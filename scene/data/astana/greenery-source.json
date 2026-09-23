@@ -1,0 +1,57 @@
+{
+  "metadata": {
+    "schemaVersion": 1,
+    "outputCrs": "EPSG:4326",
+    "queryBbox": [
+      71.220936,
+      50.999912,
+      71.728067,
+      51.301212
+    ],
+    "bboxClipped": false,
+    "featureCount": 3696,
+    "osmFeatureCount": 1696,
+    "municipalSampleCount": 2000,
+    "municipalFullQueryCount": 57030,
+    "municipalFullCoverage": false,
+    "municipalFullCoverageNote": "Complete acquisition failed on source server query errors; only the original explicitly sampled 2000 municipal polygons are retained.",
+    "unclosedOsmWaysExcluded": [],
+    "sources": [
+      {
+        "sourceId": "osm-greenery",
+        "source": "https://overpass-api.de/api/interpreter",
+        "query": "[out:json][timeout:25];(way[\"leisure\"~\"^(park|garden)$\"](50.999912,71.220936,51.301212,71.728067);way[\"landuse\"=\"forest\"](50.999912,71.220936,51.301212,71.728067);way[\"natural\"=\"wood\"](50.999912,71.220936,51.301212,71.728067);relation[\"leisure\"~\"^(park|garden)$\"](50.999912,71.220936,51.301212,71.728067);relation[\"landuse\"=\"forest\"](50.999912,71.220936,51.301212,71.728067);relation[\"natural\"=\"wood\"](50.999912,71.220936,51.301212,71.728067););out geom;",
+        "retrievedAt": "2026-09-23T11:57:58.085330+00:00",
+        "osmTimestamp": "2026-09-22T08:45:51Z",
+        "license": "ODbL 1.0",
+        "attribution": "© OpenStreetMap contributors",
+        "copyrightUrl": "https://www.openstreetmap.org/copyright",
+        "geometry": "Source WGS84 rings unchanged; relation member ways stitched only at identical endpoints; holes assigned to containing outer rings."
+      },
+      {
+        "source": "https://gis.esaulet.kz/server/rest/services/Sloi_geoportala_otkrytiy_kontur_0702/MapServer/26",
+        "sourceId": "astana-municipal-green",
+        "queryBbox": [
+          71.38,
+          51.08,
+          71.49,
+          51.17
+        ],
+        "bboxClipped": false,
+        "renderSampleCap": 2000,
+        "selection": "First 2000 OBJECTID-ordered source polygons intersecting central bbox",
+        "generalizationToleranceDegrees": 1.5e-05,
+        "publicationDate": null,
+        "license": null,
+        "note": "Municipal green-space polygons, not a park inventory. Service does not state date/reuse license.",
+        "retrievedAt": "2026-09-23T11:02:41.653357+00:00",
+        "featureCount": 2000,
+        "outputCrs": "EPSG:4326",
+        "geometryStatus": "source-geometry",
+        "coordinateDimensions": "Source Z discarded; [longitude, latitude] retained unchanged."
+      }
+    ]
+  },
+  "sha256": "3aa001b6220ce5bc7f8a7c90edd5af4329c0151c6955473f70251e47ad5c05e4",
+  "bytes": 2062349
+}
