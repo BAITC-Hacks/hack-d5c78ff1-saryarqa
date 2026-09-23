@@ -70,7 +70,7 @@ function staticEntry({ pathname, parts }) {
   const extension = extname(parts.at(-1)).toLowerCase();
   if (atlasDataPaths.has(pathname)) return { parts, type: mime.get(extension) };
   if (parts[0] === 'game' && parts.length === 2 && extension === '.js') return { parts, type: mime.get(extension) };
-  if (parts[0] === 'scene' && (sceneTypes.has(extension) || pathname === '/scene/dev.html')) return { parts, type: mime.get(extension) };
+  if (parts[0] === 'scene' && (sceneTypes.has(extension) || ['/scene/dev.html', '/scene/dev-fixture.html'].includes(pathname))) return { parts, type: mime.get(extension) };
   if (parts[0] === 'assets' && parts[1] === 'game' && parts.length >= 3 && assetTypes.has(extension)) return { parts, type: mime.get(extension) };
   if (parts[0] === 'data' && ['geography', 'city'].includes(parts[1]) && parts.length === 3 && extension === '.json') return { parts, type: mime.get(extension) };
   return null;

@@ -7,7 +7,7 @@ const regions = ['esil', 'almaty', 'saryarka', 'baikonur', 'nura'];
 const indicators = ['T1', 'T2', 'E1', 'E2', 'S1', 'S2', 'B1', 'B2', 'C1', 'C2'];
 
 function snapshot(overrides = {}) {
-  return {
+  const base = {
     contractVersion: 1,
     revision: 1,
     planRevision: 4,
@@ -32,9 +32,10 @@ function snapshot(overrides = {}) {
         { regionId: 'nura', indicator: 'T1', delta: -1.75, tone: 'negative' },
       ],
     },
-    playback: { status: 'playing', speed: 1 },
+    playback: { status: 'playing', speed: 1, runId: 7 },
     ...overrides,
   };
+  return { ...base, playback: { status: 'playing', speed: 1, runId: 7, ...overrides.playback } };
 }
 
 function freezeDeep(value) {
@@ -107,11 +108,11 @@ test('normal completion, skip and reduced motion give identical final markers/re
   const results = [];
   for (const mode of ['normal', 'skip', 'reduced', 'paused-reduced']) {
     const completed = [];
-    const effects = createEffects({ onComplete: (revision) => completed.push(revision) });
+    const effects = createEffects({ onComplete: (revision, runId) => completed.push([revision, runId]) });
     effects.update({ snapshot: snapshot({ playback: { status: mode === 'skip' ? 'complete' : mode === 'paused-reduced' ? 'paused' : 'playing', speed: 1 } }), reducedMotion: mode.includes('reduced') });
     if (mode === 'normal') effects.step(16);
     effects.step(100);
-    assert.deepEqual(completed, [4]);
+    assert.deepEqual(completed, [[4, 7]]);
     const final = effects.getState();
     assert.equal(final.progress, 1);
     assert.equal(final.quarter, 8);
@@ -125,24 +126,43 @@ test('normal completion, skip and reduced motion give identical final markers/re
 
 test('completion is once per run and replay of the same plan resets and completes once again', () => {
   const completed = [];
-  const effects = createEffects({ onComplete: (revision) => completed.push(revision) });
+  const effects = createEffects({ onComplete: (revision, runId) => completed.push([revision, runId]) });
   effects.update({ snapshot: snapshot() });
   effects.step(16);
   effects.update({ snapshot: snapshot() });
   effects.step(100);
   effects.update({ snapshot: snapshot({ playback: { status: 'complete', speed: 1 } }) });
-  assert.deepEqual(completed, [4]);
-  effects.update({ snapshot: snapshot() });
+  assert.deepEqual(completed, [[4, 7]]);
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', runId: 8 } }) });
   assert.equal(effects.getState().quarter, 0);
   assert.equal(effects.getState().status, 'playing');
   assert.deepEqual(effects.getState().reactions, []);
   effects.step(16);
-  assert.deepEqual(completed, [4, 4]);
+  assert.deepEqual(completed, [[4, 7], [4, 8]]);
+});
+
+test('a new runId resets the same plan even when status stays playing; stale runs are ignored', () => {
+  const completed = [];
+  const original = snapshot();
+  const effects = createEffects({ onComplete: (revision, runId) => completed.push([revision, runId]) });
+  effects.update({ snapshot: original });
+  effects.step(4);
+  assert.equal(effects.getState().quarter, 2);
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', runId: 8 } }) });
+  assert.equal(effects.getState().quarter, 0);
+  effects.update({ snapshot: original });
+  assert.equal(effects.getState().quarter, 0);
+  effects.step(16);
+  assert.deepEqual(completed, [[4, 8]]);
+  effects.update({ snapshot: original });
+  assert.deepEqual(completed, [[4, 8]]);
+  assert.equal(effects.getState().status, 'complete');
+  assert.equal(original.result.score, 61.23);
 });
 
 test('a new plan cancels old presentation; stale metadata cannot emit completion or reactions', () => {
   const completed = [];
-  const effects = createEffects({ onComplete: (revision) => completed.push(revision) });
+  const effects = createEffects({ onComplete: (revision, runId) => completed.push([revision, runId]) });
   effects.update({ snapshot: snapshot() });
   effects.step(12);
   effects.update({ snapshot: snapshot({ planRevision: 5 }) });
@@ -151,6 +171,46 @@ test('a new plan cancels old presentation; stale metadata cannot emit completion
   assert.equal(state.progress, 0);
   assert.deepEqual(state.reactions, []);
   assert.deepEqual(completed, []);
+});
+
+test('legacy snapshots without runId complete once and replay after the complete status', () => {
+  const completed = [];
+  const effects = createEffects({ onComplete: (revision, runId) => completed.push([revision, runId]) });
+  const legacy = status => snapshot({ playback: { status, runId: undefined } });
+  effects.update({ snapshot: legacy('playing') });
+  effects.step(16);
+  effects.update({ snapshot: legacy('playing') });
+  effects.step(16);
+  assert.deepEqual(completed, [[4, undefined]]);
+  effects.update({ snapshot: legacy('complete') });
+  effects.update({ snapshot: legacy('playing') });
+  assert.equal(effects.getState().quarter, 0);
+  effects.step(16);
+  assert.deepEqual(completed, [[4, undefined], [4, undefined]]);
+});
+
+test('legacy compatibility cannot erase an identified run or accept an older plan', () => {
+  const completed = [];
+  const effects = createEffects({ onComplete: (revision, runId) => completed.push([revision, runId]) });
+  effects.update({ snapshot: snapshot() });
+  effects.step(4);
+  effects.update({ snapshot: snapshot({ playback: { runId: undefined, status: 'complete' } }) });
+  effects.update({ snapshot: snapshot({ planRevision: 3, playback: { runId: 99, status: 'complete' } }) });
+  assert.equal(effects.getState().quarter, 2);
+  assert.equal(effects.getState().runId, 7);
+  assert.deepEqual(completed, []);
+  effects.step(12);
+  assert.deepEqual(completed, [[4, 7]]);
+});
+
+test('explicit malformed runId values do not animate or emit completion', () => {
+  for (const runId of [null, -1, 1.5, '7', NaN, Infinity]) {
+    const completed = [];
+    const effects = createEffects({ onComplete: (...args) => completed.push(args) });
+    effects.update({ snapshot: snapshot({ playback: { runId } }), reducedMotion: true });
+    assert.equal(effects.step(16).status, 'idle');
+    assert.deepEqual(completed, []);
+  }
 });
 
 test('runId restarts an already playing replay and completion identifies only the current run', () => {
@@ -210,9 +270,10 @@ test('reduced motion emits each replay runId once, including consecutive complet
 
 test('synchronous completion callbacks may update to complete without recursive completion', () => {
   let calls = 0;
-  const effects = createEffects({ onComplete: (revision) => {
+  const effects = createEffects({ onComplete: (revision, runId) => {
     calls += 1;
     assert.equal(revision, 4);
+    assert.equal(runId, 7);
     assert.equal(effects.getState().status, 'complete');
     effects.update({ snapshot: snapshot({ playback: { status: 'complete', speed: 1 } }) });
   } });
@@ -236,6 +297,21 @@ test('synchronous completion callbacks may replace the plan without old state ov
   assert.equal(state.progress, 0);
   assert.equal(state.status, 'idle');
   assert.deepEqual(state.markers, []);
+});
+
+test('synchronous completion may start a new run of the same plan without old-run overwrite', () => {
+  const completed = [];
+  const effects = createEffects({ onComplete: (revision, runId) => {
+    completed.push([revision, runId]);
+    if (runId === 7) effects.update({ snapshot: snapshot({ playback: { status: 'playing', runId: 8 } }) });
+  } });
+  effects.update({ snapshot: snapshot() });
+  const restarted = effects.step(16);
+  assert.equal(restarted.quarter, 0);
+  assert.equal(restarted.status, 'playing');
+  assert.deepEqual(completed, [[4, 7]]);
+  effects.step(16);
+  assert.deepEqual(completed, [[4, 7], [4, 8]]);
 });
 
 test('selectors bound duplicate/invalid inputs and exclude the context-only region', () => {
@@ -280,7 +356,7 @@ test('snapshots stay read only and returned state cannot mutate the controller',
 
 test('invalid outcomes do not animate and destroy permanently releases visible state', () => {
   const completed = [];
-  const effects = createEffects({ onComplete: (revision) => completed.push(revision) });
+  const effects = createEffects({ onComplete: (revision, runId) => completed.push([revision, runId]) });
   effects.update({ snapshot: snapshot({ result: { valid: false, score: null } }), reducedMotion: true });
   assert.equal(effects.step(16).status, 'idle');
   effects.update({ snapshot: snapshot() });
@@ -350,6 +426,16 @@ function sceneHarness(t) {
       if (name.startsWith('data-')) this.dataset[name.slice(5).replace(/-([a-z])/g, (_, letter) => letter.toUpperCase())] = String(value);
     }
     appendChild(child) { child.remove(); this.children.push(child); child.parentNode = this; return child; }
+    append(...children) { children.forEach(child => this.appendChild(typeof child === 'string' ? document.createTextNode(child) : child)); }
+    insertBefore(child, reference) {
+      if (reference == null) return this.appendChild(child);
+      if (child === reference) return child;
+      assert.equal(reference.parentNode, this, 'insertion reference must belong to its parent');
+      child.remove();
+      this.children.splice(this.children.indexOf(reference), 0, child);
+      child.parentNode = this;
+      return child;
+    }
     replaceChildren(...children) { this.children.slice().forEach(child => child.remove()); children.forEach(child => this.appendChild(child)); }
     remove() {
       if (this.parentNode) this.parentNode.children = this.parentNode.children.filter(child => child !== this);
@@ -397,6 +483,7 @@ function sceneHarness(t) {
     hidden: false,
     createElement: tag => new Element(tag),
     createElementNS: (_namespace, tag) => new Element(tag),
+    createTextNode: text => Object.assign(new Element('#text'), { textContent: String(text) }),
   });
   const globals = {
     document,
@@ -535,7 +622,7 @@ test('scene reduced-motion completion allows synchronous update, emits once and 
     scene.update({ snapshot: sceneSnapshot({ playback: { status: 'complete', speed: 1 } }), context: { reducedMotion: true } });
   });
   scene.update({ snapshot: source, context: { reducedMotion: true } });
-  assert.deepEqual(intents, [{ type: 'PLAYBACK_COMPLETE', planRevision: 4 }]);
+  assert.deepEqual(intents, [{ type: 'PLAYBACK_COMPLETE', planRevision: 4, runId: 7 }]);
   assert.equal(scene.getDiagnostics().effects.progress, 1);
   assert.equal(harness.pendingFrames(), 0);
   assert.equal(JSON.stringify(source), before);

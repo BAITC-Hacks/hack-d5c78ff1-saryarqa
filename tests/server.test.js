@@ -21,6 +21,7 @@ async function fixture() {
   await put('simulator.js', 'export const score = 1;');
   await put('game/session.js', 'export const session = true;');
   await put('scene/dev.html', '<h1>Scene</h1>');
+  await put('scene/dev-fixture.html', '<h1>Fixture scene</h1>');
   await put('scene/styles.css', '.scene{}');
   await put('scene/fixtures/sample.png', Buffer.from([137, 80, 78, 71]));
   await put('assets/game/icon.svg', '<svg></svg>');
@@ -64,6 +65,7 @@ test('serves only approved root and resource paths with correct MIME and HEAD be
       ['/app.js', 'text/javascript'],
       ['/game/session.js', 'text/javascript'],
       ['/scene/dev.html', 'text/html'],
+      ['/scene/dev-fixture.html', 'text/html'],
       ['/scene/styles.css', 'text/css'],
       ['/scene/fixtures/sample.png', 'image/png'],
       ['/assets/game/icon.svg', 'image/svg+xml'],

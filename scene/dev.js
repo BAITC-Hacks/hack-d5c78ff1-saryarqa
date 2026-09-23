@@ -8,6 +8,7 @@ import { cityData as fixtureCityData } from './fixtures/snapshot.js';
 
 const $ = id => document.getElementById(id);
 const fixture = new URLSearchParams(location.search).get('data') === 'fixture';
+if (fixture) location.replace(new URL('./dev-fixture.html', location.href));
 const root = $('scene-root'), media = matchMedia('(prefers-reduced-motion: reduce)');
 const context = { cityData: fixtureCityData, reducedMotion: media.matches, visible: true };
 let storage; try { storage = localStorage; } catch { storage = undefined; }

@@ -109,7 +109,9 @@ export function createEffects({ onComplete = () => {} } = {}) {
     // Set the latch before calling the shell: dispatch can synchronously update or
     // destroy this controller, or replace the plan. Do not mutate after callback.
     completionDelivered = true;
-    onComplete(planRevision, runId);
+    const completedPlanRevision = planRevision;
+    const completedRunId = runId;
+    onComplete(completedPlanRevision, completedRunId);
   }
 
   function getState() {
@@ -164,9 +166,13 @@ export function createEffects({ onComplete = () => {} } = {}) {
     const nextRevision = snapshot?.planRevision ?? null;
     const nextRunId = snapshot?.playback?.runId;
     const nextRequestedStatus = STATUSES.has(snapshot?.playback?.status) ? snapshot.playback.status : 'idle';
+    if (Number.isSafeInteger(planRevision) && Number.isSafeInteger(nextRevision) && nextRevision < planRevision) return getState();
+    if (nextRevision === planRevision && Number.isSafeInteger(runId)
+      && (nextRunId === undefined || (Number.isSafeInteger(nextRunId) && nextRunId < runId))) return getState();
     const presentation = snapshot?.presentation;
     const nextConfirmed = snapshot?.contractVersion === 1 && snapshot?.result?.valid === true
-      && presentation?.planRevision === nextRevision;
+      && presentation?.planRevision === nextRevision
+      && (nextRunId === undefined || (Number.isSafeInteger(nextRunId) && nextRunId >= 0));
     const changedPlan = planRevision !== nextRevision;
     const changedRun = runId !== nextRunId;
     // Old contract fixtures have no run identity; preserve their status-based

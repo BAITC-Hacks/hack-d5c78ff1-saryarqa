@@ -63,9 +63,22 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
   const missing = new Set();
   const checkedFiles = new Map();
   const failedImages = new Set();
+  const actorNodes = new Map();
+  let assetRevision = 0;
   const abort = new AbortController();
   const listeners = [];
   const pressed = new Set();
+  // Stable controls preserve keyboard focus across synchronous session updates.
+  for (const [index, region] of world.regions.entries()) {
+    const button = document.createElement('button');
+    button.type = 'button'; button.dataset.region = region.regionId;
+    const number = document.createElement('span'); number.className = 'akim-scene-region-number'; number.setAttribute('aria-hidden', 'true'); number.textContent = String(index + 1);
+    button.append(number, document.createTextNode(region.label));
+    if (region.regionId === 'saraishyk') {
+      const hint = document.createElement('span'); hint.textContent = 'контекст'; button.append(hint);
+    }
+    $('.akim-scene-regions').append(button);
+  }
   let destroyed = false, snapshot = null, context = {}, frame = null, lastTime = null;
   let detail = false, previousView = null, previousProjection = null, drag = null, width = 900, height = 600;
   let frames = 0, totalRenderMs = 0, lastFeedback = '';
@@ -88,8 +101,8 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
       checkedFiles.set(href, check);
       fetch(href, { signal: abort.signal }).then(response => { if (!response.ok) throw new Error('Missing sprite'); return response.text(); })
         .then(source => { if (destroyed) return; const parsed = new DOMParser().parseFromString(source, 'image/svg+xml');
-          check.ids = new Set([...parsed.querySelectorAll('[id]')].map(node => node.id)); check.status = 'ready'; render(); })
-        .catch(error => { if (error.name !== 'AbortError' && !destroyed) { check.status = 'failed'; render(); } });
+          check.ids = new Set([...parsed.querySelectorAll('[id]')].map(node => node.id)); check.status = 'ready'; assetRevision++; render(); })
+        .catch(error => { if (error.name !== 'AbortError' && !destroyed) { check.status = 'failed'; assetRevision++; render(); } });
     }
     const check = checkedFiles.get(href);
     if (view.symbolId && (check?.status === 'failed' || (check?.status === 'ready' && !check.ids.has(view.symbolId)))) { reportMissing(id); return null; }
@@ -176,20 +189,35 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
 
   function renderMotion() {
     const before = performance.now();
-    layers.actors.replaceChildren();
     const scale = worldScale();
     const mayor = actors.getMayor();
-    for (const actor of [...actors.getActors(), ...(mayor ? [mayor] : [])].sort((a, b) => camera.project(a.position)[1] - camera.project(b.position)[1])) {
+    const live = new Set();
+    const orderedActors = [...actors.getActors(), ...(mayor ? [mayor] : [])].sort((a, b) => camera.project(a.position)[1] - camera.project(b.position)[1]);
+    for (const [index, actor] of orderedActors.entries()) {
+      live.add(actor.id);
       const size = actor.kind === 'mayor' ? 29 : actor.kind === 'person' ? 13 : 27;
-      const actorSprite = sprite(actor.assetId, actor.position, Math.max(size * .65, size * Math.min(1.9, scale)), actor.kind === 'mayor' ? 'Аким: декоративное движение без изменения плана' : `Условный объект: ${actor.kind}`);
+      const renderedSize = Math.max(size * .65, size * Math.min(1.9, scale));
+      const signature = `${actor.assetId}:${renderedSize}:${snapshot.projection}:${assetRevision}`;
+      let cached = actorNodes.get(actor.id);
+      if (!cached || cached.signature !== signature) {
+        const node = sprite(actor.assetId, actor.position, renderedSize, actor.kind === 'mayor' ? 'Аким: декоративное движение без изменения плана' : `Условный объект: ${actor.kind}`);
+        node.dataset.actorId = actor.id;
+        if (cached) cached.node.replaceWith(node);
+        cached = { node, signature }; actorNodes.set(actor.id, cached);
+      }
+      const [x, y] = camera.project(actor.position);
+      cached.node.setAttribute('transform', `translate(${x} ${y})`);
+      // Keep image/use nodes alive; recreating them can re-fetch sprites each frame.
+      const current = layers.actors.children[index];
+      if (current !== cached.node) layers.actors.insertBefore(cached.node, current || null);
       if (['car', 'bus', 'lrt'].includes(actor.kind)) {
         const angle = actor.heading * Math.PI / 180, point = camera.project(actor.position);
         const ahead = camera.project([actor.position[0] + Math.cos(angle), actor.position[1] + Math.sin(angle)]);
         const rotation = Math.atan2(ahead[1] - point[1], ahead[0] - point[0]) * 180 / Math.PI;
-        actorSprite.lastElementChild?.setAttribute('transform', `rotate(${rotation})`);
+        cached.node.lastElementChild?.setAttribute('transform', `rotate(${rotation})`);
       }
-      layers.actors.appendChild(actorSprite);
     }
+    for (const [id, cached] of actorNodes) if (!live.has(id)) { cached.node.remove(); actorNodes.delete(id); }
     const state = effects.getState();
     layers.effects.replaceChildren();
     const offsets = new Map();
@@ -223,6 +251,8 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
   }
 
   function renderInspector() {
+    const focusedAction = $('.akim-scene-inspector').contains(document.activeElement) ? document.activeElement?.dataset.action : null;
+    const opened = [...$('.akim-scene-inspector').querySelectorAll('details')].map(node => node.open);
     const region = world.regions.find(r => r.regionId === snapshot?.focusedRegion);
     const observations = (context.cityData?.observations || []).filter(o => o.regionId === (region?.regionId || 'city'));
     const sources = context.cityData?.sources || [];
@@ -247,6 +277,8 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
       ${region ? '<button type="button" data-action="city-context">Данные всего города</button>' : ''}
       <details><summary>Масштаб и источники</summary><p>Люди и транспорт — условные представители. Максимум: ${ACTOR_CAPS.people} жителей, ${ACTOR_CAPS.cars} машин, ${ACTOR_CAPS.buses} автобусов и ${ACTOR_CAPS.lrt} LRT. Это не численность населения или парка.</p><p>${escape(sourceLabel)}${geography.boundaryDate ? ` · ${escape(geography.boundaryDate)}` : ''}. Декоративные пути и размещение построек не подтверждают реальные адреса. Сценарная линия LRT не означает действующий маршрут.</p>${sampling}</details>
       ${missing.size ? `<details class="akim-scene-missing"><summary>Условные значки: ${missing.size}</summary><p>Нет подходящего изображения для текущего вида; показана подписанная замена.</p><small>${[...missing].map(escape).join(', ')}</small></details>` : ''}`;
+    [...$('.akim-scene-inspector').querySelectorAll('details')].forEach((node, index) => { node.open = opened[index] || false; });
+    if (focusedAction) [...$('.akim-scene-inspector').querySelectorAll('[data-action]')].find(node => node.dataset.action === focusedAction)?.focus({ preventScroll: true });
   }
 
   function render() { if (destroyed || !snapshot) return; renderMap(); renderMotion(); }
@@ -277,7 +309,7 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
   function updateEffects() { effects.update({ snapshot, reducedMotion: !!context.reducedMotion, visible: visible() }); }
   function focusRegion(regionId) { onIntent({ type: 'FOCUS_REGION', regionId }); }
   function action(command) {
-    if (!snapshot) return;
+    if (!snapshot || !visible()) return;
     if (command === 'top' || command === 'tilted') onIntent({ type: 'SET_PROJECTION', projection: command });
     else if (command === 'overview') onIntent({ type: 'SET_VIEW', view: 'overview' });
     else if (command === 'detail') { focusRegion('nura'); onIntent({ type: 'SET_VIEW', view: 'district' }); }
@@ -291,6 +323,7 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
     }
   }
   listen(container, 'click', event => {
+    if (!visible()) return;
     const button = event.target.closest('button');
     if (!button || !container.contains(button)) return;
     if (button.dataset.region) focusRegion(button.dataset.region); else if (button.dataset.action) action(button.dataset.action);
@@ -298,19 +331,20 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
   const localPoint = event => { const rect = stage.getBoundingClientRect(); return [event.clientX - rect.left, event.clientY - rect.top]; };
   listen(stage, 'pointerdown', event => {
     if (!visible() || event.button !== 0 || event.target.closest('button')) return;
+    if (drag) return; // A second touch must not steal an active camera gesture.
     stage.focus({ preventScroll: true });
     const point = localPoint(event); drag = { id: event.pointerId, start: point, last: point, moved: false };
     stage.setPointerCapture?.(event.pointerId);
   });
   listen(stage, 'pointermove', event => {
-    if (!drag || drag.id !== event.pointerId) return;
+    if (!visible() || !drag || drag.id !== event.pointerId) return;
     const point = localPoint(event);
     if (Math.hypot(point[0] - drag.start[0], point[1] - drag.start[1]) > 6) drag.moved = true;
     if (drag.moved) { camera.pan(point[0] - drag.last[0], point[1] - drag.last[1]); render(); }
     drag.last = point;
   });
   listen(stage, 'pointerup', event => {
-    if (!drag || drag.id !== event.pointerId) return;
+    if (!visible() || !drag || drag.id !== event.pointerId) return;
     const clicked = !drag.moved; drag = null;
     if (stage.hasPointerCapture?.(event.pointerId)) stage.releasePointerCapture(event.pointerId);
     if (!clicked) return;
@@ -318,9 +352,11 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
     if (detail) { actors.setDestination(point); renderMotion(); schedule(); }
     else { const region = world.regions.find(r => pointInRegion(point, r)); if (region) focusRegion(region.regionId); }
   });
-  listen(stage, 'pointercancel', () => { drag = null; });
+  const cancelDrag = () => { drag = null; };
+  listen(stage, 'pointercancel', cancelDrag);
+  listen(stage, 'lostpointercapture', cancelDrag);
   listen(stage, 'wheel', event => {
-    if (!event.ctrlKey && !event.metaKey) return;
+    if (!visible() || (!event.ctrlKey && !event.metaKey)) return;
     event.preventDefault(); camera.zoomAt(Math.exp(-event.deltaY * .003), localPoint(event)); render();
   }, { passive: false });
   listen(stage, 'keydown', event => {
@@ -338,7 +374,8 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
   });
   listen(stage, 'keyup', event => pressed.delete(event.key.length === 1 ? event.key.toLowerCase() : event.key));
   listen(stage, 'blur', () => pressed.clear());
-  listen(document, 'visibilitychange', () => { if (!snapshot) return; pressed.clear(); updateEffects(); stop(); schedule(); });
+  listen(window, 'blur', () => { pressed.clear(); drag = null; });
+  listen(document, 'visibilitychange', () => { if (!snapshot) return; pressed.clear(); drag = null; updateEffects(); stop(); schedule(); });
   const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(resize) : null;
   observer?.observe(stage);
   if (!observer) listen(window, 'resize', resize);
@@ -347,6 +384,7 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
       if (destroyed) return;
       if (input?.snapshot?.contractVersion !== 1) throw new TypeError('Unsupported scene contract version.');
       snapshot = input.snapshot; context = input.context || {};
+      if (!visible()) { pressed.clear(); drag = null; }
       detail = snapshot.view === 'district' && snapshot.focusedRegion === 'nura';
       actors.update({ cityData: context.cityData, reducedMotion: !!context.reducedMotion, view: detail ? 'district' : 'overview', focusedRegion: snapshot.focusedRegion });
       const nextView = detail ? 'nura' : 'overview';
@@ -356,8 +394,7 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
       container.dataset.reducedMotion = String(!!context.reducedMotion);
       container.dataset.visible = String(visible());
       $('.akim-scene-view strong').textContent = detail ? 'Нура · прогулка по кварталу' : 'Панорама города';
-      if (!$('.akim-scene-regions').children.length) $('.akim-scene-regions').innerHTML = world.regions.map((region, index) => `<button type="button" data-region="${region.regionId}"><span class="akim-scene-region-number" aria-hidden="true">${index + 1}</span>${escape(region.label)}${region.regionId === 'saraishyk' ? '<span>контекст</span>' : ''}</button>`).join('');
-      for (const button of container.querySelectorAll('[data-region]')) button.setAttribute('aria-pressed', String(snapshot.focusedRegion === button.dataset.region));
+      for (const button of $('.akim-scene-regions').children) button.setAttribute('aria-pressed', String(snapshot.focusedRegion === button.dataset.region));
       for (const button of container.querySelectorAll('[data-action="top"], [data-action="tilted"]')) button.setAttribute('aria-pressed', String(button.dataset.action === snapshot.projection));
       $('.akim-scene-map-note').textContent = geography.status === 'verified' ? 'Миниатюрная сцена · декоративные объекты' : 'Тестовая схема · не реальные границы Астаны';
       $('.akim-scene-help').textContent = detail ? 'Клик / касание — идти · стрелки / WASD — аким · Shift + стрелки — камера · движение не меняет план' : 'Потяни карту · Ctrl/⌘ + колесо — масштаб · стрелки — камера · Enter — осмотреть район в центре';
@@ -368,6 +405,7 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
       if (destroyed) return;
       destroyed = true; stop(); pressed.clear(); drag = null; abort.abort(); observer?.disconnect();
       listeners.forEach(remove => remove()); actors.destroy(); effects.destroy(); container.remove();
+      actorNodes.clear();
       if (mounted.get(root) === api) mounted.delete(root);
     },
     // Read-only diagnostics for acceptance/performance checks; no session mutation.
