@@ -1,0 +1,15 @@
+.akim-scene .map-feedback { pointer-events:none; }
+.akim-scene .map-feedback-label,.akim-scene .map-feedback-caption { font-family:inherit; paint-order:stroke fill; stroke:#faf6e9; stroke-width:3px; stroke-linejoin:round; fill:#315c4a; font-size:10px; font-weight:750; }
+.akim-scene .map-feedback-caption { font-size:9px; letter-spacing:.3px; fill:#677b60; }
+.akim-scene .map-feedback-object { filter:drop-shadow(0 2px 1px #28473818); animation:map-feedback-enter 420ms ease-out both; }
+.akim-scene .map-feedback[data-mode="preview"] .map-feedback-foundation { stroke:#bc944a; }
+.akim-scene .map-feedback-signal { animation:map-feedback-signal 3s ease-in-out infinite; }
+.akim-scene .map-feedback-flow { animation:map-feedback-flow 3s linear infinite; }
+.akim-scene .map-feedback-light { animation:map-feedback-lamp 4s ease-in-out infinite; }
+.akim-scene .map-feedback-measure[data-phase="queued"] .map-feedback-signal,.akim-scene .map-feedback-measure[data-phase="queued"] .map-feedback-flow { animation-play-state:paused; }
+.akim-scene[data-motion="paused"] .map-feedback *,.akim-scene [data-motion="paused"] .map-feedback *,.akim-scene .map-feedback[data-reduced-motion="true"] * { animation:none!important; transition:none!important; }
+@keyframes map-feedback-signal { 0%,100% { opacity:.65; } 50% { opacity:1; } }
+@keyframes map-feedback-flow { to { stroke-dashoffset:-18; } }
+@keyframes map-feedback-lamp { 0%,100% { opacity:.28; } 50% { opacity:.42; } }
+@keyframes map-feedback-enter { from { opacity:0; } to { opacity:1; } }
+@media(prefers-reduced-motion:reduce) { .akim-scene .map-feedback * { animation:none!important; transition:none!important; } }
