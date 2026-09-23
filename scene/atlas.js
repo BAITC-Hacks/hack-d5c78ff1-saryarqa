@@ -4,10 +4,11 @@ import { createEffects } from './effects.js';
 import { iconMarkup, categoryIcon } from './icons.js';
 import { createVegetation } from './vegetation.js';
 import { buildBuildings, selectVisibleBuildings } from './buildings.js';
-import { actorArt, policyArt, worldArt, effectArt } from '../game/art.js';
+import { actorArt, worldArt } from '../game/art.js';
 import { deriveMapVisualState } from './map-visual-state.js';
 import { createMapLife } from './map-life.js';
 import { createMapFeedback } from './map-feedback.js';
+import { createWalkControls, movementKey } from './walk-controls.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const mounts = new WeakMap();
@@ -46,12 +47,13 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   container.className = 'akim-scene akim-atlas';
   container.innerHTML = `<div class="atlas-map-shell">
     <div class="atlas-toolbar" role="toolbar" aria-label="Управление картой">
-      <div class="atlas-projections"><button type="button" data-act="top">Сверху</button><button type="button" data-act="tilted">Объём</button></div>
+      <div class="atlas-projections"><button type="button" data-act="top">Карта</button><button type="button" data-act="tilted">2.5D</button></div>
       <button type="button" data-act="walk" class="atlas-walk">Гулять по Нуре</button>
       <details class="atlas-layer-menu"><summary>Слои</summary><div class="atlas-layer-tools"><button type="button" data-layer="buildings" aria-pressed="true">Здания</button><button type="button" data-layer="landmarks" aria-pressed="true">Места</button><button type="button" data-layer="vegetation" aria-pressed="true">Зелень</button><button type="button" data-layer="labels" aria-pressed="true">Подписи</button><button type="button" data-layer="traffic" aria-pressed="false">Нагрузка</button></div></details>
       <button data-act="sources" type="button" aria-label="Источники карты" class="atlas-info">i</button>
     </div>
     <div class="atlas-stage" tabindex="0" role="group" aria-label="Карта Астаны. Стрелки перемещают камеру. В Нуре стрелки или WASD перемещают акима."><svg class="atlas-svg" aria-label="Карта районов Астаны" role="img"></svg></div>
+    <div class="atlas-district-badge"><span>АСТАНА · ИГРОВОЙ ГОРОД</span><strong>Центр города</strong><small>Выбери район и построй свой план</small></div>
     <div class="atlas-place-card" hidden></div><button class="atlas-building-status" data-act="retry-buildings" type="button" hidden></button>
     <div class="atlas-camera-tools" role="group" aria-label="Масштаб карты"><button type="button" data-act="zoom-in" aria-label="Приблизить">+</button><button type="button" data-act="zoom-out" aria-label="Отдалить">−</button><button type="button" data-act="overview" aria-label="Весь город">⌂</button></div>
     <div class="atlas-scale"><i></i><span></span></div>
@@ -63,20 +65,19 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   const stage = $('.atlas-stage'), surface = $('.atlas-svg');
   const ground = el('g', { class: 'atlas-ground' }); surface.appendChild(ground);
   const layers = {};
-  for (const name of ['districts', 'parks', 'water', 'road-casing', 'roads', 'vegetation', 'buildings', 'traffic', 'intersections']) { layers[name] = el('g', { class: `atlas-layer-${name}` }); ground.appendChild(layers[name]); }
+  for (const name of ['terrain', 'districts', 'parks', 'water', 'road-casing', 'roads', 'vegetation', 'buildings', 'traffic', 'intersections']) { layers[name] = el('g', { class: `atlas-layer-${name}` }); ground.appendChild(layers[name]); }
   for (const name of ['decoration', 'vehicles', 'landmarks', 'citizens', 'labels', 'policy-world', 'effects', 'mayor']) { layers[name] = el('g', { class: `atlas-layer-${name}` }); surface.appendChild(layers[name]); }
   const camera = createCamera({ viewBox: map.viewBox, width: 1000, height: 700, projection: 'tilted', maxZoom: 40 });
   const features = [...map.landmarks, ...map.parkAnchors.map(p => ({ ...p, category: 'park_anchor' }))];
   const featureMap = new Map(features.map(p => [p.id, p]));
   const enabled = { buildings: true, landmarks: true, traffic: false, labels: true, vegetation: true };
-  let policyCards = [];
+  let actorExclusions = [];
   const greenAreas = (map.landscape || []).filter(f => /park|green|forest|wood/.test(f.kind));
   const waterAreas = (map.landscape || []).filter(f => /water|river|hydro/.test(f.kind));
   const listeners = [];
   // Accept the six attributed source polygons without claiming their effective date is verified.
   const sourcedSix = Object.keys(districtNames).every(id => map.regions?.some(r => r.regionId === id && r.status !== 'historical' && r.sourceIds?.includes('astana-municipal-six-districts')));
   const worldRegions = (map.regions || []).filter(r => r.regionId && (r.status === 'verified' || (sourcedSix && r.status !== 'historical' && Object.hasOwn(districtNames, r.regionId) && r.sourceIds?.includes('astana-municipal-six-districts'))));
-  const policyNames = {M1:'Автобусы',M2:'Светофоры',M3:'ЛРТ',M4:'Парк',M5:'Топливо',M6:'Озеленение',M7:'Школа',M8:'Медицина',M9:'Спорт',M10:'Освещение',M11:'Переходы',M12:'Обращения',M13:'Сети',M14:'Службы'};
   const policyAnchors = new Map(worldRegions.map(region => [region.regionId, features.filter(f => pointInRegion(f.position, region)).sort((a,b) => distance(a.position,map.center)-distance(b.position,map.center))[0]?.position || region.labelAnchor]));
   const mapLife = createMapLife({ layer: layers.citizens, map, regions: worldRegions });
   const mapFeedback = createMapFeedback({ layer: layers['policy-world'], regions: worldRegions, anchors: policyAnchors });
@@ -95,23 +96,39 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   const listen = (node, type, fn, options) => { node.addEventListener(type, fn, options); listeners.push(() => node.removeEventListener(type, fn, options)); };
   const visible = () => !destroyed && snapshot?.mode === 'game' && context.visible !== false && !document.hidden;
   const detail = () => snapshot?.view === 'district' && snapshot?.focusedRegion === 'nura';
+  const walkControls = createWalkControls({ host: $('.atlas-map-shell'), stage,
+    onInput: (key, down) => {
+      if (!down) { pressed.delete(key); return; }
+      if (!detail() || !visible() || !mayor) return;
+      const direction = { ArrowUp: [0,-1], ArrowDown: [0,1], ArrowLeft: [-1,0], ArrowRight: [1,0] }[key];
+      if (direction && !pressed.has(key)) moveMayor([mayor[0] + direction[0], mayor[1] + direction[1]], .06);
+      pressed.add(key); motion(); schedule();
+    },
+    onCenter: () => { if (mayor) { camera.focus([mayor[0] - 23, mayor[1] - 18, 46, 36]); render(); } },
+  });
   const sourceName = 'Муниципальный геопортал Астаны';
 
   function buildGround() {
-    for (const name of ['districts', 'parks', 'water', 'road-casing', 'roads', 'vegetation', 'buildings', 'traffic', 'intersections']) layers[name].replaceChildren();
+    for (const name of ['terrain', 'districts', 'parks', 'water', 'road-casing', 'roads', 'vegetation', 'buildings', 'traffic', 'intersections']) layers[name].replaceChildren();
+    // Source contours form the game board; material and relief are illustrative.
+    const terrainPath = worldRegions.map(region => polygonsToPath(region)).join(' ');
+    if (terrainPath) {
+      if (snapshot?.projection === 'tilted') layers.terrain.appendChild(el('path', { d: terrainPath, transform: 'translate(0 2.5)', fill: '#809b79', stroke: '#658871', 'stroke-width': 2, 'vector-effect': 'non-scaling-stroke', opacity: .8 }));
+      layers.terrain.appendChild(el('path', { d: terrainPath, fill: '#d6e5bb', stroke: '#eaf1d6', 'stroke-width': 2, 'vector-effect': 'non-scaling-stroke' }));
+    }
     for (const region of worldRegions) {
       const path = el('path', { d: polygonsToPath(region), fill: 'none', stroke: '#728c77', 'stroke-width': 1, 'stroke-dasharray': '6 6', 'vector-effect': 'non-scaling-stroke', opacity: .55, 'fill-rule': 'evenodd', 'data-district': region.regionId });
       layers.districts.appendChild(path);
     }
     for (const feature of waterAreas) {
-      layers.water.appendChild(el('path', { d: polygonsToPath(feature), fill: '#8dbfcc', stroke: '#609bad', 'stroke-width': .25, 'fill-rule': 'evenodd', class: 'atlas-water-polygon' }));
+      layers.water.appendChild(el('path', { d: polygonsToPath(feature), fill: '#79bdc4', stroke: '#eaf3d9', 'stroke-width': 2.5, 'vector-effect': 'non-scaling-stroke', 'fill-rule': 'evenodd', class: 'atlas-water-polygon' }));
     }
     roadNodes.clear();
     for (const road of map.roads) {
       const d = linePath(road.points); if (!d) continue;
       const major = /motorway|trunk|primary/.test(road.kind) || road.importance >= 4;
-      layers['road-casing'].appendChild(el('path', { d, fill: 'none', stroke: '#b5bda8', 'stroke-width': major ? 5 : 3, 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
-      const path = el('path', { d, fill: 'none', stroke: major ? '#fff9e8' : '#f8f5e9', 'stroke-width': major ? 3.2 : 1.65, 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'data-road-id': road.id });
+      layers['road-casing'].appendChild(el('path', { d, fill: 'none', stroke: '#adb5a0', 'stroke-width': major ? 6 : 3.5, 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }));
+      const path = el('path', { d, fill: 'none', stroke: major ? '#fff9e8' : '#f8f5e9', 'stroke-width': major ? 4 : 2, 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'data-road-id': road.id });
       layers.roads.appendChild(path); roadNodes.set(road.id, path);
     }
     buildingSignature = ''; greenerySignature = '';
@@ -184,25 +201,10 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   const overlaps = (a,b) => a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
   function overlayBoxes() {
     const stageBox = stage.getBoundingClientRect();
-    return ['.atlas-game-hud','.atlas-camera-tools','.atlas-layer-tools','.atlas-map-top','.atlas-map-credit','.atlas-scale','.atlas-compass','.atlas-place-card','.atlas-building-status'].flatMap(selector => {
+    return ['.atlas-toolbar','.atlas-district-badge','.atlas-game-hud','.atlas-camera-tools','.atlas-layer-tools','.atlas-map-top','.atlas-map-credit','.atlas-scale','.atlas-compass','.atlas-place-card','.atlas-building-status','.atlas-walk-controls'].flatMap(selector => {
       const node = $(selector); if (!node || node.hidden) return []; const b = node.getBoundingClientRect();
       return b.width && b.height ? [{x:b.left-stageBox.left-8,y:b.top-stageBox.top-8,w:b.width+16,h:b.height+16}] : [];
     });
-  }
-  function placePolicyCards(state) {
-    const cards = [], blockers = overlayBoxes();
-    const groups = new Map();
-    for (const marker of state.markers) { if (!groups.has(marker.regionId)) groups.set(marker.regionId,[]); groups.get(marker.regionId).push(marker.id); }
-    for (const feature of features) { const [x,y] = camera.project(feature.position); blockers.push({x:x-45,y:y-75,w:90,h:108}); }
-    if (mayor && detail()) { const [x,y] = camera.project(mayor); blockers.push({x:x-24,y:y-40,w:48,h:65}); }
-    for (const [regionId, ids] of groups) {
-      const anchor = policyAnchors.get(regionId); if (!anchor) continue;
-      const [x,y] = camera.project(anchor); if (x<0 || x>width || y<0 || y>height) continue;
-      const offsets = [[25,-128],[-169,-128],[30,58],[-172,58],[70,-52],[-214,-52],[20,135],[-160,135]];
-      const box = offsets.map(([dx,dy])=>({x:x+dx,y:y+dy,w:144,h:52})).find(b=>b.x>10 && b.x+b.w<width-10 && b.y>60 && b.y+b.h<height-45 && !blockers.some(v=>overlaps(b,v)));
-      if (box) { cards.push({regionId,ids,box,anchor:[x,y]}); blockers.push(box); }
-    }
-    return cards;
   }
   function renderPlaces() {
     layers.landmarks.replaceChildren(); layers.labels.replaceChildren();
@@ -210,12 +212,12 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     const items = features.map(feature => ({ feature, point: camera.project(feature.position) }))
       .filter(({ point }) => point[0] > -80 && point[0] < width + 80 && point[1] > -90 && point[1] < height + 100)
       .sort((x, y) => x.point[1] - y.point[1]);
-    const labelBoxes = [...overlayBoxes(), ...policyCards.map(card=>card.box)];
+    const labelBoxes = overlayBoxes();
     const modelBoxes = [];
     const sortedLabels = [...items].sort((x, y) => Number(y.feature.id === selected) - Number(x.feature.id === selected) || y.feature.importance - x.feature.importance);
     for (const { feature, point: [x, y] } of items) {
       const active = feature.id === selected;
-      const size = Math.min(98, Math.max(34, camera.getState().zoom * 10)) * (active ? 1.2 : 1);
+      const size = Math.min(90, Math.max(30, camera.getState().zoom * 7)) * (active ? 1.18 : 1);
       const group = el('g', { transform: `translate(${x} ${y})`, 'data-feature-id': feature.id, class: `atlas-landmark ${active ? 'is-selected' : ''}`, role: 'button', tabindex: '0', 'aria-label': feature.label });
       group.appendChild(el('title', {}, feature.label));
       if (feature.category === 'park_anchor') group.appendChild(createParkSymbol(size, snapshot?.projection));
@@ -224,7 +226,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       const bounds = group.getBBox?.();
       modelBoxes.push({id:feature.id,x:x+(bounds?.x ?? -size*.65)-4,y:y+(bounds?.y ?? -size*1.1)-4,w:(bounds?.width ?? size*1.3)+8,h:(bounds?.height ?? size*1.35)+8});
     }
-    for (const { feature, point: [x, y] } of sortedLabels) {
+    for (const { feature, point: [x, y] } of enabled.labels ? sortedLabels : []) {
       const active = feature.id === selected;
       let text = feature.label;
       if (text.length > 28) text = text.slice(0, 27) + '…';
@@ -240,7 +242,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       group.appendChild(el('text', { 'text-anchor': 'middle', y: 18, fill: active ? '#fffbea' : '#45634d', 'font-size': 11.5, 'font-weight': active ? 600 : 500 }, text));
       layers.labels.appendChild(group);
     }
-    if (camera.getState().zoom >= 6) {
+    if (enabled.labels && camera.getState().zoom >= 6) {
       const names = new Set();
       for (const road of map.roads) {
         if (!road.name || /^(osm[_:-]|way[_:-]|node[_:-])/i.test(road.name) || names.has(road.name) || names.size >= 10 || road.points.length < 2) continue;
@@ -297,7 +299,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     const projection = snapshot?.projection || 'top';
     const state = effects.getState();
     const visualState = deriveMapVisualState({ snapshot, effectState: state, regionIds: worldRegions.map(region => region.regionId) });
-    const animation = { camera, width, height, seconds: movingSeconds, reducedMotion: !!context.reducedMotion, visualState, projection };
+    const animation = { camera, width, height, seconds: movingSeconds, reducedMotion: !!context.reducedMotion, visualState, projection, exclusions: actorExclusions, focusedRegion: snapshot?.focusedRegion, blockers: actorExclusions };
     mapLife.render(animation); mapFeedback.render(animation);
     for (const [index, vehicle] of vehicles.entries()) {
       const along = ((vehicle.offset + movingSeconds * .0018) % 1) * vehicle.total;
@@ -308,7 +310,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       const a = camera.project(segment.a), b = camera.project(segment.b);
       const heading = Math.atan2(b[1] - a[1], b[0] - a[0]) * 180 / Math.PI;
       const kind = vehicle.bus ? 'bus' : index % 11 === 0 && snapshot?.plan.some(p => p.id === 'M14') ? 'service' : 'car';
-      art(`vehicle-${index}`, layers.vehicles, actorArt(kind, projection, heading), position, detail() ? 33 : 19, kind === 'bus' ? 'Условный автобус' : 'Условный транспорт');
+      art(`vehicle-${index}`, layers.vehicles, actorArt(kind, projection, heading), position, detail() ? 24 : 15, kind === 'bus' ? 'Условный автобус' : 'Условный транспорт');
     }
     if (detail() && walkable && mayor) {
       // Decorative pieces are visibly stylized game art, never surveyed footprints.
@@ -318,24 +320,13 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
         if (!walkable.contains(p)) continue;
         art(`decor-${index}`, layers.decoration, worldArt(kind, projection), camera.project(p), kind.startsWith('building') ? 66 : 44, 'Игровая декорация: не фактический объект');
       }
-      art('mayor', layers.mayor, actorArt('mayor', projection), camera.project(mayor), 52, 'Аким');
+      art('mayor', layers.mayor, actorArt('mayor', projection), camera.project(mayor), 28, 'Аким');
       if (state.markers.some(m => m.measureId === 'M3' && m.regionId === 'nura')) {
         const p = [walkable.start[0] - 5 + (context.reducedMotion ? 0 : Math.sin(movingSeconds * .18) * 2), walkable.start[1] + 8];
         art('planned-lrt', layers.vehicles, actorArt('lrt', projection, 0), camera.project(p), 68, 'Сценарный LRT: условная иллюстрация решения');
       }
     }
-    const counts = new Map();
-    for (const marker of state.markers) {
-      const region = worldRegions.find(r => r.regionId === marker.regionId); if (!region || (detail() && marker.regionId !== 'nura')) continue;
-      const anchor = detail() && marker.regionId === 'nura' && walkable ? walkable.start : policyAnchors.get(region.regionId);
-      const [x, y] = camera.project(anchor), offset = counts.get(marker.regionId) || 0; counts.set(marker.regionId, offset + 1);
-      if (x < -20 || x > width + 20 || y < -20 || y > height + 20) continue;
-      const position = [Math.min(width - 38, Math.max(38, x + (offset - 1) * 62)), Math.min(height - 90, Math.max(108, y - 55))];
-      const node = art(`policy-${marker.id}`, layers.effects, policyArt(marker.measureId, 'marker'), position, detail() ? 42 : 38,
-        `${districtNames[marker.regionId]}: ${policyNames[marker.measureId]} — ${marker.phase === 'active' ? 'реализовано' : 'в плане'}`, { opacity: marker.phase === 'queued' ? .65 : 1 });
-      if (node) node.setAttribute('class', `akim-scene-marker akim-scene-marker-${marker.phase}`);
-      if (marker.phase === 'construction') art(`build-${marker.id}`, layers.effects, effectArt('placement-pulse'), [position[0], position[1] + 12], 32, 'Реализация решения');
-    }
+    // mapFeedback owns each policy illustration, avoiding duplicate crowded pins.
     for (const [key, item] of artNodes) if (!liveArt.has(key)) item.node.setAttribute('display', 'none');
     const feedback = state.status === 'complete' ? 'Готово' : state.markers.length ? state.status === 'idle' ? 'План на карте' : 'Реализуем решения…' : '';
     if ($('.atlas-feedback').textContent !== feedback) $('.atlas-feedback').textContent = feedback;
@@ -349,15 +340,19 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     ground.setAttribute('transform', `matrix(${camera.matrix().join(' ')})`);
     scheduleBuildings();
     layers.intersections.setAttribute('display', camera.getState().zoom >= 5 ? '' : 'none');
-    policyCards = placePolicyCards(effects.getState());
-    for (const path of layers.districts.children) { const selectedRegion = path.getAttribute('data-district') === snapshot.focusedRegion; path.setAttribute('fill', selectedRegion ? '#dfbd7030' : 'none'); path.setAttribute('stroke', selectedRegion ? '#aa8040' : '#728c77'); path.setAttribute('opacity', selectedRegion ? 1 : .55); }
+    actorExclusions = [...overlayBoxes(), ...features.map(feature => { const [x, y] = camera.project(feature.position); return { x: x - 26, y: y - 48, w: 52, h: 66 }; })];
+    for (const path of layers.districts.children) { const selectedRegion = path.getAttribute('data-district') === snapshot.focusedRegion; path.setAttribute('fill', selectedRegion ? '#e2c77535' : 'none'); path.setAttribute('stroke', selectedRegion ? '#b48b35' : '#8ca281'); path.setAttribute('stroke-width', selectedRegion ? 2.5 : 1); path.setAttribute('stroke-dasharray', selectedRegion ? '9 5' : '4 8'); path.setAttribute('opacity', selectedRegion ? 1 : .45); }
     renderPlaces(); motion();
     const pixelsPerWorld = camera.getState().scale;
     const worldPerKm = 1000 / ((map.bounds[2] - map.bounds[0]) * 111.32 * Math.cos(((map.bounds[1] + map.bounds[3]) / 2) * Math.PI / 180));
     const meters = 90 / (pixelsPerWorld * worldPerKm) * 1000;
     $('.atlas-scale span').textContent = meters >= 1000 ? `${(meters / 1000).toFixed(1)} км` : `${Math.round(meters / 50) * 50} м`;
   }
-  function focusCenter() { camera.reset(); camera.focus([map.center[0] - 150, map.center[1] - 110, 300, 220]); render(); }
+  function focusCenter() { camera.reset(); camera.focus([map.center[0] - 90, map.center[1] - 67.5, 180, 135]); render(); }
+  function focusDistrict(regionId) {
+    const anchor = policyAnchors.get(regionId);
+    if (anchor) camera.focus([anchor[0] - 68, anchor[1] - 54, 136, 108]);
+  }
   function focusFeature(id) {
     const feature = featureMap.get(id); if (!feature) return;
     selected = id; selectedCorridor = null; highlightRoads(); const radius = feature.category === 'park_anchor' ? 34 : 68;
@@ -414,7 +409,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     if (command === 'top' || command === 'tilted') onIntent({ type: 'SET_PROJECTION', projection: command });
     if (command === 'zoom-in' || command === 'zoom-out') { camera.zoomAt(command === 'zoom-in' ? 1.4 : 1 / 1.4, [width / 2, height / 2]); render(); }
     if (command === 'center') focusCenter();
-    if (command === 'overview') { onIntent({ type: 'SET_VIEW', view: 'overview' }); camera.reset(); render(); }
+    if (command === 'overview') { onIntent({ type: 'SET_VIEW', view: 'overview' }); focusCenter(); }
     if (command === 'sources') sources();
     if (command === 'close-card') { selected = null; inspectorSignature = ''; $('.atlas-place-card').hidden = true; render(); }
     if (command === 'retry-buildings') { buildingSource?.retry(); refreshBuildings(); }
@@ -443,12 +438,12 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     const featureId = event.target.closest('[data-feature-id]')?.dataset.featureId;
     if (featureId && (event.key === 'Enter' || event.key === ' ')) { event.preventDefault(); focusFeature(featureId); stage.focus({ preventScroll: true }); return; }
     if (event.target !== stage || !visible() || event.ctrlKey || event.metaKey || event.altKey) return;
-    const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
+    const key = movementKey(event) || (event.key.length === 1 ? event.key.toLowerCase() : event.key);
     const direction = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1], a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1] }[key];
     if (direction) { event.preventDefault(); if (detail() && mayor && !event.shiftKey) { if (!pressed.has(key)) moveMayor([mayor[0] + direction[0], mayor[1] + direction[1]], .06); pressed.add(key); motion(); schedule(); } else { camera.pan(-direction[0] * 45, -direction[1] * 45); render(); } }
     else if (key === '+' || key === '=') { event.preventDefault(); action('zoom-in'); } else if (key === '-') { event.preventDefault(); action('zoom-out'); } else if (key === 'Home') { event.preventDefault(); focusCenter(); }
   });
-  listen(stage, 'keyup', event => pressed.delete(event.key.length === 1 ? event.key.toLowerCase() : event.key));
+  listen(stage, 'keyup', event => pressed.delete(movementKey(event) || event.key));
   listen(stage, 'blur', () => pressed.clear());
   listen(document, 'visibilitychange', () => { container.dataset.motion = visible() && !context.reducedMotion && snapshot?.playback?.status !== 'paused' ? 'running' : 'paused'; pressed.clear(); if (drag && stage.hasPointerCapture?.(drag.id)) stage.releasePointerCapture(drag.id); drag = null; if (snapshot) effects.update({ snapshot, reducedMotion: context.reducedMotion, visible: visible() }); stop(); schedule(); });
   const observer = new ResizeObserver(resize); observer.observe(stage);
@@ -457,13 +452,16 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       if (destroyed) return; if (next?.contractVersion !== 1) throw new TypeError('Scene contract v1 required.');
       const previous = snapshot;
       snapshot = next; context = nextContext;
+      walkControls.setEnabled(detail() && visible());
       const hud = $('.atlas-game-hud'); if (hud) observer.observe(hud);
       container.dataset.motion = !visible() || context.reducedMotion || snapshot.playback?.status === 'paused' ? 'paused' : 'running';
       if (!visible()) { pressed.clear(); if (drag && stage.hasPointerCapture?.(drag.id)) stage.releasePointerCapture(drag.id); drag = null; stop(); }
       if (lastProjection !== snapshot.projection) { camera.setProjection(snapshot.projection); buildGround(); lastProjection = snapshot.projection; }
       const view = detail() ? 'district' : 'overview';
       const changedView = currentView !== view;
+      if (changedView && detail() && visible()) stage.focus({ preventScroll: true });
       if (currentView !== view) { pressed.clear(); if (detail() && walkable) camera.focus([walkable.start[0] - 23, walkable.start[1] - 18, 46, 36]); else if (currentView === null || currentView === 'district') focusCenter(); currentView = view; }
+      if (previous && previous.focusedRegion !== snapshot.focusedRegion && snapshot.focusedRegion && !detail() && !changedView) focusDistrict(snapshot.focusedRegion);
       // Show an edited district's upgrade once; ordinary session updates must not
       // pull the camera back after the player pans, replays, or inspects the map.
       if (previous && previous.planRevision !== snapshot.planRevision && visible() && !detail() && !changedView) {
@@ -477,12 +475,14 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       }
       for (const button of container.querySelectorAll('[data-act="top"], [data-act="tilted"]')) button.setAttribute('aria-pressed', String(button.dataset.act === snapshot.projection));
       $('.atlas-mode-status').textContent = detail() && walkable ? 'Нура · прогулка' : snapshot.focusedRegion ? districtNames[snapshot.focusedRegion] : 'Астана';
+      $('.atlas-district-badge strong').textContent = detail() ? 'Нура · прогулка' : districtNames[snapshot.focusedRegion] || 'Центр города';
+      $('.atlas-district-badge small').textContent = detail() ? 'WASD или нажми на свободное место' : snapshot.focusedRegion === 'saraishyk' ? 'Справочный район · без расчёта' : snapshot.focusedRegion ? 'Решения назначаются выбранному району' : 'Выбери район и построй свой план';
       $('.atlas-status-help').textContent = detail() && walkable ? 'WASD — идти' : 'Перетащи карту';
       $('.atlas-walk').disabled = !walkable; $('.atlas-walk').setAttribute('aria-pressed', String(detail()));
       effects.update({ snapshot, reducedMotion: !!context.reducedMotion, visible: visible() });
       renderInspector(); resize(); if (context.reducedMotion && !pressed.size) stop(); else schedule();
     },
-    destroy() { if (destroyed) return; destroyed = true; stop(); clearTimeout(buildingTimer); buildingSource?.destroy(); pressed.clear(); if (drag && stage.hasPointerCapture?.(drag.id)) stage.releasePointerCapture(drag.id); drag = null; listeners.forEach(fn => fn()); observer.disconnect(); effects.destroy(); mapLife.destroy(); mapFeedback.destroy(); artNodes.clear(); container.remove(); if (mounts.get(root) === api) mounts.delete(root); },
+    destroy() { if (destroyed) return; destroyed = true; walkControls.destroy(); stop(); clearTimeout(buildingTimer); buildingSource?.destroy(); pressed.clear(); if (drag && stage.hasPointerCapture?.(drag.id)) stage.releasePointerCapture(drag.id); drag = null; listeners.forEach(fn => fn()); observer.disconnect(); effects.destroy(); mapLife.destroy(); mapFeedback.destroy(); artNodes.clear(); container.remove(); if (mounts.get(root) === api) mounts.delete(root); },
     getDiagnostics() { return { frames, averageMotionRenderMs: frames ? totalRenderMs / frames : 0, actorCount: vehicles.length + mapLife.getDiagnostics().count, mapLife: mapLife.getDiagnostics(), mapFeedback: mapFeedback.getDiagnostics(), visible: visible(), running: frame !== null, destroyed, camera: camera.getState(), mayor: mayor ? [...mayor] : null, selected, loadedBuildings: allBuildings().length, renderedBuildings: renderedBuildingCount, buildingTiles: buildingSource?.getState(), effects: effects.getState(), data: { roads: map.roads.length, buildings: map.buildingCount || (map.buildings || []).length, landmarks: map.landmarks.length, regions: worldRegions.length }, missingAssetIds: [...missingArt], artNodeCount: artNodes.size }; },
   };
   mounts.set(root, api);

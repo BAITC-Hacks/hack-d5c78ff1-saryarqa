@@ -4,6 +4,10 @@ import { REGIONS, getRegion } from './game/contracts.js';
 import { createSceneAdapter } from './game/scene-adapter.js';
 import { createForecast } from './game/forecast.js';
 import { policyArt, iconArt } from './game/art.js';
+import { explainLocally, mountAdvisorChat } from './game/advisor.js';
+import { createCloudSession } from './game/cloud.js';
+import { createCloudPanel } from './game/cloud-panel.js';
+import { initAccountUI } from './game/account-ui.js';
 
 const $ = (selector) => document.querySelector(selector);
 const byId = (id) => document.getElementById(id);
@@ -12,6 +16,9 @@ const groups = [...new Set(MEASURES.map((measure) => measure.direction))];
 let browserStorage;
 try { browserStorage = window.localStorage; } catch { browserStorage = null; }
 const session = createGameSession({ storage: browserStorage });
+const cloud = createCloudSession({ session, storage: browserStorage });
+const accountUI = initAccountUI(session, { cloud });
+const cloudPanel = createCloudPanel({ root: byId('cloud-panel'), session, cloud, showAI: false });
 let state = session.getSnapshot();
 let requestedAI = new Map();
 let forecast = null;
@@ -21,10 +28,21 @@ let aiController = null;
 let adapter = null;
 let sceneStatus = { phase: 'loading', cityData: null };
 const motion = matchMedia('(prefers-reduced-motion: reduce)');
+const advisorStyle = document.createElement('link');
+advisorStyle.rel = 'stylesheet'; advisorStyle.href = '/game/advisor.css'; document.head.append(advisorStyle);
+const advisorChat = mountAdvisorChat({ panel: document.querySelector('.ai-panel'), getState: () => state, motion });
+const calculatorPanel = document.createElement('section');
+calculatorPanel.id = 'calculator-panel'; calculatorPanel.className = 'calculator-panel'; calculatorPanel.hidden = true;
+calculatorPanel.setAttribute('aria-label', 'Калькулятор городского плана');
+byId('game-panel').before(calculatorPanel);
+const planHistory = [];
+let restoringHistory = false;
+let pendingMeasure = null;
 
 function dispatch(action) {
   const response = session.dispatch(action);
   byId('session-message').textContent = response?.ok === false ? response.error?.message ?? 'Не удалось выполнить действие.' : '';
+  byId('planner-message').textContent = byId('session-message').textContent;
   return response;
 }
 
@@ -60,7 +78,7 @@ for (const [index, group] of ['Все', ...groups].entries()) {
   const button = el('button', '', index === 0 ? 'Все' : categoryNames[index - 1]);
   button.type = 'button'; button.dataset.category = group;
   button.setAttribute('aria-pressed', String(index === 0));
-  const icon = iconArt(`category-${['transport','ecology','social','safety','services'][index - 1]}`);
+  const icon = iconArt(`category-${['transport','ecology','social-services','safety','city-services'][index - 1]}`);
   if (icon) button.prepend(artImage(icon, 'category-icon'));
   button.addEventListener('click', () => {
     selectedCategory = group;
@@ -90,18 +108,20 @@ function renderCatalog() {
     group.append(heading);
     const list = el('div', 'measure-list');
     for (const item of MEASURES.filter((candidate) => candidate.direction === groupName)) {
-      const selected = state.plan.some((choice) => choice.id === item.id);
+      const choice = state.plan.find((choice) => choice.id === item.id);
+      const selected = Boolean(choice);
       const button = el('button', `measure-card${selected ? ' is-selected' : ''}`);
       button.type = 'button';
       button.dataset.focusKey = `measure-${item.id}`;
+      button.dataset.direction = String(groups.indexOf(groupName));
       button.setAttribute('aria-pressed', String(selected));
       button.setAttribute('aria-label', `${selected ? 'Убрать' : 'Выбрать'}: ${item.name}, стоимость ${item.cost}, ${item.scope === 'city' ? 'весь город' : 'выбрать район'}`);
       const focused = getRegion(state.focusedRegion);
-      button.disabled = !selected && (state.plan.length >= 5 || (state.mode === 'game' && focused?.simulationDistrict === null && item.scope === 'district'));
+      button.disabled = !selected && (state.plan.length >= 5 || state.validation.cost + item.cost > 100 || (state.mode === 'game' && focused?.simulationDistrict === null && item.scope === 'district'));
       const top = el('div', 'measure-card-top');
       top.append(el('span', 'measure-id', item.id), el('span', 'measure-check', selected ? '✓' : '+'));
       const bottom = el('div', 'measure-card-bottom');
-      bottom.append(el('span', '', item.scope === 'city' ? 'Весь город' : 'Один район'), el('span', 'measure-cost', `${item.cost} ед.`));
+      bottom.append(el('span', '', item.scope === 'city' ? 'Весь город' : choice?.district ?? (focused?.simulationDistrict || 'Выбрать район')), el('span', 'measure-cost', `${item.cost} ед.`));
       const effectText = Object.entries(realizedMeasureEffects(item).effects).map(([id, effect]) => `${id} ${effect >= 0 ? '+' : ''}${number(effect)}`).join(' · ');
       const preview = el('span', 'measure-preview', `Эффект через ${item.lag} кв.`);
       preview.title = 'Изменения показателей к концу восьми кварталов, без отдельных бонусов сочетания мер.';
@@ -120,7 +140,86 @@ function renderCatalog() {
 function toggleMeasure(id) {
   const current = state.plan.findIndex((choice) => choice.id === id);
   if (current >= 0) dispatch({ type: 'REMOVE_MEASURE', id });
-  else dispatch({ type: 'ADD_MEASURE', id, district: measure(id).scope === 'city' ? null : state.mode === 'game' ? getRegion(state.focusedRegion)?.simulationDistrict ?? null : null });
+  else {
+    const item = measure(id);
+    const district = getRegion(state.focusedRegion)?.simulationDistrict;
+    if (item.scope === 'district' && (!district || state.mode === 'calculator')) {
+      pendingMeasure = id;
+      byId('placement-title').textContent = measureNames[id];
+      byId('placement-description').textContent = `${item.cost} ед. · Эффект через ${item.lag} кв. В каком районе разместить?`;
+      byId('placement-dialog').showModal();
+      return;
+    }
+    addMeasure(id, item.scope === 'city' ? null : district);
+  }
+}
+
+function addMeasure(id, district) {
+  const response = dispatch({ type: 'ADD_MEASURE', id, district });
+  if (response.ok && state.plan.length === 5) setPlannerTab('plan');
+}
+
+for (const region of REGIONS.filter(item => item.simulationDistrict)) {
+  const button = el('button', 'placement-option', region.label);
+  button.type = 'button';
+  const baseline = BASELINE.districts.find(item => item.name === region.simulationDistrict);
+  button.append(el('span', '', `Индекс ${number(baseline.scoreAfter)}`));
+  button.addEventListener('click', () => {
+    const id = pendingMeasure;
+    byId('placement-dialog').close();
+    if (!id) return;
+    dispatch({ type: 'FOCUS_REGION', regionId: region.regionId });
+    addMeasure(id, region.simulationDistrict);
+  });
+  byId('placement-options').append(button);
+}
+byId('placement-dialog').addEventListener('close', () => { pendingMeasure = null; });
+byId('undo-button').addEventListener('click', () => {
+  const plan = planHistory.pop();
+  if (!plan) return;
+  restoringHistory = true;
+  dispatch({ type: 'LOAD_PLAN', plan });
+  restoringHistory = false;
+  byId('undo-button').disabled = !planHistory.length;
+});
+
+function renderGameHUD() {
+  const revealed = state.result && (state.mode === 'calculator' || state.playback.status === 'complete');
+  const playing = state.result && !revealed;
+  byId('game-phase').textContent = revealed ? 'Прогноз готов' : playing ? 'Город развивается' : 'Планирование';
+  byId('game-phase').dataset.phase = revealed ? 'complete' : playing ? 'playing' : 'planning';
+  byId('mission-title').textContent = revealed ? `Качество жизни: ${number(state.result.score)}` : playing ? 'Смотрим, как изменится город' : state.plan.length ? `Ваш план: ${state.plan.length} из 5 решений` : 'Ваш первый городской план';
+  byId('mission-hint').textContent = revealed ? `${state.result.delta >= 0 ? '+' : ''}${number(state.result.delta)} к старту. Сравните районы и попробуйте улучшить план.` : playing ? 'Последствия решений рассчитаны. Можно ускорить показ или перейти к прогнозу.' : state.validation.valid ? 'Все решения на месте. Запустите развитие города.' : getRegion(state.focusedRegion)?.simulationDistrict ? `Новые районные меры: ${getRegion(state.focusedRegion).label}. Нажмите на карточку, чтобы добавить.` : 'Выберите район и постройте план из пяти решений.';
+  ['plan', 'run', 'result'].forEach((step, index) => {
+    const active = index === (revealed ? 2 : playing ? 1 : 0);
+    if (active) byId(`step-${step}`).setAttribute('aria-current', 'step');
+    else byId(`step-${step}`).removeAttribute('aria-current');
+  });
+  byId('undo-button').disabled = !planHistory.length;
+  const slots = byId('plan-slots');
+  slots.replaceChildren();
+  for (let index = 0; index < 5; index++) {
+    const choice = state.plan[index];
+    const button = el('button', `plan-slot${choice ? ' is-filled' : ''}`);
+    button.type = 'button';
+    if (choice) {
+      const art = policyArt(choice.id, 'object');
+      if (art) button.append(artImage(art, 'slot-art'));
+      const label = el('span', 'slot-label', measureNames[choice.id]);
+      label.append(el('small', '', choice.district ?? 'Весь город'));
+      button.append(label);
+      button.setAttribute('aria-label', `Изменить: ${measureNames[choice.id]}, ${choice.district ?? 'весь город'}`);
+    } else {
+      button.append(el('span', 'slot-number', String(index + 1).padStart(2, '0')), el('span', 'slot-placeholder', 'Добавить'));
+      button.setAttribute('aria-label', `Выбрать решение ${index + 1}`);
+    }
+    button.addEventListener('click', () => {
+      setPlannerTab(choice ? 'plan' : 'measures');
+      byId(choice ? 'plan-panel' : 'measures').scrollIntoView({ behavior: motion.matches ? 'instant' : 'smooth', block: 'nearest' });
+      byId(choice ? 'tab-plan' : 'tab-measures').focus({ preventScroll: true });
+    });
+    slots.append(button);
+  }
 }
 
 function renderSelections() {
@@ -209,6 +308,7 @@ function render() {
 }
 
 function clearResults() {
+  advisorChat.reset();
   aiController?.abort();
   aiController = null;
   requestedAI.clear();
@@ -368,7 +468,9 @@ async function requestAI(mode = 'analysis') {
     requestedAI.set(mode, data.analysis);
   } catch {
     if (!isCurrent()) return;
-    status.textContent = 'AI временно недоступен. Расчёт и варианты улучшения доступны рядом.';
+    byId('ai-output').textContent = explainLocally(result.plan, '', mode);
+    byId('ai-output').hidden = false;
+    status.textContent = 'Локальный помощник · AI недоступен. Объяснение построено по результатам движка.';
     button.disabled = false;
   } finally {
     clearTimeout(timeout);
@@ -431,9 +533,46 @@ function completeWithoutScene() {
   });
 }
 
+function renderCalculator() {
+  calculatorPanel.replaceChildren();
+  calculatorPanel.append(el('p', 'eyebrow', 'КАЛЬКУЛЯТОР РЕШЕНИЙ'), el('h2', '', 'Проверьте свой план'), el('p', '', 'Выберите пять мер и назначьте районы. Расчёт покажет влияние на качество жизни, риски и проверенные варианты улучшения.'));
+  const facts = el('div', 'calculator-facts');
+  for (const [label, value] of [['Решений', `${state.plan.length}/5`], ['Бюджет', `${state.validation.cost}/100`], ['Исходный индекс', number(BASELINE.score)]]) {
+    const fact = el('div', 'calculator-fact'); fact.append(el('span', '', label), el('strong', '', value)); facts.append(fact);
+  }
+  calculatorPanel.append(facts);
+  if (!state.plan.length) calculatorPanel.append(el('p', 'calculator-empty', 'Добавьте меру из каталога справа или загрузите пример из кейса. На мобильном каталог находится ниже.'));
+  else {
+    const table = el('table', 'calculator-table');
+    const head = el('thead'); const headings = el('tr');
+    for (const title of ['Решение', 'Район', 'Стоимость']) headings.append(el('th', '', title));
+    head.append(headings); const body = el('tbody');
+    for (const choice of state.plan) {
+      const row = el('tr'); row.append(el('td', '', measureNames[choice.id]));
+      const district = el('td');
+      if (measure(choice.id).scope === 'district') {
+        const select = el('select', 'district-select'); select.setAttribute('aria-label', `Район для ${measureNames[choice.id]} в калькуляторе`);
+        for (const item of DISTRICTS) { const option = el('option', '', item.name); option.value = item.name; select.append(option); }
+        select.value = choice.district ?? '';
+        select.addEventListener('change', () => dispatch({ type: 'ASSIGN_MEASURE', id: choice.id, district: select.value })); district.append(select);
+      } else district.textContent = 'Весь город';
+      row.append(district, el('td', '', `${measure(choice.id).cost} ед.`)); body.append(row);
+    }
+    table.append(head, body); calculatorPanel.append(table);
+  }
+  const calculateButton = el('button', 'button button-primary calculator-summary-plan', state.validation.valid ? 'Рассчитать план' : `Добавьте ещё ${Math.max(0, 5 - state.plan.length)} мер`);
+  calculateButton.type = 'button'; calculateButton.disabled = !state.validation.valid;
+  if (state.plan.length === 5 && !state.validation.valid) calculateButton.textContent = 'Исправьте ошибки плана';
+  calculateButton.addEventListener('click', calculate); calculatorPanel.append(calculateButton);
+}
+
 function renderShell() {
   const game = state.mode === 'game';
+  document.body.dataset.mode = state.mode;
+  renderGameHUD();
   byId('game-panel').hidden = !game;
+  calculatorPanel.hidden = game;
+  if (!game) renderCalculator();
   byId('mode-game').setAttribute('aria-pressed', String(game));
   byId('mode-calculator').setAttribute('aria-pressed', String(!game));
   for (const projection of ['top', 'tilted']) {
@@ -452,7 +591,7 @@ function renderShell() {
   byId('playback-speed').value = String(state.playback.speed);
   byId('playback-speed').disabled = sceneStatus.phase !== 'ready';
   byId('calculate-button').disabled = !state.validation.valid;
-  byId('calculate-button').textContent = 'Показать прогноз';
+  byId('calculate-button').textContent = game ? 'Показать прогноз' : 'Рассчитать план';
   if (revealed) showResult(state.result);
   else byId('results').hidden = true;
   renderInspector();
@@ -481,6 +620,10 @@ const unsubscribe = session.subscribe((next) => {
   state = next;
   previousSnapshot = next;
   const edited = !prior || prior.planRevision !== next.planRevision;
+  if (edited && prior && !restoringHistory) {
+    planHistory.push(prior.plan.map(choice => ({ ...choice })));
+    if (planHistory.length > 30) planHistory.shift();
+  }
   if (edited) { clearResults(); renderSelections(); renderValidation(); }
   if (edited || prior.mode !== next.mode || prior.focusedRegion !== next.focusedRegion) renderCatalog();
   renderShell();
@@ -500,4 +643,5 @@ adapter = createSceneAdapter({ root: byId('scene-root'), session, onStatus(statu
   renderShell();
 } });
 adapter.connect();
-window.addEventListener('pagehide', (event) => { if (event.persisted) return; adapter.destroy(); aiController?.abort(); unsubscribe(); session.destroy(); });
+cloud.connect();
+window.addEventListener('pagehide', (event) => { if (event.persisted) return; adapter.destroy(); accountUI.destroy(); cloudPanel.destroy(); cloud.destroy(); aiController?.abort(); advisorChat.destroy(); unsubscribe(); session.destroy(); });

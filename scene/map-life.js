@@ -1,15 +1,49 @@
-import { pointInRegion, regionBounds, segmentsCross } from './camera.js';
+import { regionBounds, segmentsCross } from './camera.js';
 import { actorArt } from '../game/art.js';
 
 const NS = 'http://www.w3.org/2000/svg';
-const LIMIT = 32;
-const COLORS = ['#c36b4f', '#477eaa', '#b28b35', '#698553', '#956e9f', '#459a96'];
-const SKIN = ['#e7b788', '#bf885f', '#f1c8a4', '#996a49'];
+export const CITIZEN_LIMITS = Object.freeze({ paths: 1800, desktop: 320, mobile: 140, minSize: 8, maxSize: 18 });
+const LIMIT = CITIZEN_LIMITS.paths;
 const point = value => Array.isArray(value) && value.every(Number.isFinite) && value.length === 2;
 const distance = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 const middle = (a, b) => [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+const indexedShapes = new WeakMap();
+// Reuse vertical edge buckets for dense source polygons. Point tests remain exact;
+// no simplified coastline or approximate district geometry enters collision checks.
+function contains(point, shape) {
+  let polygons = indexedShapes.get(shape);
+  if (!polygons) {
+    polygons = (shape.polygons || []).map(polygon => polygon.map(ring => {
+      const minY = Math.min(...ring.map(p => p[1])), maxY = Math.max(...ring.map(p => p[1]));
+      const height = Math.max(maxY - minY, 1e-9), buckets = Array.from({ length: 64 }, () => []);
+      for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+        const a = ring[j], b = ring[i], from = Math.max(0, Math.floor((Math.min(a[1], b[1]) - minY) / height * 63));
+        const to = Math.min(63, Math.floor((Math.max(a[1], b[1]) - minY) / height * 63));
+        for (let bucket = from; bucket <= to; bucket++) buckets[bucket].push([a, b]);
+      }
+      return { minY, maxY, height, buckets };
+    }));
+    indexedShapes.set(shape, polygons);
+  }
+  const [x, y] = point;
+  const inRing = ring => {
+    if (y < ring.minY || y > ring.maxY) return false;
+    let inside = false;
+    for (const [a, b] of ring.buckets[Math.max(0, Math.min(63, Math.floor((y - ring.minY) / ring.height * 63)))]) {
+      const dx = b[0] - a[0], dy = b[1] - a[1], cross = (x - a[0]) * dy - (y - a[1]) * dx;
+      if (Math.abs(cross) <= 1e-9 * Math.max(1, Math.abs(dx), Math.abs(dy)) && x >= Math.min(a[0], b[0]) - 1e-9 && x <= Math.max(a[0], b[0]) + 1e-9 && y >= Math.min(a[1], b[1]) - 1e-9 && y <= Math.max(a[1], b[1]) + 1e-9) return true;
+      if ((a[1] > y) !== (b[1] > y) && x < a[0] + (y - a[1]) * dx / dy) inside = !inside;
+    }
+    return inside;
+  };
+  return polygons.some(([outer, ...holes]) => outer && inRing(outer) && !holes.some(inRing));
+}
 const intersects = (a, b, shape) => shape.polygons?.some(polygon => polygon.some(ring =>
-  ring.some((p, i) => i > 0 && segmentsCross(a, b, ring[i - 1], p))));
+  ring.some((p, i) => i > 0 && Math.max(a[0], b[0]) >= Math.min(p[0], ring[i - 1][0])
+    && Math.min(a[0], b[0]) <= Math.max(p[0], ring[i - 1][0])
+    && Math.max(a[1], b[1]) >= Math.min(p[1], ring[i - 1][1])
+    && Math.min(a[1], b[1]) <= Math.max(p[1], ring[i - 1][1])
+    && segmentsCross(a, b, ring[i - 1], p))));
 const boundsOverlap = (a, b, bounds) => bounds && Math.max(a[0], b[0]) >= bounds.minX
   && Math.min(a[0], b[0]) <= bounds.maxX && Math.max(a[1], b[1]) >= bounds.minY
   && Math.min(a[1], b[1]) <= bounds.maxY;
@@ -22,7 +56,7 @@ export function buildWalkingPaths(map, regions = map.regions || []) {
   const candidates = [], raw = [];
   const regionShapes = regions.map(shape => ({ shape, bounds: regionBounds(shape) }));
   function candidate(a, b, source) {
-    if (!point(a) || !point(b) || distance(a, b) < .5) return;
+    if (!point(a) || !point(b) || distance(a, b) < .2) return;
     const midpoint = middle(a, b);
     raw.push({ a, b, midpoint, source, centerDistance: distance(midpoint, center) });
   }
@@ -33,25 +67,25 @@ export function buildWalkingPaths(map, regions = map.regions || []) {
       const a = road.points[i - 1], b = road.points[i];
       if (!point(a) || !point(b)) continue;
       const length = distance(a, b);
-      if (length < 2) continue;
+      if (length < .6) continue;
       const unit = [(b[0] - a[0]) / length, (b[1] - a[1]) / length];
-      const mid = middle(a, b), half = Math.min(4, length * .35);
+      const mid = middle(a, b), half = Math.min(1.1, length * .35);
       for (const side of [-1, 1]) {
-        const offset = [-unit[1] * .8 * side, unit[0] * .8 * side];
+        const offset = [-unit[1] * .18 * side, unit[0] * .18 * side];
         candidate(mid.map((v, axis) => v - unit[axis] * half + offset[axis]),
           mid.map((v, axis) => v + unit[axis] * half + offset[axis]), 'roadside');
       }
     }
   }
   // Park anchors receive a few short routes only where a mapped green polygon contains them.
-  const parks = (map.landscape || []).filter(f => !/water|river|hydro/.test(f.kind));
+  const parks = (map.landscape || []).filter(f => !/water|river|hydro/.test(f.kind)).map(shape => ({ shape, bounds: regionBounds(shape) }));
   for (const anchor of map.parkAnchors || []) {
     if (!point(anchor.position)) continue;
     for (let i = 0; i < 6; i++) {
       const angle = i * Math.PI / 3;
       const mid = anchor.position.map((v, axis) => v + (axis ? Math.sin(angle) : Math.cos(angle)) * 4);
       const a = [mid[0] - 1.5, mid[1] - .5], b = [mid[0] + 1.5, mid[1] + .5];
-      if (parks.some(park => pointInRegion(a, park) && pointInRegion(b, park) && !intersects(a, b, park))) candidate(a, b, 'park');
+      if (parks.some(({shape, bounds}) => boundsOverlap(a, b, bounds) && contains(a, shape) && contains(b, shape) && !intersects(a, b, shape))) candidate(a, b, 'park');
     }
   }
   // Bound expensive polygon checks before route selection. Road geometry can contain
@@ -59,41 +93,31 @@ export function buildWalkingPaths(map, regions = map.regions || []) {
   raw.sort((a, b) => a.centerDistance - b.centerDistance);
   const anchors = [...(map.parkAnchors || []), ...(map.landmarks || [])].filter(anchor => point(anchor.position));
   const pools = regionShapes.map(({ shape, bounds }) => {
-    const nearby = anchors.filter(anchor => boundsOverlap(anchor.position, anchor.position, bounds) && pointInRegion(anchor.position, shape))
+    const nearby = anchors.filter(anchor => boundsOverlap(anchor.position, anchor.position, bounds) && contains(anchor.position, shape))
       .sort((a, b) => distance(a.position, center) - distance(b.position, center));
     const anchor = nearby[0]?.position || shape.labelAnchor || center;
     return raw.filter(item => boundsOverlap(item.midpoint, item.midpoint, bounds))
-      .sort((a, b) => distance(a.midpoint, anchor) - distance(b.midpoint, anchor)).slice(0, 48)
+      .sort((a, b) => distance(a.midpoint, anchor) - distance(b.midpoint, anchor)).slice(0, 1800)
       .map(item => ({ ...item, region: shape }));
   });
-  const ordered = pools.length ? Array.from({ length: 48 }, (_, index) => pools.map(pool => pool[index]).filter(Boolean)).flat() : raw;
+  const ordered = pools.length ? Array.from({ length: 1800 }, (_, index) => pools.map(pool => pool[index]).filter(Boolean)).flat() : raw;
+  const cells = new Set();
   let checked = 0;
   for (const item of ordered) {
-    if (checked >= 256 || candidates.length >= 96) break;
+    if (checked >= 9000 || candidates.length >= LIMIT) break;
     const { a, b, midpoint } = item;
-    if (candidates.some(other => distance(other.midpoint, midpoint) < 3)) continue;
+    const cell = `${Math.floor(midpoint[0] * 3)}:${Math.floor(midpoint[1] * 3)}`;
+    if (cells.has(cell)) continue;
     checked++;
     const region = item.region;
-    if (regions.length && (!region || !pointInRegion(midpoint, region) || !pointInRegion(a, region) || !pointInRegion(b, region) || intersects(a, b, region))) continue;
+    if (regions.length && (!region || !contains(midpoint, region) || !contains(a, region) || !contains(b, region) || intersects(a, b, region))) continue;
     if (exclusions.some(({ shape, bounds }) => boundsOverlap(a, b, bounds)
-      && (pointInRegion(a, shape) || pointInRegion(b, shape) || intersects(a, b, shape)))) continue;
+      && (contains(a, shape) || contains(b, shape) || intersects(a, b, shape)))) continue;
+    cells.add(cell);
     candidates.push({ a, b, midpoint, source: item.source, regionId: region?.regionId || null });
   }
-  const result = [], used = new Set();
-  const regionIds = [...new Set(candidates.map(item => item.regionId))];
-  // Round robin keeps small districts represented without tying people count to population.
-  for (let pass = 0; pass < LIMIT && result.length < LIMIT; pass++) {
-    let added = false;
-    for (const regionId of regionIds) {
-      const item = candidates.find(candidate => candidate.regionId === regionId && !used.has(candidate)
-        && result.every(other => distance(other.midpoint, candidate.midpoint) > 6));
-      if (!item) continue;
-      used.add(item); result.push(item); added = true;
-      if (result.length === LIMIT) break;
-    }
-    if (!added) break;
-  }
-  return result;
+  // The pool remains round-robin across regions; the renderer selects the current viewport.
+  return candidates;
 }
 
 /** React to authoritative indicator deltas only; never infer scores or economic outcomes. */
@@ -103,7 +127,7 @@ export function getCitizenReaction(effects = {}) {
   return positive && negative ? 'mixed' : positive ? 'positive' : negative ? 'negative' : 'neutral';
 }
 
-/** Owns a bounded, persistent SVG subtree. The atlas owns timing and visibility. */
+/** A reusable node pool: viewport selection controls density; no census correspondence. */
 export function createMapLife({ layer, map, regions = map.regions || [] }) {
   const doc = layer.ownerDocument || document;
   const el = (tag, attributes = {}) => {
@@ -111,63 +135,68 @@ export function createMapLife({ layer, map, regions = map.regions || [] }) {
     for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, value);
     return node;
   };
-  const root = el('g', { class: 'atlas-citizens', 'aria-hidden': 'true', 'pointer-events': 'none' });
+  const root = el('g', { class: 'atlas-citizens', 'aria-hidden': 'true', 'pointer-events': 'none', 'data-illustrative': 'true' });
   layer.appendChild(root);
   const paths = buildWalkingPaths(map, regions);
-  let destroyed = false, visibleCount = 0, movingCount = 0;
-  const people = paths.map((path, index) => {
-    const node = el('g', { class: 'atlas-citizen', 'data-region-id': path.regionId || '', 'data-reaction': 'neutral' });
-    const shadow = el('ellipse', { cy: .5, rx: 3.5, ry: 1.2, fill: '#304b45', opacity: .2 });
-    const figure = el('g');
-    const legs = el('path', { d: 'M-1 -4L-1.4 0M1 -4L1.4 0', fill: 'none', stroke: '#344c59', 'stroke-width': 1.5, 'stroke-linecap': 'round' });
-    const arms = el('path', { d: 'M-2 -8L-3 -4M2 -8L3 -4', fill: 'none', stroke: SKIN[index % SKIN.length], 'stroke-width': 1.2, 'stroke-linecap': 'round' });
-    const body = el('path', { d: index % 3 ? 'M-2 -9Q0 -10 2 -9L2 -4L-2 -4Z' : 'M-1.7 -9Q0 -10 1.7 -9L2.8 -3.5L-2.8 -3.5Z', fill: COLORS[index % COLORS.length], stroke: '#fffae8', 'stroke-width': .4 });
-    const head = el('circle', { cy: -11, r: 2, fill: SKIN[index % SKIN.length] });
-    const hair = el('path', { d: 'M-2 -11Q-2.4 -14 0 -13.3Q2.4 -13.2 2 -10.8L1 -12L-1.2 -11.7Z', fill: index % 5 === 0 ? '#bdad91' : '#4b4138' });
-    const art = actorArt(`citizen-0${index % 3 + 1}`, 'tilted');
-    const sprite = el('image', { href: art.href, x: -21, y: -40.6875, width: 42, height: 42,
-      preserveAspectRatio: 'xMidYMid meet', display: 'none', class: 'atlas-citizen-art' });
-    const bubble = el('g', { display: 'none', transform: 'translate(5 -15)' });
+  let destroyed = false, visibleCount = 0, movingCount = 0, signature = '', selected = [], spriteSize = 8;
+  const people = Array.from({ length: Math.min(paths.length, CITIZEN_LIMITS.desktop) }, (_, index) => {
+    const node = el('g', { class: 'atlas-citizen', 'data-reaction': 'neutral', display: 'none' });
+    const kind = index % 29 === 28 ? 'emergency' : index % 13 === 12 ? 'worker' : `citizen-0${index % 3 + 1}`;
+    const sprite = el('image', { href: actorArt(kind).href, x: -8, y: -15.5, width: 16, height: 16,
+      preserveAspectRatio: 'xMidYMid meet', class: 'atlas-citizen-art', display: '' });
+    // Only a few representative reactions appear, keeping streets and labels readable.
+    const bubble = el('g', { display: 'none', transform: 'translate(5 -19) scale(.65)' });
     const bubbleBody = el('path', { d: 'M-4 -4H4Q6 -4 6 -2V2Q6 4 4 4H0L-3 6V4H-4Q-6 4 -6 2V-2Q-6 -4 -4 -4Z', fill: '#faf8e7', stroke: '#6b8e79', 'stroke-width': .8 });
     const symbol = el('path', { d: '', fill: 'none', stroke: '#4e8664', 'stroke-width': 1.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' });
     bubble.appendChild(bubbleBody); bubble.appendChild(symbol);
-    for (const child of [legs, arms, body, head, hair]) figure.appendChild(child);
-    for (const child of [shadow, figure, sprite, bubble]) node.appendChild(child);
-    root.appendChild(node);
-    return { node, figure, sprite, legs, arms, bubble, bubbleBody, symbol, path, phase: index * .61803398875 % 1, reaction: 'neutral' };
+    node.appendChild(sprite); node.appendChild(bubble); root.appendChild(node);
+    return { node, sprite, bubble, bubbleBody, symbol, phase: index * .61803398875 % 1, reaction: 'neutral' };
   });
   return {
-    render({ camera, width, height, seconds = 0, reducedMotion = false, visualState } = {}) {
+    render({ camera, width, height, seconds = 0, reducedMotion = false, visualState, exclusions = [] } = {}) {
       if (destroyed || !camera) return;
       const time = reducedMotion || !Number.isFinite(seconds) ? 0 : seconds;
+      const zoom = camera.getState?.().zoom || 1;
+      spriteSize = Math.min(CITIZEN_LIMITS.maxSize, Math.max(CITIZEN_LIMITS.minSize, 6 + Math.sqrt(zoom) * 1.5));
+      const nextSignature = `${camera.matrix?.().join(',') || JSON.stringify(camera.getState?.())}|${width}|${height}|${exclusions.map(b => [b.x,b.y,b.w,b.h].join(',')).join(';')}`;
+      if (signature !== nextSignature) {
+        signature = nextSignature;
+        const limit = Math.min(width < 600 ? CITIZEN_LIMITS.mobile : CITIZEN_LIMITS.desktop, Math.max(20, Math.floor(width * height / 1600)));
+        const cells = new Set(); selected = [];
+        for (const path of paths) {
+          if (selected.length >= limit) break;
+          const [x, y] = camera.project(path.midpoint);
+          const cell = `${Math.floor(x / (spriteSize * 1.35))}:${Math.floor(y / (spriteSize * 1.35))}`;
+          if (x < 4 || x > width - 4 || y < spriteSize || y > height - 25 || cells.has(cell)) continue;
+          if (exclusions.some(b => x >= b.x - 5 && x <= b.x + b.w + 5 && y >= b.y && y <= b.y + b.h + spriteSize)) continue;
+          cells.add(cell); selected.push(path);
+        }
+        for (let i = 0; i < people.length; i++) {
+          people[i].path = selected[i];
+          people[i].node.setAttribute('data-region-id', selected[i]?.regionId || '');
+          if (!selected[i]) people[i].node.setAttribute('display', 'none');
+        }
+      }
       const regionEffects = new Map((visualState?.regions || []).map(region => [region.regionId, region.effects]));
       visibleCount = 0; movingCount = 0;
-      const scale = Math.min(1.35, Math.max(.86, .8 + (camera.getState?.().zoom || 1) * .06));
-      const useArt = (camera.getState?.().zoom || 1) >= 5;
-      for (const person of people) {
+      for (const [index, person] of people.entries()) {
         const { node, path, phase } = person;
+        if (!path) continue;
         const cycle = (phase + time / (24 + phase * 14)) % 1;
         const fraction = cycle < .5 ? cycle * 2 : (1 - cycle) * 2;
         const position = path.a.map((value, axis) => value + (path.b[axis] - value) * fraction);
         const [x, y] = camera.project(position);
-        const visible = x > -15 && x < width + 15 && y > -15 && y < height + 25;
+        const visible = x > 0 && x < width && y > spriteSize && y < height - 25
+          && !exclusions.some(b => x >= b.x - 3 && x <= b.x + b.w + 3 && y >= b.y && y <= b.y + b.h + spriteSize);
         node.setAttribute('display', visible ? '' : 'none');
         if (!visible) continue;
-        visibleCount++;
-        if (!reducedMotion) movingCount++;
-        node.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${scale.toFixed(2)})`);
-        const gait = reducedMotion ? 0 : Math.sin(time * 5 + phase * 6.28);
-        person.figure.setAttribute('display', useArt ? 'none' : '');
-        person.sprite.setAttribute('display', useArt ? '' : 'none');
-        person.sprite.setAttribute('transform', `translate(0 ${(-Math.abs(gait) * .5).toFixed(2)})`);
-        person.bubble.setAttribute('transform', useArt ? 'translate(10 -39)' : 'translate(5 -15)');
-        person.figure.setAttribute('transform', `translate(0 ${(-Math.abs(gait) * .35).toFixed(2)})`);
-        person.legs.setAttribute('d', `M-1 -4L${(-1.3 + gait).toFixed(2)} 0M1 -4L${(1.3 - gait).toFixed(2)} 0`);
-        person.arms.setAttribute('d', `M-2 -8L-3 ${(-4 - gait).toFixed(2)}M2 -8L3 ${(-4 + gait).toFixed(2)}`);
+        visibleCount++; if (!reducedMotion) movingCount++;
+        const scale = spriteSize / 16;
+        node.setAttribute('transform', `translate(${x.toFixed(2)} ${y.toFixed(2)}) scale(${scale.toFixed(3)})`);
         const reaction = getCitizenReaction(regionEffects.get(path.regionId));
+        person.bubble.setAttribute('display', reaction !== 'neutral' && index % 16 === 0 && zoom >= 5 ? '' : 'none');
         if (reaction !== person.reaction) {
           person.reaction = reaction; node.setAttribute('data-reaction', reaction);
-          person.bubble.setAttribute('display', reaction === 'neutral' ? 'none' : '');
           const color = reaction === 'positive' ? '#488269' : '#b38347';
           person.symbol.setAttribute('stroke', color); person.bubbleBody.setAttribute('stroke', color);
           person.symbol.setAttribute('d', reaction === 'positive' ? 'M-2 0L-.5 1.5L2.5 -1.5'
@@ -176,7 +205,7 @@ export function createMapLife({ layer, map, regions = map.regions || [] }) {
       }
     },
     destroy() { if (!destroyed) { root.remove(); destroyed = true; visibleCount = 0; movingCount = 0; } },
-    getDiagnostics() { return { count: people.length, actorCount: people.length, visibleCount, movingCount, destroyed, representative: true,
-      reactions: Object.fromEntries(['neutral', 'positive', 'negative', 'mixed'].map(reaction => [reaction, people.filter(person => person.reaction === reaction).length])) }; },
+    getDiagnostics() { return { count: selected.length, actorCount: selected.length, capacity: people.length, pathCount: paths.length, spriteSize, visibleCount, movingCount, destroyed, representative: true,
+      reactions: Object.fromEntries(['neutral', 'positive', 'negative', 'mixed'].map(reaction => [reaction, people.filter(person => person.path && person.reaction === reaction).length])) }; },
   };
 }

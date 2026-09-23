@@ -435,6 +435,34 @@ test('atlas mayor cannot cross a source footprint thinner than a movement sample
   assert.ok(scene.getDiagnostics().mayor[0] < 465.005, 'the whole travelled segment must be clear of footprints');
 });
 
+test('atlas walk controls and physical Cyrillic-layout WASD move the mayor and disable outside walking mode', t => {
+  const harness = atlasHarness(t);
+  const scene = harness.mount(harness.root, undefined, { ...atlasData,
+    regions: [{ regionId: 'nura', status: 'verified', labelAnchor: [500, 350], polygons: square(0, 0, 1000) }],
+  });
+  const walking = sceneSnapshot({ view: 'district', focusedRegion: 'nura' });
+  scene.update({ snapshot: walking, context: { reducedMotion: true } });
+  const stage = harness.root.querySelector('.atlas-stage');
+  const controls = harness.root.querySelector('.atlas-walk-controls');
+  assert.equal(controls.hidden, false);
+  assert.equal(harness.document.activeElement, stage);
+  const beforeKeyboard = scene.getDiagnostics().mayor[0];
+  stage.dispatchEvent({ type: 'keydown', key: 'в', code: 'KeyD' });
+  stage.dispatchEvent({ type: 'keyup', key: 'в', code: 'KeyD' });
+  assert.ok(scene.getDiagnostics().mayor[0] > beforeKeyboard);
+  const right = controls.children.find(button => button.dataset.walkKey === 'ArrowRight');
+  const beforeTouch = scene.getDiagnostics().mayor[0];
+  right.dispatchEvent({ type: 'pointerdown', pointerId: 42 });
+  right.dispatchEvent({ type: 'pointerup', pointerId: 42 });
+  assert.ok(scene.getDiagnostics().mayor[0] > beforeTouch);
+  assert.equal(right.hasPointerCapture(42), false);
+  scene.update({ snapshot: sceneSnapshot({ mode: 'calculator' }), context: { reducedMotion: true } });
+  assert.equal(controls.hidden, true);
+  const after = scene.getDiagnostics().mayor;
+  right.dispatchEvent({ type: 'pointerdown', pointerId: 43 });
+  assert.deepEqual(scene.getDiagnostics().mayor, after);
+});
+
 test('atlas six-source gate accepts the complete set without admitting historical extras', t => {
   const harness = atlasHarness(t);
   const regions = ['esil', 'almaty', 'saryarka', 'baikonur', 'nura', 'saraishyk'].map(regionId => ({

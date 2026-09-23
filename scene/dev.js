@@ -2,6 +2,8 @@ import { createScene } from './index.js';
 import { loadAstanaMap } from './load-map.js';
 import { createPlayPanel } from './play-panel.js';
 import { createGameSession } from '../game/session.js';
+import { createCloudSession } from '../game/cloud.js';
+import { createCloudPanel } from '../game/cloud-panel.js';
 import { geography as fixtureGeography } from './fixtures/geography.js';
 import { assets as fixtureAssets } from './fixtures/assets.js';
 import { cityData as fixtureCityData } from './fixtures/snapshot.js';
@@ -13,6 +15,8 @@ const root = $('scene-root'), media = matchMedia('(prefers-reduced-motion: reduc
 const context = { cityData: fixtureCityData, reducedMotion: media.matches, visible: true };
 let storage; try { storage = localStorage; } catch { storage = undefined; }
 const session = createGameSession({ storage });
+const cloud = createCloudSession({ session, storage });
+let cloudPanel;
 session.dispatch({ type: 'SET_PROJECTION', projection: 'tilted' });
 let scene, panel, mapData, unsubscribe;
 const intents = [];
@@ -20,14 +24,14 @@ function onIntent(intent) { intents.push(structuredClone(intent)); session.dispa
 function render(snapshot = session.getSnapshot()) { scene?.update({ snapshot, context }); }
 function diagnostics() { $('dev-status').textContent = JSON.stringify({ snapshot: session.getSnapshot(), scene: scene?.getDiagnostics() }, null, 2); }
 function mount() {
-  panel?.destroy(); scene?.destroy(); root.replaceChildren();
+  cloudPanel?.destroy(); panel?.destroy(); scene?.destroy(); root.replaceChildren();
   scene = createScene({ root, assets: fixtureAssets, geography: fixtureGeography, ...(mapData ? { mapData } : {}), onIntent });
   render();
-  if (mapData) { const hud = document.createElement('div'); hud.className = 'atlas-game-hud'; root.querySelector('.atlas-map-shell').appendChild(hud); panel = createPlayPanel({ root: hud, session }); render(); }
+  if (mapData) { const hud = document.createElement('div'); hud.className = 'atlas-game-hud'; root.querySelector('.atlas-map-shell').appendChild(hud); panel = createPlayPanel({ root: hud, session }); cloudPanel = createCloudPanel({ root: hud.querySelector('.atlas-play-content'), session, cloud }); render(); }
 }
 try {
   if (!fixture) mapData = await loadAstanaMap();
-  mount(); unsubscribe = session.subscribe(render);
+  mount(); unsubscribe = session.subscribe(render); cloud.connect();
   $('reduced').checked = context.reducedMotion;
   $('reduced').onchange = event => { context.reducedMotion = event.target.checked; render(); };
   $('hidden').onchange = event => { context.visible = !event.target.checked; render(); };
@@ -39,4 +43,4 @@ try {
   const title = document.createElement('strong'); title.textContent = 'Не удалось загрузить карту';
   const detail = document.createElement('p'); detail.textContent = error.message; message.append(title, detail); root.appendChild(message); console.error(error);
 }
-window.addEventListener('pagehide', () => { unsubscribe?.(); panel?.destroy(); scene?.destroy(); session.destroy(); }, { once: true });
+window.addEventListener('pagehide', () => { unsubscribe?.(); cloudPanel?.destroy(); cloud.destroy(); panel?.destroy(); scene?.destroy(); session.destroy(); }, { once: true });
