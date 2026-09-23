@@ -14,6 +14,8 @@ Draft project PR: [#2](https://github.com/BAITC-Hacks/hack-d5c78ff1-saryarqa/pul
 
 Latest screenshots: [320](../../../assets/game/qa-integrated/shell-320.png), [375](../../../assets/game/qa-integrated/shell-375.png), [430](../../../assets/game/qa-integrated/shell-430.png), [768](../../../assets/game/qa-integrated/shell-768.png), [1024](../../../assets/game/qa-integrated/shell-1024.png), [1440](../../../assets/game/qa-integrated/shell-1440.png). These are shell checks, not mayor/actor/real-map acceptance.
 
+Parallel collaborator commit `0209fe6897dd5c0eef76fd4815165d6026913884` added `data/raw/**` to this feature while it was being published. It was preserved by merge, without executing its Python scripts or changing its files. Latest tested merge commit: **`b4dfd9cbe6efb338eb317f9737ea850c3b346d7e`**, again 56 PASS / 1 Windows symlink SKIP. Those raw files provide two point candidates, a bounding box and an OSM-fetch script, not a reviewed road export or source-compatible district geometry. Dates, source URLs/reuse and transformation to the local CRS are not established there. They are not imported by the runtime manifest/geography/context or certified by this report. Concurrent untracked `data/osm-research` is also left untouched.
+
 ## Saved responsibility and continuation context
 
 This task owns `assets/game/**`, `data/geography/**`, `data/city/**`, `tools/check-assets.mjs`, `tests/assets.test.js`, `tests/city-data.test.js` and this report, under [03-ASSETS-QA](../03-ASSETS-QA.md), [contract v1](../04-CONTRACTS.md) and [asset brief](../07-ASSET-PACK.md). Keep this report as the durable handoff for subsequent work. The accepted design is [GAME-DESIGN](../../GAME-DESIGN.md).
