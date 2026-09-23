@@ -100,3 +100,86 @@ test('city effects reach all districts, values remain in range', () => {
   }
   assert.equal(result.districts.length, DISTRICTS.length);
 });
+
+test('all three synergy bonuses stay fixed and apply only in the paired district', () => {
+  const transport = calculatePlan([
+    { id: 'M1', district: 'Нура' }, { id: 'M2', district: null },
+    { id: 'M4', district: 'Сарыарка' }, { id: 'M9', district: 'Нура' },
+    { id: 'M14', district: null },
+  ]);
+  assert.equal(transport.valid, true);
+  assert.deepEqual(transport.synergies, [
+    { measures: ['M1', 'M2'], district: 'Нура', indicator: 'T1', amount: 2 },
+  ]);
+  assert.equal(transport.districts.find((district) => district.name === 'Нура').after.T1, 64.5);
+  assert.equal(transport.districts.find((district) => district.name === 'Есиль').after.T1, 48);
+
+  const ecology = calculatePlan([
+    { id: 'M5', district: 'Сарыарка' }, { id: 'M6', district: null },
+    { id: 'M8', district: 'Нура' }, { id: 'M10', district: 'Нура' },
+    { id: 'M12', district: null },
+  ]);
+  assert.equal(ecology.valid, true);
+  assert.deepEqual(ecology.synergies, [
+    { measures: ['M5', 'M6'], district: 'Сарыарка', indicator: 'E2', amount: 2 },
+    { measures: ['M10', 'M12'], district: 'Нура', indicator: 'B1', amount: 2 },
+  ]);
+  assert.equal(ecology.districts.find((district) => district.name === 'Сарыарка').after.E2, 52.25);
+  assert.equal(ecology.districts.find((district) => district.name === 'Есиль').after.E2, 73.5);
+  assert.equal(ecology.districts.find((district) => district.name === 'Нура').after.B1, 67.5);
+});
+
+test('exactly 100 budget is valid and unspent funds never enter the formula', () => {
+  const result = calculatePlan([
+    { id: 'M3', district: 'Нура' }, { id: 'M7', district: 'Нура' },
+    { id: 'M8', district: 'Нура' }, { id: 'M11', district: 'Алматы' },
+    { id: 'M14', district: null },
+  ]);
+  assert.equal(result.valid, true);
+  assert.equal(result.cost, 100);
+  assert.equal(result.remaining, 0);
+  const official = calculatePlan(example);
+  for (const plan of [result, official]) {
+    assert.equal(plan.score, 0.7 * plan.cityAverage + 0.3 * plan.weakestDistrict.score - plan.criticalCount);
+  }
+});
+
+test('official cheapest plan preserves adverse traffic effects and new critical cells', () => {
+  const result = calculatePlan([
+    { id: 'M9', district: 'Нура' }, { id: 'M11', district: 'Алматы' },
+    { id: 'M10', district: 'Нура' }, { id: 'M12', district: null },
+    { id: 'M4', district: 'Сарыарка' },
+  ]);
+  assert.equal(result.valid, true);
+  assert.equal(result.cost, 61);
+  assert.equal(result.districts.find((district) => district.name === 'Алматы').after.T1, 38.25);
+  assert.deepEqual(result.criticalCells, [
+    { district: 'Алматы', indicator: 'T1', value: 38.25 },
+    { district: 'Нура', indicator: 'S2', value: 37.625 },
+  ]);
+});
+
+test('changing an assignment changes the score without mutating the submitted plan', () => {
+  const original = structuredClone(example);
+  const changed = example.map((choice) => choice.id === 'M7' ? { ...choice, district: 'Есиль' } : choice);
+  const first = calculatePlan(example);
+  const second = calculatePlan(changed);
+  assert.equal(first.valid, true);
+  assert.equal(second.valid, true);
+  assert.notEqual(first.score, second.score);
+  assert.deepEqual(example, original);
+  assert.equal(second.criticalCount, 1);
+});
+
+test('malformed input and a duplicate in different districts have no score or effects', () => {
+  const duplicate = [...example.slice(0, 4), { id: 'M7', district: 'Есиль' }];
+  for (const input of [null, {}, 'M7', [null, ...example.slice(1)], duplicate]) {
+    const result = calculatePlan(input);
+    assert.equal(result.valid, false);
+    assert.equal(result.score, null);
+    assert.equal(result.delta, null);
+    assert.equal(result.districts, undefined);
+    assert.ok(result.errors.length > 0);
+  }
+  assert.ok(codes(duplicate).includes('DUPLICATE_MEASURE'));
+});

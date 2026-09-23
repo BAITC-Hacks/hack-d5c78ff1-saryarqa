@@ -435,6 +435,34 @@ test('atlas mayor cannot cross a source footprint thinner than a movement sample
   assert.ok(scene.getDiagnostics().mayor[0] < 465.005, 'the whole travelled segment must be clear of footprints');
 });
 
+test('atlas walk controls and physical Cyrillic-layout WASD move the mayor and disable outside walking mode', t => {
+  const harness = atlasHarness(t);
+  const scene = harness.mount(harness.root, undefined, { ...atlasData,
+    regions: [{ regionId: 'nura', status: 'verified', labelAnchor: [500, 350], polygons: square(0, 0, 1000) }],
+  });
+  const walking = sceneSnapshot({ view: 'district', focusedRegion: 'nura' });
+  scene.update({ snapshot: walking, context: { reducedMotion: true } });
+  const stage = harness.root.querySelector('.atlas-stage');
+  const controls = harness.root.querySelector('.atlas-walk-controls');
+  assert.equal(controls.hidden, false);
+  assert.equal(harness.document.activeElement, stage);
+  const beforeKeyboard = scene.getDiagnostics().mayor[0];
+  stage.dispatchEvent({ type: 'keydown', key: 'в', code: 'KeyD' });
+  stage.dispatchEvent({ type: 'keyup', key: 'в', code: 'KeyD' });
+  assert.ok(scene.getDiagnostics().mayor[0] > beforeKeyboard);
+  const right = controls.children.find(button => button.dataset.walkKey === 'ArrowRight');
+  const beforeTouch = scene.getDiagnostics().mayor[0];
+  right.dispatchEvent({ type: 'pointerdown', pointerId: 42 });
+  right.dispatchEvent({ type: 'pointerup', pointerId: 42 });
+  assert.ok(scene.getDiagnostics().mayor[0] > beforeTouch);
+  assert.equal(right.hasPointerCapture(42), false);
+  scene.update({ snapshot: sceneSnapshot({ mode: 'calculator' }), context: { reducedMotion: true } });
+  assert.equal(controls.hidden, true);
+  const after = scene.getDiagnostics().mayor;
+  right.dispatchEvent({ type: 'pointerdown', pointerId: 43 });
+  assert.deepEqual(scene.getDiagnostics().mayor, after);
+});
+
 test('atlas six-source gate accepts the complete set without admitting historical extras', t => {
   const harness = atlasHarness(t);
   const regions = ['esil', 'almaty', 'saryarka', 'baikonur', 'nura', 'saraishyk'].map(regionId => ({
@@ -482,4 +510,25 @@ test('bundled Astana geography adapts all six attributed districts and gives Nur
     moved ||= position.some((value, axis) => value !== start[axis]);
   }
   assert.equal(moved, true);
+});
+
+test('atlas renders visible building geometry after the former 2600th feature', t => {
+  const harness = atlasHarness(t);
+  const buildings = Array.from({ length: 3500 }, (_, i) => ({ id: `complete-${i}`, polygons: square(495 + (i % 50) * .1, 345 + Math.floor(i / 50) * .1, .05) }));
+  const scene = harness.mount(harness.root, () => {}, { ...atlasData, buildings, fullCity: true });
+  scene.update({ snapshot: sceneSnapshot({ projection: 'top' }), context: { reducedMotion: true } });
+  const paths = harness.root.querySelector('.atlas-layer-buildings').children;
+  assert.equal(paths.reduce((sum, path) => sum + (path.getAttribute('d').match(/M/g) || []).length, 0), 3500);
+  assert.ok(paths.length < 100, 'complete geometry is batched instead of creating thousands of DOM nodes');
+});
+
+
+test('full city roads retain all visible segments in bounded SVG batches', t => {
+  const harness = atlasHarness(t);
+  const roads = Array.from({ length: 3500 }, (_, i) => ({ id: 'city-road-' + i, kind: i % 2 ? 'primary' : 'residential', points: [[499, 349], [501, 351]] }));
+  const scene = harness.mount(harness.root, () => {}, { ...atlasData, roads, fullCity: true });
+  scene.update({ snapshot: sceneSnapshot({ projection: 'top' }), context: { reducedMotion: true } });
+  const paths = harness.root.querySelector('.atlas-layer-roads').children;
+  assert.equal(paths.reduce((sum, path) => sum + Number(path.getAttribute('data-segment-count')), 0), 3500);
+  assert.ok(paths.length < 40);
 });

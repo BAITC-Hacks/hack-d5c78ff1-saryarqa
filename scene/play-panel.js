@@ -291,7 +291,7 @@ export function createPlayPanel({ root, session }) {
       const selected = Boolean(decision);
       row.card.classList.toggle('is-selected', selected);
       row.add.innerHTML = iconMarkup(selected ? 'minus' : 'plus',18);
-      row.add.disabled = !selected && plan.length >= 5;
+      row.add.disabled = !selected && (plan.length >= 5 || validation.cost + row.measure.cost > 100);
       row.add.setAttribute('aria-pressed', String(selected));
       row.add.setAttribute('aria-label', `${selected ? 'Убрать' : 'Добавить'}: ${row.measure.name}`);
       row.assignment.hidden = !selected || row.measure.scope === 'city';

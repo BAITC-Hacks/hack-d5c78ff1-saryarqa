@@ -1,0 +1,11 @@
+.akim-scene .atlas-walk-controls{position:absolute;z-index:4;left:16px;bottom:100px;display:grid;grid-template-columns:repeat(3,42px);grid-template-rows:repeat(3,42px);gap:4px;touch-action:none;user-select:none}
+.akim-scene .atlas-walk-controls[hidden]{display:none}
+.akim-scene .atlas-walk-controls button{display:grid;place-items:center;border:1px solid #b4c4af;border-radius:12px;background:#fffdf1ed;color:#284c3c;padding:0;box-shadow:0 3px 12px #203e3212;cursor:pointer;touch-action:none}
+.akim-scene .atlas-walk-controls button:focus-visible{outline:3px solid #c39b52;outline-offset:2px}
+.akim-scene .atlas-walk-controls button[aria-pressed=true]{background:#284c3c;color:#fffdf1;transform:translateY(1px)}
+.akim-scene .atlas-walk-controls [data-walk-key=ArrowUp]{grid-column:2;grid-row:1}
+.akim-scene .atlas-walk-controls [data-walk-key=ArrowLeft]{grid-column:1;grid-row:2}
+.akim-scene .atlas-walk-controls [data-walk-key=center]{grid-column:2;grid-row:2}
+.akim-scene .atlas-walk-controls [data-walk-key=ArrowRight]{grid-column:3;grid-row:2}
+.akim-scene .atlas-walk-controls [data-walk-key=ArrowDown]{grid-column:2;grid-row:3}
+@media(max-width:600px){.akim-scene .atlas-walk-controls{left:10px;bottom:86px;grid-template-columns:repeat(3,40px);grid-template-rows:repeat(3,40px)}}

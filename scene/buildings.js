@@ -5,12 +5,12 @@
  */
 const NS = 'http://www.w3.org/2000/svg';
 const MATERIALS = Object.freeze([
-  { roof: '#d9dfe0', edge: '#7d9095', light: '#c3c8bd', dark: '#8b9998' },
-  { roof: '#e4d8be', edge: '#a6967e', light: '#d3c6ac', dark: '#a99b85' },
-  { roof: '#f0ece1', edge: '#a5a897', light: '#dedaca', dark: '#a9b2a7' },
-  { roof: '#b5c8d0', edge: '#718e98', light: '#abbec0', dark: '#789397' },
-  { roof: '#c5cec1', edge: '#86978a', light: '#bdc8b5', dark: '#8b9e91' },
-  { roof: '#d8c9b4', edge: '#9e8d78', light: '#cbbca4', dark: '#9d9485' },
+  { roof: '#bed6d6', edge: '#6c9092', light: '#eff0d9', dark: '#8eafa7' },
+  { roof: '#dfb77a', edge: '#a48a62', light: '#f7e9bf', dark: '#b5a074' },
+  { roof: '#f7f2da', edge: '#92a083', light: '#e8e6ca', dark: '#93aa90' },
+  { roof: '#8fbfc7', edge: '#5a9099', light: '#d1e3d9', dark: '#6f9d9a' },
+  { roof: '#c9d8b1', edge: '#7c9c7f', light: '#e5e7c7', dark: '#8ba58c' },
+  { roof: '#d5a68b', edge: '#a88771', light: '#f1dcc1', dark: '#b3a18a' },
 ]);
 const footprintCache = new WeakMap();
 
@@ -174,7 +174,9 @@ export function buildBuildings({ buildings = [], projection = 'top' } = {}) {
         && ring.length >= 3 && ring.every(finitePoint))) continue;
       const bounds = getBounds(polygon);
       if (!bounds.width || !bounds.height || !signedArea(polygon[0])) continue;
-      const height = tilted ? Math.min(2.8, Math.max(.35, Math.sqrt(bounds.width * bounds.height) * .6)) : 0;
+      // Readable game relief is illustrative, as are the stable material colors.
+      // Exact source footprints and courtyard holes remain unchanged.
+      const height = tilted ? Math.min(4.4, Math.max(.7, Math.sqrt(bounds.width * bounds.height) * .95)) : 0;
       const id = building.id ?? `building-${buildingIndex}`;
       const material = MATERIALS[hash(id) % MATERIALS.length];
       const offset = worldVector([0, -height]);
@@ -193,9 +195,9 @@ export function buildBuildings({ buildings = [], projection = 'top' } = {}) {
   if (shadows) {
     root.appendChild(element('path', { d: shadows, class: 'atlas-building-shadow-soft',
       fill: '#2d4943', stroke: '#2d4943', 'stroke-width': 2.3,
-      'vector-effect': 'non-scaling-stroke', 'fill-rule': 'nonzero', opacity: .075 }));
+      'vector-effect': 'non-scaling-stroke', 'fill-rule': 'nonzero', opacity: .1 }));
     root.appendChild(element('path', { d: shadows, class: 'atlas-building-shadow-contact',
-      fill: '#354a44', 'fill-rule': 'nonzero', opacity: tilted ? .14 : .09 }));
+      fill: '#354a44', 'fill-rule': 'nonzero', opacity: tilted ? .2 : .09 }));
   }
 
   for (const piece of pieces) {

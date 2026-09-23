@@ -1,3 +1,4 @@
+@import './walk-controls.css';
 .akim-scene.akim-atlas { box-sizing:border-box; --atlas-cream:#f8f4e8; --atlas-forest:#284c3c; --atlas-ochre:#c39b52; width:100%; min-width:0; color:var(--atlas-forest); background:#e7ecdc; border:1px solid #cdd5bb; border-radius:20px; overflow:hidden; font-family:inherit; }
 .akim-scene .atlas-map-shell { position:relative; height:clamp(480px,65vh,680px); min-width:0; overflow:hidden; isolation:isolate; }
 .akim-scene .atlas-stage { position:absolute; inset:0; touch-action:none; outline:none; background:radial-gradient(ellipse at 50% 40%,#f0f2df,#e1e7d4); }
@@ -66,3 +67,11 @@
 
 .akim-scene .atlas-building-status{position:absolute;z-index:5;left:16px;bottom:66px;border:1px solid #d1ddd1;border-radius:12px;padding:7px 12px;color:#496b61;font-size:11px;background:#ffffffdf;max-width:calc(100% - 82px)}
 .akim-scene .atlas-building-status[hidden]{display:none}
+
+.akim-scene .atlas-district-badge{position:absolute;top:66px;left:16px;z-index:3;display:grid;gap:3px;max-width:min(280px,calc(100% - 105px));padding:10px 13px;border:1px solid #e1e7d0;border-radius:13px;background:#fffdf1eb;box-shadow:0 4px 18px #29452a0a;pointer-events:none}
+.akim-scene .atlas-district-badge strong{font-size:13px;line-height:1.3}
+.akim-scene .atlas-district-badge small{font-size:10px;line-height:1.4;color:#647766}
+.akim-scene .atlas-pack-icon{display:inline-block;object-fit:contain;flex:none;vertical-align:middle}
+@media(max-width:600px){.akim-scene .atlas-district-badge{top:85px;left:10px;max-width:calc(100% - 76px);padding:7px 10px}.akim-scene .atlas-district-badge small{max-width:195px}.akim-scene .atlas-walk-controls{top:240px;bottom:auto;left:10px;grid-template-columns:repeat(3,36px);grid-template-rows:repeat(3,36px)}}
+
+.akim-scene .atlas-layer-tools button[aria-pressed=true]{color:var(--atlas-forest)}

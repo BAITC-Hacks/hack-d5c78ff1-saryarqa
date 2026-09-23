@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { buildWalkingPaths, createMapLife, getCitizenReaction } from '../scene/map-life.js';
+import { buildWalkingPaths, createMapLife, getCitizenReaction, CITIZEN_LIMITS } from '../scene/map-life.js';
 import { createCamera, pointInRegion, segmentsCross } from '../scene/camera.js';
 import { readFileSync } from 'node:fs';
 import { ASTANA_MAP_FILES } from '../scene/load-map.js';
@@ -13,7 +13,7 @@ const map = { center: [50, 50], regions, roads: Array.from({ length: 12 }, (_, i
 
 test('representative routes are deterministic, bounded and avoid building/water crossings', () => {
   const paths = buildWalkingPaths(map, regions);
-  assert.ok(paths.length > 5 && paths.length <= 32);
+  assert.ok(paths.length > 5 && paths.length <= CITIZEN_LIMITS.paths);
   assert.deepEqual(paths, buildWalkingPaths(map, regions));
   for (const path of paths) {
     assert.equal(path.regionId, 'nura');
@@ -68,6 +68,19 @@ test('render reuses nodes, respects reduced motion, updates reactions and destro
   const art = visiblePerson.children.find(node => node.tag === 'image');
   assert.equal(art.attributes.display, '');
   assert.match(art.attributes.href, /citizen-0[123]-still\.png$/);
+  for (const width of [320, 375, 430, 768, 1024, 1440]) {
+    camera.setViewport(width, 500);
+    life.render({ ...args, width });
+    const status = life.getDiagnostics();
+    assert.ok(status.visibleCount <= (width < 600 ? CITIZEN_LIMITS.mobile : CITIZEN_LIMITS.desktop));
+    assert.ok(status.spriteSize >= CITIZEN_LIMITS.minSize && status.spriteSize <= CITIZEN_LIMITS.maxSize);
+    assert.equal(created, nodeCount, 'viewport changes reuse the same DOM pool');
+  }
+  life.render({ ...args, width: 1440, exclusions: [{ x: -100, y: -100, w: 1640, h: 700 }] });
+  assert.equal(life.getDiagnostics().visibleCount, 0, 'HUD and label exclusion zones stay clear');
+  camera.pan(100000, 100000);
+  life.render(args);
+  assert.equal(life.getDiagnostics().visibleCount, 0, 'offscreen citizens are culled');
   life.destroy(); life.destroy();
   assert.equal(layer.children.length, 0);
   assert.equal(life.getDiagnostics().destroyed, true);
@@ -77,10 +90,10 @@ test('real map has a bounded representative group across sourced districts in th
   const data = createGeoData(Object.fromEntries(Object.entries(ASTANA_MAP_FILES).map(([key, path]) =>
     [key, JSON.parse(readFileSync(new URL(`..${path}`, import.meta.url), 'utf8'))])));
   const paths = buildWalkingPaths(data);
-  assert.equal(paths.length, 32);
+  assert.ok(paths.length >= 1000 && paths.length <= CITIZEN_LIMITS.paths);
   assert.equal(new Set(paths.map(path => path.regionId)).size, 6);
   const camera = createCamera({ viewBox: data.viewBox, width: 1000, height: 700, projection: 'tilted', maxZoom: 40 });
   camera.focus([data.center[0] - 150, data.center[1] - 110, 300, 220]);
   const visible = paths.filter(path => { const [x, y] = camera.project(path.midpoint); return x > 0 && x < 1000 && y > 0 && y < 700; });
-  assert.ok(visible.length >= 24, `Expected visible representative crowd, got ${visible.length}`);
+  assert.ok(visible.length >= 300, `Expected broad candidate coverage, got ${visible.length}`);
 });

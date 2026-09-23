@@ -1,4 +1,12 @@
-// One optical family for the city interface: 24px, rounded 1.65px strokes.
+import { iconArt } from '../game/art.js';
+const packIcons = {
+  info:'hud-info', play:'hud-play', pause:'hud-pause', check:'hud-selected', replay:'hud-undo',
+  leaf:'category-ecology', traffic:'category-transport', shield:'category-safety', services:'category-city-services',
+  school:'indicator-S1-education', health:'indicator-S2-health', train:'map-lrt', route:'map-road', map:'map-district',
+  citizen:'map-citizen', budget:'hud-budget', score:'hud-score', quarter:'hud-quarter', warning:'hud-warning',
+  compare:'hud-compare', synergy:'hud-synergy', skip:'hud-skip', locked:'hud-locked',
+};
+// Reuse the supplied icon family; utility controls retain the matching vector fallback.
 // These are interface symbols, separate from the geographically placed models.
 const paths = {
   search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4.5 4.5"/>',
@@ -35,6 +43,8 @@ const paths = {
 };
 
 export function iconMarkup(name, size = 20) {
+  const asset = packIcons[name] && iconArt(packIcons[name])?.href;
+  if (asset) return `<img class="atlas-icon atlas-pack-icon" src="${asset}" width="${Number(size) || 20}" height="${Number(size) || 20}" alt="" aria-hidden="true">`;
   return `<svg class="atlas-icon" xmlns="http://www.w3.org/2000/svg" width="${Number(size) || 20}" height="${Number(size) || 20}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${paths[name] || paths.pin}</svg>`;
 }
 export const categoryIcon = category => ({ culture:'culture', government:'culture', religion:'dome', university:'school', sport:'sport', transport:'train', business:'buildings', park_anchor:'leaf' }[category] || 'pin');

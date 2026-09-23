@@ -1,4 +1,5 @@
 node_modules/
+.akim-data/
 .worktrees/
 .env
 .env.*

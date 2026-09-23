@@ -2,12 +2,24 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gunzipSync } from 'node:zlib';
 import analyze from './api/analyze.js';
+import services from './api/services.js';
+import player from './api/player.js';
+import runs from './api/runs.js';
+import leaderboard from './api/leaderboard.js';
 import { getCapabilities, isSafeFile } from './api/capabilities.js';
-import { ASTANA_MAP_FILES, BUILDING_TILE_PATHS } from './scene/load-map.js';
+import { ASTANA_MAP_FILES, BUILDING_TILE_PATHS, CITY_MAP_FILES } from './scene/load-map.js';
 
 const defaultRoot = dirname(fileURLToPath(import.meta.url));
 const MAX_BODY_BYTES = 4096;
+const apiRoutes = new Map([
+  ['/api/analyze', { handler: analyze, methods: ['POST'] }],
+  ['/api/services', { handler: services, methods: ['GET'] }],
+  ['/api/player', { handler: player, methods: ['GET', 'POST'] }],
+  ['/api/runs', { handler: runs, methods: ['GET', 'POST'] }],
+  ['/api/leaderboard', { handler: leaderboard, methods: ['GET'] }],
+]);
 const rootFiles = new Map([
   ['/', ['index.html']],
   ['/index.html', ['index.html']],
@@ -36,7 +48,7 @@ const mime = new Map([
 ]);
 const sceneTypes = new Set(['.js', '.css', '.svg', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.avif']);
 const assetTypes = new Set(['.svg', '.png', '.webp', '.json', '.mp3', '.ogg', '.wav', '.m4a', '.aac']);
-const atlasDataPaths = new Set([...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS]);
+const atlasDataPaths = new Set([...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS, ...Object.values(CITY_MAP_FILES).flatMap(Object.values)]);
 
 function send(res, status, body, contentType = 'text/plain; charset=utf-8', headers = {}) {
   res.writeHead(status, {
@@ -69,17 +81,17 @@ function staticEntry({ pathname, parts }) {
   if (parts.length < 2) return null;
   const extension = extname(parts.at(-1)).toLowerCase();
   if (atlasDataPaths.has(pathname)) return { parts, type: mime.get(extension) };
-  if (parts[0] === 'game' && parts.length === 2 && extension === '.js') return { parts, type: mime.get(extension) };
+  if (parts[0] === 'game' && parts.length === 2 && ['.js', '.css'].includes(extension)) return { parts, type: mime.get(extension) };
   if (parts[0] === 'scene' && (sceneTypes.has(extension) || ['/scene/dev.html', '/scene/dev-fixture.html'].includes(pathname))) return { parts, type: mime.get(extension) };
   if (parts[0] === 'assets' && parts[1] === 'game' && parts.length >= 3 && assetTypes.has(extension)) return { parts, type: mime.get(extension) };
-  if (parts[0] === 'assets' && parts[1] === 'exports' && parts.length >= 3 && ['.svg', '.png', '.webp', '.css'].includes(extension)) return { parts, type: mime.get(extension) };
+  if (parts[0] === 'assets' && parts[1] === 'exports' && parts.length >= 3 && ['.svg', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.avif', '.css'].includes(extension)) return { parts, type: mime.get(extension) };
   if (parts[0] === 'data' && ['geography', 'city'].includes(parts[1]) && parts.length === 3 && extension === '.json') return { parts, type: mime.get(extension) };
   return null;
 }
 
-async function serveAnalyze(req, res) {
-  if (req.method !== 'POST') {
-    send(res, 405, JSON.stringify({ error: 'METHOD_NOT_ALLOWED' }), 'application/json; charset=utf-8', { Allow: 'POST' });
+async function serveApi(req, res, route) {
+  if (!route.methods.includes(req.method)) {
+    send(res, 405, JSON.stringify({ error: 'METHOD_NOT_ALLOWED' }), 'application/json; charset=utf-8', { Allow: route.methods.join(', '), 'Cache-Control': 'no-store' });
     return;
   }
   try {
@@ -100,7 +112,7 @@ async function serveAnalyze(req, res) {
       res.end(JSON.stringify(body));
       return res;
     };
-    await analyze(req, res);
+    await route.handler(req, res);
   } catch {
     if (!res.writableEnded) send(res, 500, JSON.stringify({ error: 'SERVER_ERROR' }), 'application/json; charset=utf-8');
   }
@@ -114,8 +126,9 @@ export function createAppServer({ rootDir = defaultRoot } = {}) {
       send(res, 400, 'Bad request');
       return;
     }
-    if (route.pathname === '/api/analyze') {
-      await serveAnalyze(req, res);
+    const api = apiRoutes.get(route.pathname);
+    if (api) {
+      await serveApi(req, res, api);
       return;
     }
     if (route.pathname === '/api/capabilities') {
@@ -136,13 +149,23 @@ export function createAppServer({ rootDir = defaultRoot } = {}) {
       send(res, 405, 'Method not allowed', 'text/plain; charset=utf-8', { Allow: 'GET, HEAD' });
       return;
     }
-    if (!await isSafeFile(root, entry.parts)) {
+    const compressedParts = atlasDataPaths.has(route.pathname)
+      ? [...entry.parts.slice(0, -1), `${entry.parts.at(-1)}.gz`] : null;
+    const compressed = compressedParts && await isSafeFile(root, compressedParts);
+    if (!compressed && !await isSafeFile(root, entry.parts)) {
       send(res, 404, 'Not found');
       return;
     }
     try {
-      const body = await readFile(resolve(root, ...entry.parts));
-      send(res, 200, body, entry.type, { 'Content-Length': body.length });
+      let body = await readFile(resolve(root, ...(compressed ? compressedParts : entry.parts)));
+      const acceptsGzip = String(req.headers['accept-encoding'] || '').split(',').some(value => {
+        const [name, ...parameters] = value.trim().split(';');
+        return name === 'gzip' && !parameters.some(p => /^\s*q=0(?:\.0*)?\s*$/.test(p));
+      });
+      const headers = compressed ? { Vary: 'Accept-Encoding' } : {};
+      if (compressed && acceptsGzip) headers['Content-Encoding'] = 'gzip';
+      else if (compressed) body = gunzipSync(body);
+      send(res, 200, body, entry.type, { ...headers, 'Content-Length': body.length });
     } catch {
       send(res, 404, 'Not found');
     }

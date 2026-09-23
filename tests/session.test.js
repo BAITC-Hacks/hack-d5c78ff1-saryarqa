@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createGameSession } from '../game/session.js';
+import { DRAFT_STORAGE_KEY } from '../game/storage.js';
 
 const sample = [
   { id: 'M7', district: 'Нура' },
@@ -10,6 +11,10 @@ const sample = [
   { id: 'M5', district: 'Сарыарка' },
 ];
 const loadSample = (session) => assert.equal(session.dispatch({ type: 'LOAD_PLAN', plan: sample }).ok, true);
+const memory = () => {
+  const data = new Map();
+  return { getItem: (key) => data.get(key) ?? null, setItem: (key, value) => data.set(key, value) };
+};
 
 test('subscriptions are immediate and immutable, with one plan in both modes', () => {
   const session = createGameSession({ storage: null });
@@ -124,4 +129,80 @@ test('only Нура has a detailed scene; Сарайшық is context only', () 
   session.dispatch({ type: 'FOCUS_REGION', regionId: 'nura' });
   assert.equal(session.dispatch({ type: 'SET_VIEW', view: 'district' }).ok, true);
   session.destroy();
+});
+
+test('reload restores the draft and camera preferences while keeping invalid plans unscored', () => {
+  const storage = memory();
+  const first = createGameSession({ storage });
+  assert.equal(first.getSnapshot().projection, 'tilted');
+  first.dispatch({ type: 'ADD_MEASURE', id: 'M1' });
+  first.dispatch({ type: 'ADD_MEASURE', id: 'M3', district: 'Нура' });
+  first.dispatch({ type: 'FOCUS_REGION', regionId: 'nura' });
+  first.dispatch({ type: 'SET_VIEW', view: 'district' });
+  first.dispatch({ type: 'SET_PROJECTION', projection: 'top' });
+  first.dispatch({ type: 'SET_MODE', mode: 'calculator' });
+  const before = first.getSnapshot();
+  first.destroy();
+  const second = createGameSession({ storage });
+  const after = second.getSnapshot();
+  assert.deepEqual(after.plan, before.plan);
+  assert.deepEqual(after.validation, before.validation);
+  assert.equal(after.focusedRegion, 'nura');
+  assert.equal(after.view, 'district');
+  assert.equal(after.projection, 'top');
+  assert.equal(after.mode, 'calculator');
+  assert.equal(after.result, null);
+  assert.equal(after.preview.score, null);
+  assert.equal(second.dispatch({ type: 'FINALIZE' }).ok, false);
+  second.dispatch({ type: 'FOCUS_REGION', regionId: 'esil' });
+  assert.equal(createGameSession({ storage }).getSnapshot().view, 'overview');
+});
+
+test('reloaded valid plans calculate again and reset preserves the personal best', () => {
+  const storage = memory();
+  const first = createGameSession({ storage });
+  loadSample(first);
+  first.dispatch({ type: 'FINALIZE' });
+  const before = first.getSnapshot();
+  const record = JSON.parse(storage.getItem(DRAFT_STORAGE_KEY));
+  storage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({ ...record, result: { score: 999 }, presentation: {}, playback: { status: 'playing' } }));
+  first.destroy();
+  const second = createGameSession({ storage });
+  assert.equal(second.getSnapshot().result, null);
+  assert.equal(second.getSnapshot().presentation, null);
+  assert.equal(second.getSnapshot().playback.status, 'idle');
+  assert.deepEqual(second.getSnapshot().personalBest, before.personalBest);
+  assert.equal(second.dispatch({ type: 'FINALIZE' }).ok, true);
+  assert.equal(second.getSnapshot().result.score, before.result.score);
+  assert.equal(second.dispatch({ type: 'RESET' }).ok, true);
+  const third = createGameSession({ storage });
+  assert.deepEqual(third.getSnapshot().plan, []);
+  assert.deepEqual(third.getSnapshot().personalBest, before.personalBest);
+});
+
+test('refused over-budget edits cannot replace the saved draft', () => {
+  const storage = memory();
+  const session = createGameSession({ storage });
+  loadSample(session);
+  const revision = session.getSnapshot().revision;
+  const expensive = [
+    { id: 'M3', district: 'Нура' }, { id: 'M5', district: 'Нура' },
+    { id: 'M7', district: 'Нура' }, { id: 'M13', district: 'Нура' },
+  ];
+  assert.equal(session.dispatch({ type: 'LOAD_PLAN', plan: expensive }).error.code, 'BUDGET_EXCEEDED');
+  assert.equal(session.getSnapshot().revision, revision);
+  assert.deepEqual(createGameSession({ storage }).getSnapshot().plan, sample);
+});
+
+test('unavailable storage and failed presentation do not prevent calculation', () => {
+  const storage = { getItem() { throw Error('blocked'); }, setItem() { throw Error('full'); } };
+  const session = createGameSession({ storage, presentationFactory() { throw Error('scene failed'); } });
+  loadSample(session);
+  const seen = [];
+  session.subscribe((snapshot) => seen.push(snapshot));
+  assert.equal(session.dispatch({ type: 'FINALIZE' }).ok, true);
+  assert.ok(Math.abs(seen.at(-1).result.score - 56.54307) < 1e-10);
+  assert.equal(session.getSnapshot().playback.status, 'complete');
+  assert.equal(session.dispatch({ type: 'PLAYBACK_CONTROL', command: 'replay' }).error.code, 'NO_PRESENTATION');
+  assert.equal(session.getSnapshot().playback.status, 'complete');
 });

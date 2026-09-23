@@ -2,7 +2,7 @@ import { DISTRICTS, MEASURES, RULES_VERSION, calculatePlan, validatePlan } from 
 import { CONTRACT_VERSION, getRegion } from './contracts.js';
 import { previewPlan } from './preview.js';
 import { createPresentation } from './presentation.js';
-import { loadPersonalBest, savePersonalBest } from './storage.js';
+import { loadPersonalBest, savePersonalBest, loadDraft, saveDraft, loadViewPreferences, saveViewPreferences } from './storage.js';
 
 const measures = new Map(MEASURES.map((item) => [item.id, item]));
 const districts = new Set(DISTRICTS.map((item) => item.name));
@@ -38,17 +38,15 @@ export function createGameSession({ storage, presentationFactory = createPresent
   let destroyed = false;
   let nextRunId = 0;
   const subscribers = new Set();
+  const draft = loadDraft(storage);
   const state = {
     contractVersion: CONTRACT_VERSION,
     revision: 0,
     planRevision: 0,
-    mode: 'game',
-    projection: 'top',
-    view: 'overview',
-    focusedRegion: null,
-    plan: [],
-    validation: validatePlan([]),
-    preview: previewPlan([]),
+    ...loadViewPreferences(storage),
+    plan: draft,
+    validation: validatePlan(draft),
+    preview: previewPlan(draft),
     result: null,
     presentation: null,
     playback: { status: 'idle', speed: 1, runId: 0 },
@@ -63,8 +61,12 @@ export function createGameSession({ storage, presentationFactory = createPresent
     }
   };
   const changed = () => { state.revision += 1; notify(); return accepted(); };
+  const changedView = () => { saveViewPreferences(storage, state); return changed(); };
   const editPlan = (plan) => {
+    const cost = plan.reduce((sum, decision) => sum + (measures.get(decision.id)?.cost ?? 0), 0);
+    if (cost > 100) return refused('BUDGET_EXCEEDED', `Недостаточно бюджета: план стоит ${cost} из 100 единиц.`);
     state.plan = plan;
+    saveDraft(storage, plan);
     state.planRevision += 1;
     state.validation = validatePlan(plan);
     state.preview = previewPlan(plan);
@@ -117,20 +119,20 @@ export function createGameSession({ storage, presentationFactory = createPresent
         state.focusedRegion = action.regionId;
         if (action.regionId === null) state.view = 'overview';
         if (state.view === 'district' && action.regionId !== 'nura') state.view = 'overview';
-        return changed();
+        return changedView();
       }
       case 'SET_MODE': {
         if (action.mode !== 'game' && action.mode !== 'calculator') return refused('UNKNOWN_MODE', 'Неизвестный режим.');
         if (state.mode === action.mode) return accepted();
         state.mode = action.mode;
         if (state.result && action.mode === 'calculator') state.playback = { ...state.playback, status: 'complete' };
-        return changed();
+        return changedView();
       }
       case 'SET_PROJECTION': {
         if (action.projection !== 'top' && action.projection !== 'tilted') return refused('UNKNOWN_PROJECTION', 'Неизвестный вид карты.');
         if (state.projection === action.projection) return accepted();
         state.projection = action.projection;
-        return changed();
+        return changedView();
       }
       case 'SET_VIEW': {
         if (action.view !== 'overview' && action.view !== 'district') return refused('UNKNOWN_VIEW', 'Неизвестный вид.');
@@ -138,7 +140,7 @@ export function createGameSession({ storage, presentationFactory = createPresent
         if (action.view === 'district' && state.focusedRegion !== 'nura') return refused('DETAIL_UNAVAILABLE', 'Подробная сцена этого района пока недоступна.');
         if (state.view === action.view) return accepted();
         state.view = action.view;
-        return changed();
+        return changedView();
       }
       case 'FINALIZE': {
         if (state.result) return accepted();
@@ -146,7 +148,8 @@ export function createGameSession({ storage, presentationFactory = createPresent
         state.validation = validatePlan(state.plan);
         if (!result.valid) return refused('INVALID_PLAN', result.errors.map((item) => item.message).join(' '));
         state.result = result;
-        state.presentation = presentationFactory(result, state.plan, state.planRevision);
+        try { state.presentation = presentationFactory(result, state.plan, state.planRevision); }
+        catch { state.presentation = null; /* A scene failure cannot hide a valid calculated result. */ }
         nextRunId += 1;
         state.playback = { status: state.mode === 'game' && state.presentation ? 'playing' : 'complete', speed: 1, runId: nextRunId };
         if (!state.personalBest || result.score > state.personalBest.score) {
@@ -176,6 +179,7 @@ export function createGameSession({ storage, presentationFactory = createPresent
           if (state.playback.status === 'complete') return accepted();
           state.playback = { ...state.playback, status: 'complete' };
         } else if (command === 'replay') {
+          if (!state.presentation) return refused('NO_PRESENTATION', 'Для этого результата нет анимации.');
           nextRunId += 1;
           state.playback = { ...state.playback, status: 'playing', runId: nextRunId };
         } else return refused('UNKNOWN_PLAYBACK_COMMAND', 'Неизвестная команда воспроизведения.');

@@ -1,11 +1,13 @@
-# 2.5D game assets (work in progress)
+# Game asset integration
 
-`measure-icons.svg` contains one original vector symbol for each of the 14 measures in `simulator.js` (`#M1` through `#M14`). These are reusable UI and map-marker assets; they do not encode geography or claim a physical project has been built.
+The runtime uses the supplied miniature-city package in `assets/exports/` directly. `manifest.json` maps all 52 required stable IDs to reviewed exports; `game/art.js` registers all 209 export files with their real dimensions, anchors and pose/direction metadata. Registration is lazy: the app requests only images used by the current UI or scene.
 
-`miniature-kit.svg` contains seven original warm tabletop scene pieces: `#home`, `#apartment`, `#civic`, `#tree`, `#street-light`, `#bus`, and `#park`. They are reusable decoration, not real building locations or forecasts. A map adapter should place them decoratively and avoid implying that a particular intervention built an exact number of objects.
+The exported artwork includes 14 policy icons, 14 district markers, 14 miniature policy objects, five category icons, ten indicator icons, HUD/map symbols, six characters, four vehicle types, paired world/building views, static effects and favicon sizes. The atlas uses the original citizen, maintenance, emergency, mayor and vehicle PNGs; policy illustrations and interface symbols reuse the corresponding original SVGs.
 
-Example: `<svg viewBox="0 0 32 32" aria-hidden="true"><use href="/assets/game/measure-icons.svg#M4" /></svg>`. Keep a separate text label on every interactive use. Symbols inherit `currentColor` so the UI can communicate category or state without duplicating files.
+`scene/map-life.js` prepares up to 1,800 short illustrative walking paths beside mapped roads and inside parks. Buildings, water and district borders constrain these paths. A reusable pool renders at most 320 citizens on desktop and 140 on small screens, further reduced by viewport area, screen spacing and UI/landmark exclusions. Citizen artwork is 8-18 CSS pixels high; the mayor is 28 pixels. Reduced motion freezes movement and preserves the supplied stills. These figures are a visual sample, not the population of Astana, district census counts, live pedestrian locations or measured traffic.
 
-The district map, terrain, indicator overlays, sound and motion assets are **not created yet**. The map must be sourced and the five-data-versus-six-real-district presentation settled first. Do not describe this directory as a complete game art kit.
+Paired world tiles remain decorative. They do not replace sourced river, road, district or building geometry. The five style exports are design references and are not loaded as geographic backgrounds. Source sheets, ZIP archives, contact sheets, unneeded pose sheets and alternate directions are preserved without eager loading. Sound exports were not supplied. The geographic effective date remains unverified; see the separate geography documentation.
 
-Source/license register: `measure-icons.svg` and `miniature-kit.svg` were drawn specifically for this project on 2026-09-23; no third-party artwork used. Other assets must record their provenance and reuse terms here before shipping.
+`SOURCES.md`, the producer `assets/ASSET-MANIFEST.csv`, and family manifests document provenance. Artwork is project-owned; the owner has not specified a redistribution license. Generated artwork is not labeled CC0. Earlier starter SVGs and historical intake records remain for provenance; runtime stable IDs now point to approved exports.
+
+Run `node tools/check-assets.mjs` and `node --test tests/art.test.js tests/assets.test.js tests/map-life.test.js` to validate filenames, dimensions, anchors, local SVG safety, complete inventory, route constraints and responsive actor limits. Browser layout and imagery require a separate rendered check.
