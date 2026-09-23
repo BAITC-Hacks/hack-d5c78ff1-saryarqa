@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#101d28" />
+    <meta name="description" content="Аким на 5 часов — симулятор городских решений для районов Астаны." />
+    <title>Аким на 5 часов — симулятор решений</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+      .ai-panel{margin-top:20px;padding-top:18px;border-top:1px solid #dce6d9}.button-ai{width:100%;justify-content:space-between;background:#213d35;color:#eaf7e8}.button-ai:hover{background:#305447}.button-ai:disabled{opacity:.6;cursor:default;transform:none}.ai-panel p{margin:10px 0 0;color:#6d8375;font-size:11px;line-height:1.5}.ai-output{white-space:pre-wrap;margin-top:16px;padding:16px;border-radius:5px;background:#e9f1e5;border:1px solid #c9d9c7;color:#2e4938;font-size:13px;line-height:1.55}
+    </style>
+    <script type="module" src="./app.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Перейти к содержанию</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#main" aria-label="Аким на 5 часов, начало">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span>Аким <span class="brand-muted">на 5 часов</span></span>
+        </a>
+        <span class="topbar-note">Городская лаборатория решений <span class="topbar-divider" aria-hidden="true">/</span> Астана</span>
+        <a class="topbar-link" href="#rules">Как играть <span aria-hidden="true">↗</span></a>
+      </header>
+
+      <main id="main">
+        <section class="intro" aria-labelledby="page-title">
+          <div class="intro-copy">
+            <p class="eyebrow"><span class="pulse-dot" aria-hidden="true"></span> СИМУЛЯЦИЯ · 8 КВАРТАЛОВ</p>
+            <h1 id="page-title">Решения сегодня.<br /><em>Город завтра.</em></h1>
+            <p class="intro-lead">У вас есть 100 единиц бюджета и пять решений. Выберите меры, расставьте приоритеты и увидите, как изменится качество жизни в районах Астаны.</p>
+            <div class="intro-actions">
+              <a class="button button-primary" href="#measures">Начать планирование <span aria-hidden="true">↗</span></a>
+              <button id="sample-button" class="button button-ghost" type="button">Показать пример</button>
+            </div>
+          </div>
+          <div class="city-scene" aria-hidden="true">
+            <div class="scene-glow"></div>
+            <div class="scene-orbit orbit-one"></div>
+            <div class="scene-orbit orbit-two"></div>
+            <div class="scene-grid"></div>
+            <div class="scene-building building-one"></div>
+            <div class="scene-building building-two"></div>
+            <div class="scene-building building-three"></div>
+            <div class="scene-building building-four"></div>
+            <div class="scene-building building-five"></div>
+            <div class="scene-building building-six"></div>
+            <div class="scene-landmark"><div></div></div>
+            <div class="scene-road road-one"></div>
+            <div class="scene-road road-two"></div>
+            <div class="scene-coordinate coordinate-top">51°10′ N / 71°26′ E</div>
+            <div class="scene-coordinate coordinate-bottom">АСТАНА · 05 РАЙОНОВ</div>
+            <span class="scene-point point-one"></span><span class="scene-point point-two"></span><span class="scene-point point-three"></span>
+          </div>
+        </section>
+
+        <section class="baseline-strip" aria-label="Стартовые показатели">
+          <div class="baseline-heading"><span class="tiny-label">СТАРТОВАЯ ТОЧКА</span><strong>Город до ваших решений</strong></div>
+          <div class="baseline-metric"><span>Индекс города</span><strong id="baseline-score">—</strong><small>/ 100</small></div>
+          <div class="baseline-metric"><span>Самый уязвимый район</span><strong id="baseline-weakest">—</strong></div>
+          <div class="baseline-metric"><span>Критических показателей</span><strong id="baseline-critical">—</strong></div>
+        </section>
+
+        <section class="workspace" aria-labelledby="workspace-title">
+          <div class="section-heading">
+            <div><p class="eyebrow">01 / СТРАТЕГИЯ</p><h2 id="workspace-title">Соберите свой план</h2><p>Выберите пять разных мер. Районные проекты требуют указать район; городские работают сразу для всех.</p></div>
+            <span class="section-index" aria-hidden="true">01—05</span>
+          </div>
+
+          <div class="workspace-grid">
+            <div class="catalog" id="measures">
+              <div class="catalog-toolbar"><div><span class="tiny-label">КАТАЛОГ РЕШЕНИЙ</span><strong>14 мер · 5 направлений</strong></div><p>Стоимость и эффект заданы условиями кейса.</p></div>
+              <div id="measure-groups" class="measure-groups"></div>
+            </div>
+
+            <aside class="planner" aria-labelledby="planner-title">
+              <div class="planner-top"><p class="eyebrow">ВАШ МАНДАТ</p><h2 id="planner-title">План действий</h2><p>Результат зависит от сочетания мер и состояния каждого района.</p></div>
+              <div class="budget-panel">
+                <div class="budget-line"><span>Бюджет</span><strong><span id="budget-used">0</span> <small>/ 100</small></strong></div>
+                <div id="budget-track" class="progress-track" role="progressbar" aria-label="Использованный бюджет" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="budget-fill"></span></div>
+                <p id="budget-note">Доступно 100 единиц</p>
+              </div>
+              <div class="selection-heading"><span>Решения <strong id="selection-count">0/5</strong></span><button id="reset-button" type="button" class="text-button">Сбросить</button></div>
+              <ol id="selected-list" class="selected-list" aria-live="polite"></ol>
+              <div id="validation" class="validation" role="status" aria-live="polite"></div>
+              <button id="calculate-button" class="button button-primary calculate-button" type="button">Рассчитать сценарий <span aria-hidden="true">↗</span></button>
+              <p class="planner-footnote">Числа рассчитываются по правилам кейса. Объяснение ниже формируется из результатов расчёта.</p>
+            </aside>
+          </div>
+        </section>
+
+        <section id="results" class="results" aria-labelledby="results-title" hidden>
+          <div class="section-heading results-heading"><div><p class="eyebrow">02 / ПОСЛЕДСТВИЯ</p><h2 id="results-title">Что изменится?</h2><p>Сравнение с исходным состоянием после восьми кварталов.</p></div><button id="back-button" class="button button-ghost" type="button">Изменить план</button></div>
+          <div class="result-overview">
+            <div class="score-hero"><span class="tiny-label">ИТОГОВЫЙ ИНДЕКС</span><div class="score-number"><strong id="result-score">—</strong><span>/ 100</span></div><p id="score-delta">—</p></div>
+            <div class="result-stat"><span>Городской средний</span><strong id="result-average">—</strong><small>С учётом населения районов</small></div>
+            <div class="result-stat"><span>Самый слабый район</span><strong id="result-weakest">—</strong><small id="result-weakest-score">—</small></div>
+            <div class="result-stat"><span>Критических показателей</span><strong id="result-critical">—</strong><small>Значения строго ниже 40</small></div>
+          </div>
+          <div class="results-grid">
+            <div class="district-panel"><div class="panel-heading"><div><span class="tiny-label">РАЙОНЫ</span><h3>До и после</h3></div><span class="panel-subtext">Индекс / 100</span></div><div id="district-results" class="district-results"></div></div>
+            <div class="insights-panel"><div class="panel-heading"><div><span class="tiny-label">РАЗБОР СЦЕНАРИЯ</span><h3>Главное о решениях</h3></div></div><div id="insight-content"></div><div class="ai-panel"><button id="ai-button" class="button button-ai" type="button">Попросить ИИ объяснить план <span aria-hidden="true">↗</span></button><p id="ai-status" role="status" aria-live="polite">ИИ объясняет готовый расчёт. Для ответа нужен подключённый API.</p><div id="ai-output" class="ai-output" hidden></div></div><p class="insight-disclaimer">Расчёт и показатели выше определяются алгоритмом. ИИ не меняет числовой результат.</p></div>
+          </div>
+        </section>
+
+        <section id="rules" class="rules" aria-labelledby="rules-title"><div><p class="eyebrow">ПРАВИЛА СИМУЛЯЦИИ</p><h2 id="rules-title">Пять решений.<br />Один город.</h2></div><div class="rule-items"><p><span>01</span> Ровно пять уникальных мер.</p><p><span>02</span> Общая стоимость не выше 100.</p><p><span>03</span> Не больше двух мер одного направления.</p><p><span>04</span> Некоторые пары несовместимы — мы покажем причину.</p></div></section>
+      </main>
+      <footer><span>Аким на 5 часов</span><span>Учебный симулятор по данным кейса HackAlem AI</span><a href="#main">Наверх ↑</a></footer>
+    </div>
+  </body>
+</html>
