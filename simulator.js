@@ -1,4 +1,6 @@
 /** Deterministic rules for the HackAlem district simulator. No network or AI calls. */
+export const RULES_VERSION = 'hackalem-v1';
+export const SIMULATION_HORIZON = 8;
 export const INDICATORS = Object.freeze([
   { id: 'T1', name: 'Разгрузка дорог', direction: 'Транспорт', weight: 0.10 },
   { id: 'T2', name: 'Доступность общественного транспорта', direction: 'Транспорт', weight: 0.10 },
@@ -44,6 +46,13 @@ const scoreDistrict = (values) => INDICATORS.reduce((sum, indicator) => sum + in
 const clamp = (value) => Math.min(100, Math.max(0, value));
 const ordered = (plan) => [...plan].sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
 const error = (code, message) => ({ code, message });
+
+/** Lag-adjusted indicator effects shared by scoring and draft previews. */
+export function realizedMeasureEffects(measure) {
+  const factor = (SIMULATION_HORIZON - measure.lag) / SIMULATION_HORIZON;
+  const effects = Object.fromEntries(Object.entries(measure.effects).map(([id, full]) => [id, full * factor]));
+  return { factor, effects };
+}
 
 /** Returns explicit errors and cost; never alters the supplied plan. */
 export function validatePlan(plan) {
@@ -98,9 +107,8 @@ function evaluate(plan) {
   const measureEffects = [];
   for (const choice of plan) {
     const measure = measureById.get(choice.id);
-    const factor = (8 - measure.lag) / 8;
+    const { factor, effects } = realizedMeasureEffects(measure);
     const targets = measure.scope === 'city' ? DISTRICTS.map((district) => district.name) : [choice.district];
-    const effects = Object.fromEntries(Object.entries(measure.effects).map(([id, full]) => [id, full * factor]));
     for (const target of targets) {
       for (const [id, amount] of Object.entries(effects)) values[target][id] += amount;
     }
