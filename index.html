@@ -50,7 +50,7 @@
             <div class="scene-road road-one"></div>
             <div class="scene-road road-two"></div>
             <div class="scene-coordinate coordinate-top">51°10′ N / 71°26′ E</div>
-            <div class="scene-coordinate coordinate-bottom">АСТАНА · 05 РАЙОНОВ</div>
+            <div class="scene-coordinate coordinate-bottom">АСТАНА · УЧЕБНЫЙ СЦЕНАРИЙ</div>
             <span class="scene-point point-one"></span><span class="scene-point point-two"></span><span class="scene-point point-three"></span>
           </div>
         </section>
@@ -62,9 +62,36 @@
           <div class="baseline-metric"><span>Критических показателей</span><strong id="baseline-critical">—</strong></div>
         </section>
 
+        <section class="game-workspace" aria-labelledby="game-title">
+          <div class="mode-toolbar">
+            <div><p class="eyebrow">ВАШ ГОРОД · ВАШИ РЕШЕНИЯ</p><h2 id="game-title">Кабинет акима</h2></div>
+            <div class="segmented" role="group" aria-label="Режим работы">
+              <button type="button" id="mode-game" aria-pressed="true">Игра</button>
+              <button type="button" id="mode-calculator" aria-pressed="false">Калькулятор</button>
+            </div>
+            <div class="personal-best"><span>Личный рекорд · этот браузер</span><strong id="personal-best">Ещё нет</strong></div>
+          </div>
+          <p id="session-message" class="session-message" role="status" aria-live="polite"></p>
+          <div id="game-panel">
+            <div class="world-toolbar">
+              <div class="segmented" role="group" aria-label="Ракурс города"><button type="button" id="projection-top" aria-pressed="true">Сверху</button><button type="button" id="projection-tilted" aria-pressed="false">Под углом</button></div>
+              <div class="segmented" role="group" aria-label="Масштаб обзора"><button type="button" id="view-overview" aria-pressed="true">Весь город</button><button type="button" id="view-district" aria-pressed="false">Войти в район</button></div>
+            </div>
+            <div class="world-layout">
+              <div class="world-stage"><div id="scene-root"></div><div id="scene-notice" class="scene-notice" role="status"><strong id="scene-status">Подключаем город…</strong><p>Районы и план доступны ниже. Расчёт работает независимо от карты.</p><button id="scene-retry" class="button button-ghost" type="button" hidden>Повторить подключение</button></div></div>
+              <aside class="district-inspector" aria-labelledby="district-title"><span class="tiny-label">ВЫБРАННЫЙ РАЙОН</span><h3 id="district-title">Выберите район</h3><p id="district-note">Пять районов участвуют в учебном расчёте. Сарайшық доступен для справки.</p><div id="district-indicators"></div><div id="district-context" class="district-context"></div></aside>
+            </div>
+            <div id="region-buttons" class="region-buttons" role="group" aria-label="Выбор района"></div>
+          </div>
+          <section id="playback-panel" class="playback-panel" aria-label="Показ последствий" hidden>
+            <div><strong id="playback-status">План подтверждён</strong><p>Визуальный показ восьми кварталов. Итоговые числа определяются расчётом.</p></div>
+            <div class="playback-actions"><button id="playback-pause" type="button">Пауза</button><button id="playback-skip" type="button">К результату</button><button id="playback-replay" type="button">Повторить показ</button><label>Скорость <select id="playback-speed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select></label></div>
+          </section>
+        </section>
+
         <section class="workspace" aria-labelledby="workspace-title">
           <div class="section-heading">
-            <div><p class="eyebrow">01 / СТРАТЕГИЯ</p><h2 id="workspace-title">Соберите свой план</h2><p>Выберите пять разных мер. Районные проекты требуют указать район; городские работают сразу для всех.</p></div>
+            <div><p class="eyebrow">01 / СТРАТЕГИЯ</p><h2 id="workspace-title">Соберите свой план</h2><p>Выберите пять разных мер. Городские меры действуют на пять районов учебной модели.</p></div>
             <span class="section-index" aria-hidden="true">01—05</span>
           </div>
 

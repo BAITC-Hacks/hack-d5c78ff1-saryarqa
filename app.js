@@ -1,10 +1,27 @@
-import { DISTRICTS, INDICATORS, MEASURES, BASELINE, validatePlan, calculatePlan } from './simulator.js';
+import { DISTRICTS, INDICATORS, MEASURES, BASELINE, realizedMeasureEffects } from './simulator.js';
+import { createGameSession } from './game/session.js';
+import { REGIONS, getRegion } from './game/contracts.js';
+import { createSceneAdapter } from './game/scene-adapter.js';
 
 const $ = (selector) => document.querySelector(selector);
 const byId = (id) => document.getElementById(id);
 const number = (value, digits = 2) => new Intl.NumberFormat('ru-RU', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value);
 const groups = [...new Set(MEASURES.map((measure) => measure.direction))];
-const state = { plan: [], result: null, requestedAI: false };
+let browserStorage;
+try { browserStorage = window.localStorage; } catch { browserStorage = null; }
+const session = createGameSession({ storage: browserStorage });
+let state = session.getSnapshot();
+let requestedAI = false;
+let aiController = null;
+let adapter = null;
+let sceneStatus = { phase: 'loading', cityData: null };
+const motion = matchMedia('(prefers-reduced-motion: reduce)');
+
+function dispatch(action) {
+  const response = session.dispatch(action);
+  byId('session-message').textContent = response?.ok === false ? response.error?.message ?? 'Не удалось выполнить действие.' : '';
+  return response;
+}
 
 function el(tag, className, textValue) {
   const element = document.createElement(tag);
@@ -28,14 +45,19 @@ function renderCatalog() {
       const selected = state.plan.some((choice) => choice.id === item.id);
       const button = el('button', `measure-card${selected ? ' is-selected' : ''}`);
       button.type = 'button';
+      button.dataset.focusKey = `measure-${item.id}`;
       button.setAttribute('aria-pressed', String(selected));
       button.setAttribute('aria-label', `${selected ? 'Убрать' : 'Выбрать'}: ${item.name}, стоимость ${item.cost}, ${item.scope === 'city' ? 'весь город' : 'выбрать район'}`);
-      button.disabled = !selected && state.plan.length >= 5;
+      const focused = getRegion(state.focusedRegion);
+      button.disabled = !selected && (state.plan.length >= 5 || (state.mode === 'game' && focused?.simulationDistrict === null && item.scope === 'district'));
       const top = el('div', 'measure-card-top');
       top.append(el('span', 'measure-id', item.id), el('span', 'measure-check', selected ? '✓' : '+'));
       const bottom = el('div', 'measure-card-bottom');
       bottom.append(el('span', '', item.scope === 'city' ? 'Весь город' : 'Один район'), el('span', 'measure-cost', `${item.cost} ед.`));
-      button.append(top, el('div', 'measure-title', item.name), bottom);
+      const effectText = Object.entries(realizedMeasureEffects(item).effects).map(([id, effect]) => `${id} ${effect >= 0 ? '+' : ''}${number(effect)}`).join(' · ');
+      const preview = el('span', 'measure-preview', `${effectText} · задержка ${item.lag} кв.`);
+      preview.title = 'Изменения показателей к концу восьми кварталов, без отдельных бонусов сочетания мер.';
+      button.append(top, el('div', 'measure-title', item.name), preview, bottom);
       button.addEventListener('click', () => toggleMeasure(item.id));
       list.append(button);
     }
@@ -46,10 +68,8 @@ function renderCatalog() {
 
 function toggleMeasure(id) {
   const current = state.plan.findIndex((choice) => choice.id === id);
-  if (current >= 0) state.plan.splice(current, 1);
-  else if (state.plan.length < 5) state.plan.push({ id, district: measure(id).scope === 'city' ? null : null });
-  clearResults();
-  render();
+  if (current >= 0) dispatch({ type: 'REMOVE_MEASURE', id });
+  else dispatch({ type: 'ADD_MEASURE', id, district: measure(id).scope === 'city' ? null : state.mode === 'game' ? getRegion(state.focusedRegion)?.simulationDistrict ?? null : null });
 }
 
 function renderSelections() {
@@ -68,6 +88,7 @@ function renderSelections() {
     body.append(el('div', 'selected-meta', `${item.direction} · ${item.cost} ед.${item.scope === 'city' ? ' · весь город' : ''}`));
     if (item.scope === 'district') {
       const select = el('select', 'district-select');
+      select.dataset.focusKey = `district-${choice.id}`;
       select.setAttribute('aria-label', `Район для ${item.name}`);
       const placeholder = el('option', '', 'Выберите район');
       placeholder.value = '';
@@ -79,14 +100,13 @@ function renderSelections() {
       });
       select.value = choice.district ?? '';
       select.addEventListener('change', (event) => {
-        choice.district = event.target.value || null;
-        clearResults();
-        renderValidation();
+        dispatch({ type: 'ASSIGN_MEASURE', id: choice.id, district: event.target.value || null });
       });
       body.append(select);
     }
     row.append(body);
     const remove = el('button', 'selected-remove', '×');
+    remove.dataset.focusKey = `remove-${choice.id}`;
     remove.type = 'button';
     remove.setAttribute('aria-label', `Убрать ${item.name}`);
     remove.addEventListener('click', () => toggleMeasure(choice.id));
@@ -96,7 +116,7 @@ function renderSelections() {
 }
 
 function renderValidation() {
-  const validation = validatePlan(state.plan);
+  const validation = state.validation;
   const used = validation.cost;
   byId('budget-used').textContent = String(used);
   byId('selection-count').textContent = `${state.plan.length}/5`;
@@ -137,8 +157,9 @@ function render() {
 }
 
 function clearResults() {
-  state.result = null;
-  state.requestedAI = false;
+  aiController?.abort();
+  aiController = null;
+  requestedAI = false;
   byId('results').hidden = true;
   byId('ai-button').disabled = false;
   byId('ai-output').hidden = true;
@@ -180,7 +201,6 @@ function renderInsights(result) {
 }
 
 function showResult(result) {
-  state.result = result;
   byId('result-score').textContent = number(result.score);
   byId('score-delta').textContent = `${result.delta >= 0 ? '+' : ''}${number(result.delta)} к исходному индексу ${number(result.baseline)}`;
   byId('result-average').textContent = number(result.cityAverage);
@@ -212,45 +232,52 @@ function showResult(result) {
   }
   renderInsights(result);
   byId('results').hidden = false;
-  byId('results').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'start' });
 }
 
 function calculate() {
-  const result = calculatePlan(state.plan);
-  if (!result.valid) {
+  dispatch({ type: 'FINALIZE' });
+  if (!state.result) {
     renderValidation();
     const status = byId('validation');
     if (state.plan.length !== 5) status.textContent = `Нужно выбрать ровно 5 мер. Сейчас выбрано ${state.plan.length}.`;
-    status.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    status.scrollIntoView({ behavior: motion.matches ? 'instant' : 'smooth', block: 'center' });
     return;
   }
-  showResult(result);
+  if (sceneStatus.phase !== 'ready' && sceneStatus.phase !== 'loading') session.dispatch({ type: 'PLAYBACK_CONTROL', command: 'skip' });
+  const target = state.mode === 'game' && state.playback.status !== 'complete' ? 'playback-panel' : 'results';
+  byId(target).scrollIntoView({ behavior: motion.matches ? 'instant' : 'smooth', block: 'start' });
 }
 
 async function requestAI() {
-  if (!state.result || state.requestedAI) return;
+  if (!state.result || requestedAI || aiController) return;
+  const result = state.result;
+  const revision = state.planRevision;
   const button = byId('ai-button');
   const status = byId('ai-status');
   button.disabled = true;
   status.textContent = 'ИИ анализирует рассчитанный сценарий…';
   const controller = new AbortController();
+  aiController = controller;
+  const isCurrent = () => state.planRevision === revision && aiController === controller && state.result !== null;
   const timeout = setTimeout(() => controller.abort(), 15000);
   try {
-    const response = await fetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: state.result.plan }), signal: controller.signal });
+    const response = await fetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: result.plan }), signal: controller.signal });
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     const data = await response.json();
-    if (typeof data.analysis !== 'string' || data.analysis.trim().length === 0 || data.source !== 'openai' || Math.abs(data.score - state.result.score) > 1e-7) throw new Error('Некорректный ответ');
+    if (!isCurrent()) return;
+    if (typeof data.analysis !== 'string' || data.analysis.trim().length === 0 || data.source !== 'openai' || !Number.isFinite(data.score) || Math.abs(data.score - result.score) > 1e-7) throw new Error('Некорректный ответ');
     const output = byId('ai-output');
     output.textContent = data.analysis;
     output.hidden = false;
     status.textContent = 'Ответ ИИ. Числовой результат рассчитан алгоритмом.';
-    state.requestedAI = true;
+    requestedAI = true;
   } catch {
+    if (!isCurrent()) return;
     status.textContent = 'ИИ сейчас недоступен. Разбор рассчитанных данных выше остаётся доступным.';
     button.disabled = false;
   } finally {
     clearTimeout(timeout);
-    if (state.requestedAI) button.disabled = true;
+    if (isCurrent()) { aiController = null; button.disabled = requestedAI; }
   }
 }
 
@@ -258,19 +285,130 @@ byId('baseline-score').textContent = number(BASELINE.score);
 byId('baseline-weakest').textContent = BASELINE.weakestDistrict.name;
 byId('baseline-critical').textContent = String(BASELINE.criticalCount);
 byId('sample-button').addEventListener('click', () => {
-  state.plan = [
+  dispatch({ type: 'LOAD_PLAN', plan: [
     { id: 'M7', district: 'Нура' },
     { id: 'M8', district: 'Нура' },
     { id: 'M10', district: 'Нура' },
     { id: 'M12', district: null },
     { id: 'M5', district: 'Сарыарка' },
-  ];
-  clearResults();
-  render();
+  ] });
   $('#measures').scrollIntoView({ behavior: 'smooth', block: 'start' });
 });
-byId('reset-button').addEventListener('click', () => { state.plan = []; clearResults(); render(); });
+byId('reset-button').addEventListener('click', () => dispatch({ type: 'RESET' }));
 byId('calculate-button').addEventListener('click', calculate);
 byId('back-button').addEventListener('click', () => $('#measures').scrollIntoView({ behavior: 'smooth', block: 'start' }));
 byId('ai-button').addEventListener('click', requestAI);
-render();
+
+function renderInspector() {
+  const region = getRegion(state.focusedRegion);
+  byId('district-title').textContent = region?.label ?? 'Выберите район';
+  const holder = byId('district-indicators');
+  holder.replaceChildren();
+  if (!region) {
+    byId('district-note').textContent = 'Выберите район на карте или кнопкой ниже. План одинаков в игре и калькуляторе.';
+  } else if (!region.simulationDistrict) {
+    byId('district-note').textContent = 'Сарайшық показан для справки. В учебном наборе нет его показателей: назначать районные меры сюда нельзя.';
+  } else {
+    byId('district-note').textContent = region.regionId === 'nura' ? 'Показатели учебной модели. Выбранные районные меры будут назначены сюда.' : 'Планирование доступно. Подробная сцена этого района появится позже.';
+    const baseline = DISTRICTS.find((district) => district.name === region.simulationDistrict);
+    const revealed = state.result && (state.mode === 'calculator' || state.playback.status === 'complete');
+    const after = revealed ? state.result.districts.find((district) => district.name === region.simulationDistrict)?.after : null;
+    for (const indicator of INDICATORS) {
+      const row = el('div', 'inspector-indicator');
+      const value = after?.[indicator.id] ?? baseline.indicators[indicator.id];
+      row.append(el('span', '', indicator.name), el('strong', value < 40 ? 'is-critical' : '', number(value)));
+      holder.append(row);
+    }
+  }
+  const facts = byId('district-context');
+  facts.replaceChildren();
+  const observations = sceneStatus.cityData?.observations?.filter((item) => (item.regionId === region?.regionId || item.regionId === 'city') && item.status === 'verified' && Number.isFinite(item.value)) ?? [];
+  if (!observations.length) facts.append(el('p', '', 'Реальные данные о населении и транспорте пока не подключены. Значения модели не являются статистикой города.'));
+  for (const item of observations) facts.append(el('p', '', `${item.regionId === 'city' ? 'Весь город · ' : ''}${item.definition || item.metric}: ${new Intl.NumberFormat('ru-RU').format(item.value)} ${item.unit} · ${item.asOf}`));
+}
+
+function completeWithoutScene() {
+  if (sceneStatus.phase === 'loading' || sceneStatus.phase === 'ready' || !state.result || state.playback.status === 'complete') return;
+  const revision = state.planRevision;
+  queueMicrotask(() => {
+    if (state.planRevision === revision && state.result && state.playback.status !== 'complete' && sceneStatus.phase !== 'ready') session.dispatch({ type: 'PLAYBACK_CONTROL', command: 'skip' });
+  });
+}
+
+function renderShell() {
+  const game = state.mode === 'game';
+  byId('game-panel').hidden = !game;
+  byId('mode-game').setAttribute('aria-pressed', String(game));
+  byId('mode-calculator').setAttribute('aria-pressed', String(!game));
+  for (const projection of ['top', 'tilted']) {
+    byId(`projection-${projection}`).setAttribute('aria-pressed', String(state.projection === projection));
+    byId(`projection-${projection}`).disabled = sceneStatus.phase !== 'ready';
+  }
+  byId('view-overview').setAttribute('aria-pressed', String(state.view === 'overview'));
+  byId('view-district').setAttribute('aria-pressed', String(state.view === 'district'));
+  byId('view-district').disabled = state.focusedRegion !== 'nura' || sceneStatus.phase !== 'ready';
+  byId('view-overview').disabled = sceneStatus.phase !== 'ready';
+  const revealed = state.result && (!game || state.playback.status === 'complete');
+  byId('personal-best').textContent = state.result && !revealed ? 'После показа' : state.personalBest ? number(state.personalBest.score) : 'Ещё нет';
+  for (const button of byId('region-buttons').children) button.setAttribute('aria-pressed', String(button.dataset.region === state.focusedRegion));
+  byId('playback-panel').hidden = !state.result || !game;
+  byId('playback-status').textContent = state.playback.status === 'complete' ? 'Расчёт завершён' : state.playback.status === 'paused' ? 'Показ на паузе' : 'Показываем последствия решений…';
+  const pause = byId('playback-pause');
+  pause.textContent = state.playback.status === 'paused' ? 'Продолжить' : 'Пауза';
+  pause.disabled = sceneStatus.phase !== 'ready' || state.playback.status === 'complete';
+  byId('playback-skip').disabled = state.playback.status === 'complete';
+  byId('playback-replay').disabled = sceneStatus.phase !== 'ready' || state.playback.status !== 'complete';
+  byId('playback-speed').value = String(state.playback.speed);
+  byId('playback-speed').disabled = sceneStatus.phase !== 'ready';
+  byId('calculate-button').disabled = !state.validation.valid;
+  byId('calculate-button').textContent = game ? 'Подтвердить пять решений' : 'Рассчитать сценарий';
+  if (revealed) showResult(state.result);
+  else byId('results').hidden = true;
+  renderInspector();
+  completeWithoutScene();
+}
+
+for (const region of REGIONS) {
+  const button = el('button', 'region-button', region.label);
+  button.type = 'button';
+  button.dataset.region = region.regionId;
+  button.setAttribute('aria-pressed', 'false');
+  if (!region.simulationDistrict) button.append(el('small', '', 'справка'));
+  button.addEventListener('click', () => dispatch({ type: 'FOCUS_REGION', regionId: region.regionId }));
+  byId('region-buttons').append(button);
+}
+for (const mode of ['game', 'calculator']) byId(`mode-${mode}`).addEventListener('click', () => dispatch({ type: 'SET_MODE', mode }));
+for (const projection of ['top', 'tilted']) byId(`projection-${projection}`).addEventListener('click', () => dispatch({ type: 'SET_PROJECTION', projection }));
+for (const view of ['overview', 'district']) byId(`view-${view}`).addEventListener('click', () => dispatch({ type: 'SET_VIEW', view }));
+byId('playback-pause').addEventListener('click', () => dispatch({ type: 'PLAYBACK_CONTROL', command: state.playback.status === 'paused' ? 'play' : 'pause' }));
+for (const command of ['skip', 'replay']) byId(`playback-${command}`).addEventListener('click', () => dispatch({ type: 'PLAYBACK_CONTROL', command }));
+byId('playback-speed').addEventListener('change', (event) => dispatch({ type: 'PLAYBACK_CONTROL', command: 'speed', speed: Number(event.target.value) }));
+byId('scene-retry').addEventListener('click', () => adapter?.connect());
+
+let previousSnapshot = null;
+const unsubscribe = session.subscribe((next) => {
+  const focusedKey = document.activeElement?.dataset.focusKey;
+  const prior = previousSnapshot;
+  state = next;
+  previousSnapshot = next;
+  const edited = !prior || prior.planRevision !== next.planRevision;
+  if (edited) { clearResults(); renderSelections(); renderValidation(); }
+  if (edited || prior.mode !== next.mode || prior.focusedRegion !== next.focusedRegion) renderCatalog();
+  renderShell();
+  if (focusedKey) {
+    const replacement = [...document.querySelectorAll('[data-focus-key]')].find((item) => item.dataset.focusKey === focusedKey);
+    if (replacement && !replacement.disabled) replacement.focus({ preventScroll: true });
+    else if (focusedKey.startsWith('remove-')) document.querySelector(`[data-focus-key="measure-${focusedKey.slice(7)}"]`)?.focus({ preventScroll: true });
+  }
+});
+
+adapter = createSceneAdapter({ root: byId('scene-root'), session, onStatus(status) {
+  sceneStatus = status;
+  const ready = status.phase === 'ready';
+  byId('scene-notice').hidden = ready;
+  byId('scene-status').textContent = status.phase === 'loading' ? 'Подключаем город…' : 'Интерактивная карта ещё не подключена';
+  byId('scene-retry').hidden = status.phase === 'loading' || ready;
+  renderShell();
+} });
+adapter.connect();
+window.addEventListener('pagehide', (event) => { if (event.persisted) return; adapter.destroy(); aiController?.abort(); unsubscribe(); session.destroy(); });

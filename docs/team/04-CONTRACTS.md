@@ -1,6 +1,6 @@
 # Shared interfaces v1
 
-Status: proposed implementation contract, frozen for the first parallel wave. Files described here are to be built, not claimed to exist. Laptop 1 owns changes to this document and announces a new version before another owner depends on it. Do not quietly invent different event names or formats in each branch.
+Status: v1 implementation contract. The session, preview, presentation, storage and adapter are implemented on `codex/akim-session`; scene/assets/data readiness is tracked separately. Laptop 1 owns changes to this document and announces interface changes before another owner depends on them. Do not quietly invent different event names or formats in each branch.
 
 ## Ownership boundary
 
@@ -47,7 +47,7 @@ Required snapshot fields:
   preview: { measures: [], issues: [], score: null },
   result: null,        // null or successful calculatePlan output
   presentation: null, // null or metadata described below
-  playback: { status: 'idle', speed: 1 }, // idle/playing/paused/complete
+  playback: { status: 'idle', speed: 1, runId: 0 }, // idle/playing/paused/complete; runId increments for each new playback
   personalBest: null  // null or { plan, score, rulesVersion }
 }
 ```
@@ -67,13 +67,13 @@ Actions:
 | `FINALIZE` | none | Score through engine only if valid; save personal best and create replay metadata. |
 | `RESET` | none | Clear draft/outcome, retain personal best unless separately requested. |
 | `PLAYBACK_CONTROL` | command, optional speed | command is play/pause/skip/replay/speed; changes only visual playback. Speed must be positive and bounded. |
-| `PLAYBACK_COMPLETE` | planRevision | Scene reports completion; ignore if revision is stale. No recalculation. |
+| `PLAYBACK_COMPLETE` | planRevision, runId | Scene echoes BOTH current tokens; reject missing/stale tokens. No recalculation. |
 
 Unknown actions are rejected explicitly. Invalid user selections never get a score; draft errors may remain visible for correction. An attempted sixth/duplicate decision must be refused without hidden replacement. Adding a district measure without a target can remain an incomplete draft; it is never automatically assigned to an unrelated focused region.
 
 Every plan edit nulls `result`/`presentation` and invalidates obsolete AI/animation work via planRevision. Mode, projection, focus and playback controls must not erase a plan or change its numerical outcome.
 
-Laptop 1 adds and exports `RULES_VERSION = 'hackalem-v1'` from the engine; it is a planned constant, not currently present. Increment it whenever scenario constants/math change. Personal-best records use that constant, reject incompatible versions and recompute valid stored plans.
+The engine exports `RULES_VERSION = 'hackalem-v1'`. Increment it whenever scenario constants/math change. Personal-best records use that constant, reject incompatible versions and recompute valid stored plans.
 
 Only `nura` initially supports `view: 'district'`. For another focused region, stay in overview and show its inspector plus a brief detailed-scene-unavailable message. All five scored regions remain playable there. The scene owns an illustrative walkable mask in `scene/world.js`, contained inside the chosen district polygon, with buildings/water excluded where represented. It is a game navigation area, not a surveyed pedestrian network; no extra geography-file field is required.
 
@@ -105,7 +105,7 @@ scene.update({ snapshot, context });
 scene.destroy();
 ```
 
-`createScene` is synchronous after the lead loads/validates manifest+geometry; imports from `scene/index.js`. `update` is idempotent and must not install duplicate loops/listeners. `onIntent` emits FOCUS_REGION, SET_VIEW, SET_PROJECTION and revision-tagged PLAYBACK_COMPLETE; shell playback controls dispatch PLAYBACK_CONTROL. The shell opens the corresponding inspector/policy UI. Policy selection dispatch stays with the lead shell. Camera pan/zoom and mayor location stay internal to Scene. The scene does not import the store singleton or engine calculation function.
+`createScene` is synchronous after the lead loads/validates manifest+geometry; imports from `scene/index.js`. `update` is idempotent and must not install duplicate loops/listeners. `onIntent` emits FOCUS_REGION, SET_VIEW, SET_PROJECTION and PLAYBACK_COMPLETE tagged with BOTH `snapshot.planRevision` and `snapshot.playback.runId`; shell playback controls dispatch PLAYBACK_CONTROL. Missing or old tokens are rejected, including completion from a previous replay of the same plan. The shell opens the corresponding inspector/policy UI. Policy selection dispatch stays with the lead shell. Camera pan/zoom and mayor location stay internal to Scene. The scene does not import the store singleton or engine calculation function.
 
 `context` is `{ cityData, reducedMotion, visible }`: cityData is the validated data/city/context.json object, reducedMotion is a boolean, visible is false in Calculator/hidden documents. Renderer caps are documented configuration owned by Laptop 2. The lead updates visibility/motion changes; the scene pauses work while invisible and performs deterministic completion under reduced motion. These controls do not alter the score.
 
