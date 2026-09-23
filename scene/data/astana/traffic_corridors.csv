@@ -1,4 +1,4 @@
-﻿id,road,from,to,historical_load_score,importance_0_1,period_note,source_url
+id,road,from,to,historical_load_score,importance_0_1,period_note,source_url
 corridor_01,Бөгенбай батыр даңғылы,Желтоқсан,Бейбітшілік,99.365,0.9936,"Published historical study; use as initial importance seed, NOT as current/live traffic.",https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202
 corridor_02,Сарыарқа даңғылы,Парк «Нұр-Сұлтан»,Тарас Шевченко,98.705,0.987,"Published historical study; use as initial importance seed, NOT as current/live traffic.",https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202
 corridor_03,Бөгенбай батыр даңғылы,Мұхтар Әуезов,Республика даңғылы,95.258,0.9526,"Published historical study; use as initial importance seed, NOT as current/live traffic.",https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202

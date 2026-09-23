@@ -204,4 +204,3 @@ export function segmentsCross(a, b, c, d) {
   return Math.abs(values[0]) < 1e-10 && within(a, b, c) || Math.abs(values[1]) < 1e-10 && within(a, b, d) ||
     Math.abs(values[2]) < 1e-10 && within(c, d, a) || Math.abs(values[3]) < 1e-10 && within(c, d, b);
 }
-
