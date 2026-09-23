@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { loadScenePackage, createSceneAdapter } from '../game/scene-adapter.js';
 import { REGIONS } from '../game/contracts.js';
+import { ASTANA_MAP_FILES } from '../scene/load-map.js';
 
 const fixture = () => ({
   '/api/capabilities': { scene: true, assets: true, geography: true, cityData: true },
@@ -12,7 +13,7 @@ const fixture = () => ({
 });
 const fetcher = (data) => async (url) => ({ ok: url in data, json: async () => data[url] });
 
-function adapterHarness(createScene) {
+function adapterHarness(createScene, resources = fixture()) {
   let listener;
   const dispatched = [];
   const statuses = [];
@@ -24,7 +25,7 @@ function adapterHarness(createScene) {
   };
   const documentRef = { hidden: false, addEventListener() {}, removeEventListener() {}, head: { append() {} }, createElement: () => ({ remove() {} }) };
   const motion = { matches: false, addEventListener() {}, removeEventListener() {} };
-  const adapter = createSceneAdapter({ root, session, documentRef, motion, fetchImpl: fetcher(fixture()), loadModule: async () => ({ createScene }), onStatus: (value) => statuses.push(value) });
+  const adapter = createSceneAdapter({ root, session, documentRef, motion, fetchImpl: fetcher(resources), loadModule: async () => ({ createScene }), onStatus: (value) => statuses.push(value) });
   return { adapter, root, dispatched, statuses, update: () => listener?.(session.getSnapshot()) };
 }
 
@@ -48,6 +49,46 @@ test('retry destroys the old scene and ignores its late intents; dispose is idem
   intents[1]({ type: 'FOCUS_REGION', regionId: 'esil' });
   assert.equal(h.dispatched.length, 1);
   assert.equal(destroyed, 2);
+});
+
+const atlasFixture = () => {
+  const data = {
+    '/api/capabilities': { scene: true, atlas: true, assets: false, geography: false, cityData: false },
+    '/scene/styles.css': '',
+  };
+  for (const path of Object.values(ASTANA_MAP_FILES)) data[path] = { type: 'FeatureCollection', features: [] };
+  data[ASTANA_MAP_FILES.seed] = { working_bbox: { value: [71.2, 51, 71.8, 51.4] } };
+  data[ASTANA_MAP_FILES.majorRoads] = [];
+  data[ASTANA_MAP_FILES.trafficCorridors] = [];
+  data[ASTANA_MAP_FILES.roads].features = [{ type: 'Feature', id: 'road-1', properties: { highway: 'primary' },
+    geometry: { type: 'LineString', coordinates: [[71.4, 51.1], [71.5, 51.2]] } }];
+  return data;
+};
+
+test('adapter mounts the real atlas without legacy resources and forwards playback identity', async () => {
+  let options;
+  let updateContext;
+  const h = adapterHarness(input => {
+    options = input;
+    return { update({ context }) { updateContext = context; }, destroy() {} };
+  }, atlasFixture());
+  await h.adapter.connect();
+  assert.equal(h.statuses.at(-1).phase, 'ready');
+  assert.equal(options.mapData.geographic, true);
+  assert.equal(options.mapData.roads.length, 1);
+  assert.equal(options.geography, undefined);
+  assert.equal(options.assets, undefined);
+  assert.deepEqual(updateContext.cityData.observations, []);
+  const complete = { type: 'PLAYBACK_COMPLETE', planRevision: 3, runId: 8 };
+  options.onIntent(complete);
+  assert.deepEqual(h.dispatched, [complete]);
+  h.adapter.destroy();
+});
+
+test('a broken atlas is reported explicitly without switching to legacy geometry', async () => {
+  const data = { ...fixture(), ...atlasFixture() };
+  delete data[ASTANA_MAP_FILES.roads];
+  await assert.rejects(loadScenePackage({ fetchImpl: fetcher(data), loadModule: () => { throw new Error('Must not import'); } }), /MAP_RESOURCE_UNAVAILABLE:.*roads/);
 });
 
 test('renderer update failure clears partial DOM even if destroy throws', async () => {
