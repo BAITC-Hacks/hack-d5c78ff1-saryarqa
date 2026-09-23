@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true">
+  <!-- Original vector symbols for the 14 measures in simulator.js. Use with <use href="assets/game/measure-icons.svg#M1"/>. -->
+  <defs>
+    <style>.line{fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.fill{fill:currentColor}</style>
+  </defs>
+  <symbol id="M1" viewBox="0 0 32 32"><path class="line" d="M4 25V7m24 18V7M9 25V7m14 18V7"/><rect class="line" x="11" y="10" width="10" height="12" rx="2"/><path class="line" d="M13 14h6m-6 4h6m-6 4v2m6-2v2"/></symbol>
+  <symbol id="M2" viewBox="0 0 32 32"><path class="line" d="M16 4v24M6 16h20"/><rect class="line" x="12" y="7" width="8" height="17" rx="2"/><circle class="fill" cx="16" cy="11" r="1.5"/><circle class="fill" cx="16" cy="16" r="1.5"/><circle class="fill" cx="16" cy="21" r="1.5"/></symbol>
+  <symbol id="M3" viewBox="0 0 32 32"><path class="line" d="M5 26h22M7 29l4-6m14 6-4-6"/><rect class="line" x="5" y="6" width="22" height="17" rx="5"/><path class="line" d="M9 12h14M9 17h14"/><circle class="fill" cx="10" cy="21" r="1"/><circle class="fill" cx="22" cy="21" r="1"/></symbol>
+  <symbol id="M4" viewBox="0 0 32 32"><path class="line" d="M4 27h24M16 27V17M12 23H6m20 0h-6"/><path class="line" d="M16 4c-5 2-8 5-8 9a5 5 0 0 0 8 4 5 5 0 0 0 8-4c0-4-3-7-8-9Z"/></symbol>
+  <symbol id="M5" viewBox="0 0 32 32"><path class="line" d="M7 27V13l9-7 9 7v14H7Z"/><path class="line" d="M13 27v-9h6v9M21 7c2-2 5-1 5-4M16 13c-2 2-2 5 0 7 3-1 5-4 4-7-1 1-2 1-4 0Z"/></symbol>
+  <symbol id="M6" viewBox="0 0 32 32"><path class="line" d="M4 26h24M10 26v-9m12 9v-9M10 7c-4 3-5 6-5 9 0 4 4 5 5 2 1 3 5 2 5-2 0-3-1-6-5-9Zm12-3c-4 3-5 6-5 9 0 4 4 5 5 2 1 3 5 2 5-2 0-3-1-6-5-9Z"/></symbol>
+  <symbol id="M7" viewBox="0 0 32 32"><path class="line" d="M4 27V10l12-6 12 6v17H4ZM4 13h24M13 27v-8h6v8M9 17h2m10 0h2M16 7v6m-3-3h6"/></symbol>
+  <symbol id="M8" viewBox="0 0 32 32"><path class="line" d="M5 27V10h22v17H5ZM16 13v11m-5-5h10M9 10V6h14v4"/></symbol>
+  <symbol id="M9" viewBox="0 0 32 32"><rect class="line" x="4" y="5" width="24" height="22" rx="2"/><path class="line" d="M16 5v22M4 16h24M10 11a5 5 0 0 1 0 10m12-10a5 5 0 0 0 0 10"/><circle class="fill" cx="16" cy="16" r="2"/></symbol>
+  <symbol id="M10" viewBox="0 0 32 32"><path class="line" d="M8 28V7h13M8 12h14l5 5-5 5H8M4 28h8"/><circle class="line" cx="21" cy="17" r="2"/><path class="line" d="M17 8l-3 2m11-2 3 2"/></symbol>
+  <symbol id="M11" viewBox="0 0 32 32"><path class="line" d="M3 23h26M5 27h4m5 0h4m5 0h4M8 20V8h16v12M12 15l4-4 4 4M16 11v8"/></symbol>
+  <symbol id="M12" viewBox="0 0 32 32"><rect class="line" x="5" y="5" width="22" height="22" rx="3"/><path class="line" d="M10 12h12m-12 5h8m-8 5h5M22 20l2 2 4-4"/></symbol>
+  <symbol id="M13" viewBox="0 0 32 32"><path class="line" d="M3 12h12v5h5v-5h9M3 20h9v5h8v-5h9M6 12V7m20 5V7M16 17v3"/><circle class="line" cx="16" cy="6" r="2"/></symbol>
+  <symbol id="M14" viewBox="0 0 32 32"><path class="line" d="M4 24h24M6 24V14h17l4 5v5H6ZM8 14V9h13v5M11 18h7m-4-3v6"/><circle class="line" cx="10" cy="25" r="2"/><circle class="line" cx="23" cy="25" r="2"/></symbol>
+</svg>
