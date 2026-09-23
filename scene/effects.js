@@ -86,12 +86,12 @@ function selectReactions(presentation) {
 /**
  * Parent owns requestAnimationFrame and playback controls. This controller has no
  * timer, listener, engine dependency or numeric score/quarterly-score calculation.
- * onComplete receives the matching planRevision, once per completed run/replay.
+ * onComplete receives the matching planRevision and runId, once per run.
  */
 export function createEffects({ onComplete = () => {} } = {}) {
   let destroyed = false;
   let planRevision = null;
-  let requestedStatus = 'idle';
+  let runId = null;
   let status = 'idle';
   let quarter = 0;
   let speed = 1;
@@ -108,7 +108,9 @@ export function createEffects({ onComplete = () => {} } = {}) {
     // Set the latch before calling the shell: dispatch can synchronously update or
     // destroy this controller, or replace the plan. Do not mutate after callback.
     completionDelivered = true;
-    onComplete(planRevision);
+    const completedPlanRevision = planRevision;
+    const completedRunId = runId;
+    onComplete(completedPlanRevision, completedRunId);
   }
 
   function getState() {
@@ -161,18 +163,23 @@ export function createEffects({ onComplete = () => {} } = {}) {
     if (destroyed) return getState();
     const nextRevision = snapshot?.planRevision ?? null;
     const nextRequestedStatus = STATUSES.has(snapshot?.playback?.status) ? snapshot.playback.status : 'idle';
+    const nextRunId = snapshot?.playback?.runId;
+    if (Number.isSafeInteger(planRevision) && Number.isSafeInteger(nextRevision) && nextRevision < planRevision) return getState();
+    if (nextRevision === planRevision && Number.isSafeInteger(runId)
+      && Number.isSafeInteger(nextRunId) && nextRunId < runId) return getState();
     const presentation = snapshot?.presentation;
     const nextConfirmed = snapshot?.contractVersion === 1 && snapshot?.result?.valid === true
-      && presentation?.planRevision === nextRevision;
+      && presentation?.planRevision === nextRevision
+      && Number.isSafeInteger(nextRunId) && nextRunId >= 0;
     const changedPlan = planRevision !== nextRevision;
-    const replay = !changedPlan && requestedStatus === 'complete' && nextRequestedStatus === 'playing';
-    if (changedPlan || replay || !nextConfirmed || !confirmed) {
+    const changedRun = runId !== nextRunId;
+    if (changedPlan || changedRun || !nextConfirmed || !confirmed) {
       quarter = 0;
       completionDelivered = false;
       status = 'idle';
     }
     planRevision = nextRevision;
-    requestedStatus = nextRequestedStatus;
+    runId = nextRunId;
     confirmed = Boolean(nextConfirmed);
     visible = isVisible !== false;
     speed = Number.isFinite(snapshot?.playback?.speed) && snapshot.playback.speed > 0
