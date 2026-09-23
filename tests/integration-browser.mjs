@@ -10,7 +10,8 @@ await mkdir(output, { recursive: true });
 const browser = await chromium.launch({ channel: 'chrome', headless: true });
 const context = await browser.newContext({ viewport: { width: 1440, height: 1000 } });
 const page = await context.newPage();
-const report = { browser: browser.version(), base, scene: 'not yet verified', checks: [], widths: [], failures: [], consoleErrors: [], pageErrors: [], failedResources: [], navigationCancellations: [], limitations: ['Physical touchscreen gestures and full frame-rate performance are not tested.'] };
+page.setDefaultTimeout(12000);
+const report = { browser: browser.version(), base, scene: 'not yet verified', checks: [], widths: [], failures: [], consoleErrors: [], pageErrors: [], failedResources: [], navigationCancellations: [], limitations: ['Physical touchscreen gestures and full frame-rate performance are not tested.', 'No AI requests are made by this harness; browser-smoke uses explicit mocks and separate live-provider evidence is required.'] };
 let navigating = false;
 page.on('pageerror', error => report.pageErrors.push(error.message));
 page.on('console', message => { if (message.type() === 'error') report.consoleErrors.push({ text: message.text(), location: message.location().url }); });
@@ -56,8 +57,13 @@ try {
     await page.locator('#scene-root .akim-atlas').waitFor();
     assert.ok(await page.locator('.atlas-layer-roads path').count() > 0);
     assert.equal(await page.locator('#scene-notice').isVisible(), false);
+    assert.equal(await page.locator('.atlas-sidebar, .atlas-search, [data-tab="districts"]').count(), 0);
+    assert.doesNotMatch(await page.locator('body').innerText(), /Other Places|Другие места/i);
     report.scene = 'actual sourced Astana atlas mounted in main application, not fixture';
   });
+  for (const width of [320, 375, 430, 768, 1024, 1440]) await check(`Main default layout ${width}`, () => layout('main-default', width));
+  await page.locator('#sample-button').click();
+  for (const width of [320, 375, 430, 768, 1024, 1440]) await check(`Main selected plan layout ${width}`, () => layout('main-plan', width));
   await check('Official example: budget 95, score 56.54, zero critical cells, mode parity', async () => {
     await page.locator('#sample-button').click();
     await page.locator('#mode-calculator').click();
@@ -69,18 +75,18 @@ try {
     assert.equal(await page.locator('#result-critical').textContent(), '0');
     await page.locator('#mode-game').click();
     assert.equal(await page.locator('#result-score').textContent(), '56,54');
-    assert.equal(await page.locator('#playback-status').textContent(), 'Расчёт завершён');
+    assert.equal(await page.locator('#playback-status').textContent(), 'Прогноз готов');
   });
   await check('Main real atlas replay naturally completes and skip preserves result', async () => {
     await page.locator('#playback-speed').selectOption('4');
     await page.locator('#playback-replay').click();
-    await page.waitForFunction(() => document.querySelector('#playback-status').textContent === 'Расчёт завершён', null, { timeout: 15000 });
+    await page.waitForFunction(() => document.querySelector('#playback-status').textContent === 'Прогноз готов', null, { timeout: 15000 });
     assert.equal(await page.locator('#result-score').textContent(), '56,54');
     await page.locator('#playback-replay').click();
     await page.locator('#playback-skip').click();
     assert.equal(await page.locator('#result-score').textContent(), '56,54');
   });
-  for (const width of [320, 375, 430, 768, 1024, 1440]) await check(`Main atlas layout ${width}`, () => layout('main', width));
+  for (const width of [320, 375, 430, 768, 1024, 1440]) await check(`Main forecast results layout ${width}`, () => layout('main-results', width));
   await navigate(`${base}/scene/dev.html`);
   await page.waitForFunction(() => window.akimSceneDev?.mapData && window.akimSceneDev?.scene);
   await check('Actual atlas diagnostics and both camera projections', async () => {
@@ -92,7 +98,6 @@ try {
     }
   });
   await check('Nura mayor moves on real geography without modifying plan', async () => {
-    await page.locator('[data-tab="districts"]').click();
     await page.locator('[data-act="walk"]').click();
     assert.equal(await page.evaluate(() => window.akimSceneDev.snapshot.view), 'district');
     const before = await page.evaluate(() => ({ mayor: window.akimSceneDev.scene.getDiagnostics().mayor, plan: JSON.stringify(window.akimSceneDev.snapshot.plan) }));

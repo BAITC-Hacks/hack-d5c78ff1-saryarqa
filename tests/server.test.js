@@ -25,6 +25,8 @@ async function fixture() {
   await put('scene/styles.css', '.scene{}');
   await put('scene/fixtures/sample.png', Buffer.from([137, 80, 78, 71]));
   await put('assets/game/icon.svg', '<svg></svg>');
+  await put('assets/exports/characters/mayor-still.png', Buffer.from([137, 80, 78, 71]));
+  await put('assets/exports/effects/effects.css', '.effect{}');
   await put('assets/game/sound.ogg', Buffer.from([1, 2, 3]));
   await put('data/geography/fixture.json', '{}');
   await put('data/city/fixture.json', '{}');
@@ -66,6 +68,8 @@ test('serves only approved root and resource paths with correct MIME and HEAD be
       ['/game/session.js', 'text/javascript'],
       ['/scene/dev.html', 'text/html'],
       ['/scene/dev-fixture.html', 'text/html'],
+      ['/assets/exports/characters/mayor-still.png', 'image/png'],
+      ['/assets/exports/effects/effects.css', 'text/css'],
       ['/scene/styles.css', 'text/css'],
       ['/scene/fixtures/sample.png', 'image/png'],
       ['/assets/game/icon.svg', 'image/svg+xml'],

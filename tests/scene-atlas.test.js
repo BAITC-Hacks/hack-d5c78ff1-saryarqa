@@ -206,6 +206,29 @@ test('atlas optional mapData mounts supplied geometry without inventing current 
   stage.dispatchEvent({ type: 'pointerup' });
   assert.equal(intents.filter(intent => intent.type === 'FOCUS_REGION').length, 0);
   assert.equal(scene.getDiagnostics().mayor, null);
+  assert.equal(harness.root.querySelector('.atlas-sidebar'), null);
+  assert.equal(harness.root.querySelector('.atlas-search'), null);
+  assert.ok(harness.root.querySelector('[data-act="sources"]'));
+  assert.equal(harness.root.querySelector('.atlas-place-card').hidden, true);
+});
+
+test('atlas generated mayor and vehicles retain image nodes while moving', t => {
+  const harness = atlasHarness(t);
+  const mapData = freezeDeep({ ...atlasData, regions: [{ regionId: 'nura', status: 'verified', labelAnchor: [500, 350], polygons: square(0, 0, 1000) }] });
+  const scene = harness.mount(harness.root, undefined, mapData);
+  scene.update({ snapshot: sceneSnapshot({ view: 'district', focusedRegion: 'nura' }), context: { reducedMotion: false } });
+  const mayor = harness.root.querySelector('[data-art-id="mayor"]');
+  const image = mayor.querySelector('image');
+  assert.match(image.getAttribute('href'), /assets\/exports\/characters\/mayor-still\.png$/);
+  const before = mayor.getAttribute('transform');
+  const stage = harness.root.querySelector('.atlas-stage');
+  stage.dispatchEvent({ type: 'keydown', key: 'ArrowRight' });
+  stage.dispatchEvent({ type: 'keyup', key: 'ArrowRight' });
+  harness.frame(0); harness.frame(40);
+  assert.equal(harness.root.querySelector('[data-art-id="mayor"]'), mayor);
+  assert.equal(mayor.querySelector('image'), image);
+  assert.notEqual(mayor.getAttribute('transform'), before);
+  assert.ok(scene.getDiagnostics().artNodeCount < 100);
 });
 
 test('atlas accepted current boundaries are pickable while historical overlaps remain excluded', t => {
@@ -237,6 +260,35 @@ test('atlas identical updates keep one frame, listeners and continuously advanci
   assert.ok(Math.abs(scene.getDiagnostics().effects.quarter - 0.5) < 1e-9);
   assert.equal(harness.root.children.length, 1);
   assert.equal(JSON.stringify(source), before);
+});
+
+test('atlas focuses newly assigned district once while preserving manual pan, city edits and walking', t => {
+  const harness = atlasHarness(t);
+  const regions = [
+    { regionId: 'almaty', status: 'verified', labelAnchor: [800, 500], polygons: square(700, 400, 200) },
+    { regionId: 'nura', status: 'verified', labelAnchor: [200, 400], polygons: square(100, 300, 200) },
+  ];
+  const scene = harness.mount(harness.root, undefined, { ...atlasData, regions });
+  const update = (planRevision, plan, overrides = {}) => scene.update({ snapshot: sceneSnapshot({ planRevision, plan, ...overrides }), context: { reducedMotion: true } });
+  update(1, [{ id: 'M7', district: 'Алматы' }]);
+  assert.deepEqual(scene.getDiagnostics().camera.center, atlasData.center, 'initial restored plan must not steal initial view');
+  update(2, [{ id: 'M7', district: 'Алматы' }, { id: 'M4', district: 'Нура' }]);
+  assert.deepEqual(scene.getDiagnostics().camera.center, [200, 400]);
+  const stage = harness.root.querySelector('.atlas-stage');
+  stage.dispatchEvent({ type: 'keydown', key: 'ArrowRight' });
+  const panned = scene.getDiagnostics().camera;
+  update(2, [{ id: 'M7', district: 'Алматы' }, { id: 'M4', district: 'Нура' }], { revision: 99 });
+  assert.deepEqual(scene.getDiagnostics().camera, panned, 'unrelated update preserves player pan');
+  update(3, [{ id: 'M7', district: 'Алматы' }, { id: 'M4', district: 'Нура' }, { id: 'M12', district: null }]);
+  assert.deepEqual(scene.getDiagnostics().camera, panned, 'city policy does not move camera');
+  update(4, [{ id: 'M4', district: 'Нура' }]);
+  assert.deepEqual(scene.getDiagnostics().camera, panned, 'removal does not move camera');
+  update(5, [{ id: 'M4', district: 'Алматы' }]);
+  assert.deepEqual(scene.getDiagnostics().camera.center, [800, 500], 'reassignment follows new district');
+  update(5, [{ id: 'M4', district: 'Алматы' }], { view: 'district', focusedRegion: 'nura' });
+  const walkCamera = scene.getDiagnostics().camera;
+  update(6, [{ id: 'M4', district: 'Алматы' }, { id: 'M8', district: 'Алматы' }], { view: 'district', focusedRegion: 'nura' });
+  assert.deepEqual(scene.getDiagnostics().camera, walkCamera, 'walking view takes precedence');
 });
 
 test('atlas calculator mode cancels drag capture and cannot pan until shown again', t => {
@@ -320,7 +372,6 @@ test('atlas keyboard inspects supplied landmarks and missing Nura geography stay
   const before = scene.getDiagnostics().camera;
   stage.dispatchEvent({ type: 'keydown', key: '+' });
   assert.ok(scene.getDiagnostics().camera.zoom > before.zoom);
-  container.dispatchEvent({ type: 'click', target: container.querySelector('[data-tab="districts"]') });
   const walk = container.querySelector('[data-act="walk"]');
   assert.ok(walk);
   container.dispatchEvent({ type: 'click', target: walk });

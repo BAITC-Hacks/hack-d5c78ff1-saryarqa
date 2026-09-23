@@ -1,6 +1,18 @@
 # Asset source register
 
-Review date: 2026-09-23. Stable IDs and status live in manifest.json. This register does not certify the unfinished art pack.
+Review date: 2026-09-23. Stable IDs and status live in manifest.json. The approved producer exports now replace the earlier starter/placeholder art. Historical intake details below describe the older review, not current runtime readiness. This register does not certify geographic boundaries.
+
+## generated-vector
+
+Original project SVG artwork from the approved miniature-city package, committed in 053cba4. Producer provenance: assets/README-PACK.md, assets/ASSET-MANIFEST.csv, and the more precise family manifests under assets/sources/world and assets/sources/policies. Project-owned; redistribution license not specified by the owner. No CC0 or third-party redistribution rights are asserted. Icons, policies, terrain, buildings, effects and favicon use their exported files directly. Anchors come from the specific producer manifest rather than generic package summaries. All illustrations are decorative and never define scores or official geography.
+
+## generated-raster
+
+Project-directed OpenAI image generation, packaged into transparent character and vehicle PNG exports. Sources and frame semantics: assets/sources/characters/README.md, assets/exports/characters/ASSET-MANIFEST.csv and assets/sources/units/vehicles/README.md. Project-owned; redistribution license not specified. Character sheets contain four named poses, not a four-frame walk cycle. Their stills are upright figures also usable as top-view markers. Vehicle atlases contain five single-frame directions, not animation frames. Runtime selects a still/direction; pose and atlas variants remain available lazily through game/art.js.
+
+## Runtime inventory
+
+game/art.js registers every SVG, PNG and effect stylesheet under assets/exports (209 files). Importing the module only creates metadata; it does not request or preload images. Helpers return existing exact-case URLs, dimensions and pixel anchors. The 52 stable manifest IDs all resolve to supplied exports. Optional sheets carry frameRects, frameLabels and per-frame anchors; consumers must select a pose explicitly. Source duplicates, ZIP, PDF and source scripts are excluded. Style compositions remain illustrative references and are not official maps. The effects stylesheet is opt-in and supplied static SVGs remain usable with reduced motion.
 
 ## starter-original
 
