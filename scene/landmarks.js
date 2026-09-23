@@ -1,14 +1,11 @@
-/**
- * Stylized architectural miniatures for the 17 supplied landmark anchors.
- * These drawings convey identity, not surveyed footprints or building dimensions.
- * Every symbol's ground anchor is (0, 0); the renderer owns geographic placement.
- */
+/** Architectural miniatures. Shapes, materials and heights are illustrative;
+ * geographic positions are supplied by the caller. Ground anchor: (0, 0). */
 const NS = 'http://www.w3.org/2000/svg';
 export const LANDMARK_STYLES = Object.freeze({
-  ivory: '#faf6e9', stone: '#e5dbc1', shade: '#beb89f', edge: '#827f69',
-  teal: '#357b7a', glass: '#79b8b5', dark: '#245c61', pale: '#c7e0d7',
-  gold: '#ceab58', goldLight: '#f5d989', goldDark: '#9c7835',
-  lawn: '#92aa79', shadow: '#24433d27', line: '#ffffff88', selection: '#d8b468',
+  ivory: '#fff9e9', stone: '#dfd9c6', shade: '#afbbaa', edge: '#7a968e',
+  teal: '#276d78', glass: '#78b5bd', dark: '#174755', pale: '#c4e3df',
+  gold: '#d0aa57', goldLight: '#ffe29a', goldDark: '#957136', lawn: '#83a889',
+  shadow: '#143e3f22', line: '#ffffffa6', selection: '#cba45b',
 });
 const C = LANDMARK_STYLES;
 const LABELS = Object.freeze({
@@ -21,314 +18,270 @@ const LABELS = Object.freeze({
   astana_airport: 'Международный аэропорт Астаны', abu_dhabi_plaza: 'Abu Dhabi Plaza',
   shabyt: 'Қазақ ұлттық өнер университеті / Шабыт',
 });
-
-export const landmarkLabel = id => Object.prototype.hasOwnProperty.call(LABELS, id)
-  ? LABELS[id] : 'Городской объект';
-
-const element = (tag, attributes = {}) => {
-  const node = document.createElementNS(NS, tag);
-  for (const [key, value] of Object.entries(attributes)) node.setAttribute(key, String(value));
-  return node;
+export const landmarkLabel = id => Object.hasOwn(LABELS, id) ? LABELS[id] : 'Городской объект';
+const node = (tag, attrs = {}) => {
+  const result = document.createElementNS(NS, tag);
+  for (const [key, value] of Object.entries(attrs)) result.setAttribute(key, String(value));
+  return result;
 };
-const add = (group, tag, attributes) => group.appendChild(element(tag, attributes));
-const path = (g, d, fill = C.ivory, attributes = {}) => add(g, 'path', { d, fill, ...attributes });
-const ellipse = (g, cx, cy, rx, ry, fill, attributes = {}) => add(g, 'ellipse', { cx, cy, rx, ry, fill, ...attributes });
-const circle = (g, cx, cy, r, fill, attributes = {}) => add(g, 'circle', { cx, cy, r, fill, ...attributes });
-const rect = (g, x, y, width, height, fill, rx = 0, attributes = {}) => add(g, 'rect', { x, y, width, height, rx, fill, ...attributes });
-const line = (g, x1, y1, x2, y2, stroke = C.edge, width = 1, attributes = {}) => add(g, 'line', {
-  x1, y1, x2, y2, stroke, 'stroke-width': width, 'stroke-linecap': 'round', ...attributes,
-});
-const shadow = (g, width = 31, height = 7) => ellipse(g, 3, 2, width, height, C.shadow);
-const plinth = (g, width = 30) => {
-  path(g, `M${-width},-3 0,-13 ${width},-3 0,8Z`, C.stone);
-  path(g, `M${-width},-3 0,5 ${width},-3 0,-11Z`, C.ivory);
-};
+const add = (g, tag, attrs) => g.appendChild(node(tag, attrs));
+const path = (g, d, fill, more = {}) => add(g, 'path', { d, fill, ...more });
+const ellipse = (g, x, y, rx, ry, fill, more = {}) => add(g, 'ellipse', { cx: x, cy: y, rx, ry, fill, ...more });
+const circle = (g, x, y, r, fill, more = {}) => add(g, 'circle', { cx: x, cy: y, r, fill, ...more });
+const line = (g, a, b, color = C.line, width = .7, more = {}) => add(g, 'line', { x1: a[0], y1: a[1], x2: b[0], y2: b[1], stroke: color, 'stroke-width': width, ...more });
+const outline = points => `M${points.map(p => p.join(',')).join('L')}Z`;
+const polygon = (g, points, fill, more = {}) => path(g, outline(points), fill, more);
+const I = (c, x, y, z = 0) => [(x - y) * .86, (x + y) * (c.top ? .48 : .34) - z * (c.top ? .77 : 1)];
+const quad = (c, x, y, w, d, z = 0) => [I(c, x, y, z), I(c, x + w, y, z), I(c, x + w, y + d, z), I(c, x, y + d, z)];
 
-// A low cabinet seen from the same three-quarter direction as the other symbols.
-function block(g, x, y, width, height, depth = 7, fill = C.ivory) {
-  rect(g, x, y - height, width, height, fill);
-  path(g, `M${x + width},${y - height}l${depth},${-depth * .55}v${height}l${-depth},${depth * .55}Z`, C.shade);
-  path(g, `M${x},${y - height}l${depth},${-depth * .55}h${width}l${-depth},${depth * .55}Z`, C.stone);
+function base(c, w = 28, d = 22) {
+  ellipse(c.g, 3, 5, 40, 10, '#1d49470a'); ellipse(c.g, 2, 4, 35, 8, '#1d49470f');
+  const top = quad(c, -w, -d, w * 2, d * 2, 1.5), bottom = quad(c, -w, -d, w * 2, d * 2, -.7);
+  polygon(c.g, [top[1], top[2], top[3], bottom[3], bottom[2], bottom[1]], C.shade);
+  polygon(c.g, top, '#f0eada');
+  polygon(c.g, quad(c, -w + 2, -d + 2, w * 2 - 4, d * 2 - 4, 1.6), '#e6e7d6');
 }
 
-function windows(g, x, y, count, spacing = 6, height = 7, width = 3, fill = C.teal) {
-  for (let index = 0; index < count; index += 1) rect(g, x + index * spacing, y, width, height, fill, .5);
-}
-
-function dome(g, x, y, radius, fill = C.teal) {
-  path(g, `M${x - radius},${y}Q${x - radius},${y - radius * .9} ${x},${y - radius * 1.1}Q${x + radius},${y - radius * .9} ${x + radius},${y}Z`, fill);
-  path(g, `M${x - radius * .65},${y - 1}Q${x - radius * .63},${y - radius * .8} ${x - 1},${y - radius * .99}`, 'none', { stroke: C.line, 'stroke-width': 1.6 });
-  line(g, x, y - radius * 1.1, x, y - radius * 1.4, C.gold, 1.5);
-  circle(g, x, y - radius * 1.47, 1.2, C.goldLight);
-  rect(g, x - radius, y - 1.1, radius * 2, 2.2, C.gold);
-}
-
-function minaret(g, x, y, height = 37, fill = C.ivory) {
-  path(g, `M${x - 2.7},${y}l.8,${-height}h3.8l.8,${height}Z`, fill);
-  line(g, x + 2, y - 1, x + 1.5, y - height, C.shade, 1.2);
-  for (const fraction of [.38, .75]) rect(g, x - 3.4, y - height * fraction, 6.8, 1.7, C.gold);
-  path(g, `M${x - 2.2},${y - height}l2.2,-6 2.2,6Z`, C.teal);
-  line(g, x, y - height - 6, x, y - height - 9, C.gold, 1);
-}
-
-function roof(g, width = 31, height = 21, fill = C.ivory) {
-  shadow(g, width + 2, height + 2);
-  rect(g, -width, -height, width * 2, height * 2, C.shade, 3);
-  rect(g, -width, -height - 3, width * 2, height * 2, fill, 3);
-  rect(g, -width + 3, -height, width * 2 - 6, height * 2 - 6, 'none', 2, { stroke: C.stone, 'stroke-width': 1 });
-}
-
-function baiterek(g, top) {
-  if (top) {
-    shadow(g, 23, 20); circle(g, 0, -2, 23, C.stone); circle(g, 0, -3, 18, C.ivory);
-    for (let index = 0; index < 10; index += 1) {
-      const angle = index * Math.PI / 5;
-      line(g, Math.cos(angle) * 12, -3 + Math.sin(angle) * 12, Math.cos(angle) * 20, -3 + Math.sin(angle) * 20, C.gold, 1);
+function box(c, x, y, w, d, h, z = 2, material = C.ivory, glazing = 0) {
+  const lower = quad(c, x, y, w, d, z), upper = quad(c, x, y, w, d, z + h);
+  polygon(c.g, [lower[1], lower[2], upper[2], upper[1]], material === C.teal ? C.dark : C.shade);
+  polygon(c.g, [lower[2], lower[3], upper[3], upper[2]], material === C.teal ? '#3a828a' : C.stone);
+  polygon(c.g, upper, material, { stroke: '#fff9e970', 'stroke-width': .45 });
+  if (glazing) {
+    const rows = Math.max(1, Math.min(8, Math.floor(h / 5))), columns = Math.max(2, Math.min(9, Math.floor(w / 3.5)));
+    let front = '', side = '';
+    for (let row = 0; row < rows; row += 1) {
+      const bottom = z + 1.5 + row * (h - 2) / rows, top = Math.min(z + h - 1, bottom + (h - 2) / rows * .62);
+      for (let col = 0; col < columns; col += 1) {
+        const left = x + 1 + col * (w - 2) / columns, right = left + (w - 2) / columns * .65;
+        front += outline([I(c, left, y + d, bottom), I(c, right, y + d, bottom), I(c, right, y + d, top), I(c, left, y + d, top)]);
+      }
+      const cols = Math.max(2, Math.min(6, Math.floor(d / 4)));
+      for (let col = 0; col < cols; col += 1) {
+        const near = y + 1 + col * (d - 2) / cols, far = near + (d - 2) / cols * .65;
+        side += outline([I(c, x + w, near, bottom), I(c, x + w, far, bottom), I(c, x + w, far, top), I(c, x + w, near, top)]);
+      }
     }
-    circle(g, 0, -4, 13, C.gold); ellipse(g, -3.5, -8, 7, 5.5, C.goldLight);
-    ellipse(g, 0, -4, 7, 13, 'none', { stroke: C.goldDark, 'stroke-width': .8 });
-    return;
+    path(c.g, front, material === C.teal ? '#bbdfdfaa' : C.teal); path(c.g, side, material === C.teal ? '#78b3bcbb' : '#3b7180');
   }
-  shadow(g, 23, 5); plinth(g, 21);
-  path(g, 'M-11,-5C-6,-24 -4,-38 -14,-53M11,-5C6,-24 4,-38 14,-53', 'none', { stroke: C.shade, 'stroke-width': 3 });
-  for (let index = -2; index <= 2; index += 1) {
-    path(g, `M${index * 4},-5Q${-index * 3},-30 ${index * 6},-54`, 'none', { stroke: C.ivory, 'stroke-width': 2.1 });
-  }
-  for (const y of [-14, -22, -30, -39]) ellipse(g, 0, y, y === -39 ? 5.5 : 4.5, 1.2, 'none', { stroke: C.gold, 'stroke-width': 1 });
-  circle(g, 0, -60, 14, C.goldDark); circle(g, -1, -61, 13, C.gold);
-  ellipse(g, -4, -65, 7.5, 5.5, C.goldLight);
-  ellipse(g, 0, -60, 7, 13, 'none', { stroke: C.goldDark, 'stroke-width': .8 });
-  path(g, 'M-13,-59Q0,-54 13,-59M-12,-65Q0,-61 12,-65', 'none', { stroke: '#fff1be99', 'stroke-width': .9 });
+  return { lower, upper };
 }
 
-function akorda(g, top) {
-  if (top) {
-    roof(g, 34, 19); rect(g, -32, -15, 64, 9, C.stone); rect(g, -26, 8, 52, 7, C.stone);
-    circle(g, 0, -3, 12, C.gold); circle(g, 0, -4, 10, C.teal); ellipse(g, -3, -7, 5, 4, C.glass);
-    for (const x of [-27, 27]) rect(g, x - 4, -18, 8, 30, C.ivory, 1);
-    return;
-  }
-  shadow(g, 37); block(g, -32, -4, 64, 19, 5);
-  block(g, -12, -6, 24, 27, 4);
-  windows(g, -28, -19, 4, 7, 8); windows(g, 11, -19, 3, 7, 8);
-  for (const x of [-9, -3, 3, 9]) { rect(g, x - 1.4, -29, 2.8, 20, C.ivory); line(g, x + 1.5, -27, x + 1.5, -9, C.shade, .8); }
-  path(g, 'M-15,-32 0,-40 15,-32Z', C.ivory); rect(g, -16, -33, 32, 3, C.gold);
-  rect(g, -8, -41, 16, 6, C.ivory); dome(g, 0, -41, 10);
-  line(g, 0, -56, 0, -68, C.gold, 1.3); path(g, 'M1,-68h9l-2,4H1Z', C.teal);
-  rect(g, -17, -6, 34, 3, C.stone); rect(g, -20, -3, 40, 3, C.ivory);
+function rim(c, x, y, w, d, z, color = C.gold, width = .9) {
+  const q = quad(c, x, y, w, d, z);
+  path(c.g, outline(q), 'none', { stroke: color, 'stroke-width': width });
 }
 
-function khanShatyr(g, top) {
-  if (top) {
-    shadow(g, 33, 25); ellipse(g, 0, -3, 32, 25, C.stone); ellipse(g, 0, -5, 30, 23, C.ivory);
-    for (let index = 0; index < 12; index += 1) { const a = index * Math.PI / 6; line(g, 5, -10, Math.cos(a) * 30, -5 + Math.sin(a) * 23, C.stone, 1.2); }
-    circle(g, 5, -10, 3, C.gold); return;
-  }
-  shadow(g, 36); ellipse(g, 0, -4, 34, 9, C.shade);
-  path(g, 'M-34,-7Q-6,-32 7,-64Q13,-28 35,-7Q4,7 -34,-7Z', C.ivory);
-  path(g, 'M7,-64Q15,-27 35,-7Q21,-1 10,0Z', C.stone);
-  for (const x of [-27, -17, -7, 5, 18, 29]) path(g, `M7,-62Q${x * .5},-25 ${x},-4`, 'none', { stroke: '#bdbba5', 'stroke-width': .8 });
-  path(g, 'M-26,-16Q3,-7 29,-16M-17,-29Q5,-21 21,-27', 'none', { stroke: '#d5cbb4', 'stroke-width': .8 });
-  ellipse(g, 0, -5, 32, 5, 'none', { stroke: C.gold, 'stroke-width': 2 });
-  line(g, 7, -65, 9, -76, C.goldDark, 1.4); rect(g, -4, -9, 9, 7, C.teal, 1);
+function dome(c, x, y, z, r, color = C.teal) {
+  const [px, py] = I(c, x, y, z), h = r * (c.top ? .8 : 1.05);
+  ellipse(c.g, px, py + 1, r + 1, r * .26, C.goldDark);
+  path(c.g, `M${px - r},${py}C${px - r},${py - h * .65} ${px - r * .55},${py - h} ${px},${py - h}C${px + r * .55},${py - h} ${px + r},${py - h * .65} ${px + r},${py}Z`, color);
+  path(c.g, `M${px},${py - h}Q${px + r * .7},${py - h * .8} ${px + r},${py}H${px}Z`, color === C.ivory ? C.stone : '#1d5665');
+  for (const t of [-.55, 0, .55]) path(c.g, `M${px},${py - h}Q${px + r * t},${py - h * .55} ${px + r * t * 1.35},${py}`, 'none', { stroke: '#ffffff67', 'stroke-width': .65 });
+  ellipse(c.g, px, py, r, r * .22, 'none', { stroke: C.gold, 'stroke-width': 1 });
+  line(c.g, [px, py - h], [px, py - h - 5], C.gold, 1);
+  circle(c.g, px, py - h - 5.5, 1.2, C.goldLight);
 }
 
-function museum(g, top) {
-  if (top) {
-    roof(g, 32, 19); rect(g, -27, -16, 19, 24, C.teal, 1); rect(g, -3, -19, 19, 29, C.gold, 1);
-    rect(g, 19, -10, 13, 25, C.ivory, 1); rect(g, -29, 11, 50, 5, C.stone); return;
+function columns(c, x, y, count, step, h, z = 2) {
+  for (let index = 0; index < count; index += 1) {
+    const [px, py] = I(c, x + index * step, y, z), top = I(c, x + index * step, y, z + h);
+    line(c.g, [px, py], top, C.shade, 2.8); line(c.g, [px - .7, py], [top[0] - .7, top[1]], C.ivory, 1.5);
+    ellipse(c.g, px, py, 1.7, .65, C.stone); ellipse(c.g, top[0], top[1], 1.8, .8, C.ivory);
   }
-  shadow(g, 37); block(g, -33, -3, 23, 25, 5, C.ivory); block(g, -11, -3, 29, 38, 6, C.gold);
-  block(g, 19, -1, 12, 22, 5, C.ivory); rect(g, -30, -24, 17, 15, C.teal);
-  for (const x of [-28, -23, -18]) line(g, x, -23, x, -10, C.glass, .9);
-  rect(g, -8, -35, 23, 22, C.goldLight); path(g, 'M-6,-13L12,-34', 'none', { stroke: C.goldDark, 'stroke-width': 1 });
-  windows(g, 21, -18, 2, 5, 10, 2.7); rect(g, -29, -4, 59, 4, C.stone); rect(g, -7, -11, 18, 8, C.dark);
 }
 
-function opera(g, top) {
-  if (top) {
-    roof(g, 32, 22); rect(g, -26, -18, 52, 24, C.teal, 1); path(g, 'M-28,8 0,1 28,8V18H-28Z', C.ivory);
-    for (let x = -23; x <= 23; x += 9.2) circle(g, x, 15, 1.8, C.gold); return;
-  }
-  shadow(g, 36); block(g, -30, -5, 59, 23, 6); rect(g, -25, -27, 50, 22, C.dark);
-  for (const x of [-23, -14, -5, 5, 14, 23]) { rect(g, x - 2, -29, 4, 24, C.ivory); rect(g, x - 2.8, -29, 5.6, 2.5, C.gold); }
-  path(g, 'M-34,-31 0,-45 34,-31Z', C.ivory); path(g, 'M-26,-32 0,-41 26,-32Z', C.stone);
-  line(g, -35, -30, 35, -30, C.gold, 2); rect(g, -32, -5, 64, 3, C.stone); rect(g, -36, -2, 72, 3, C.ivory);
-  // Small sculptural crest suggests the rooftop chariot without a detailed sprite.
-  path(g, 'M-7,-46l2,-5 5,2 5,-2 2,5M-3,-48v-5h6v5', 'none', { stroke: C.goldDark, 'stroke-width': 2, 'stroke-linejoin': 'round' });
+function minaret(c, x, y, height = 38) {
+  const [px, py] = I(c, x, y, 2), top = I(c, x, y, height);
+  path(c.g, `M${px - 2.3},${py}L${top[0] - 1.4},${top[1]}H${top[0] + 1.4}L${px + 2.3},${py}Z`, C.ivory);
+  line(c.g, [px + 1.2, py], [top[0] + .8, top[1]], C.shade, 1);
+  for (const f of [.35, .7, 1]) { const p = I(c, x, y, 2 + (height - 2) * f); ellipse(c.g, p[0], p[1], 2.7, .8, C.gold); }
+  path(c.g, `M${top[0] - 1.6},${top[1]}l1.6,-6 1.6,6Z`, C.teal); line(c.g, [top[0], top[1] - 6], [top[0], top[1] - 9], C.gold, .8);
 }
 
-function pyramid(g, top) {
-  if (top) {
-    shadow(g, 31, 25); path(g, 'M0,-32 33,-4 0,26 -33,-4Z', C.teal);
-    path(g, 'M0,-32 0,-4 -33,-4Z', C.pale); path(g, 'M0,-32 33,-4 0,-4Z', C.glass);
-    path(g, 'M0,-4 33,-4 0,26Z', C.dark); line(g, -33, -4, 33, -4, C.line, .8); line(g, 0, -32, 0, 26, C.line, .8); return;
+function baiterek(c) {
+  base(c, 21, 20);
+  const [x, y] = I(c, 0, 0, 3), ball = I(c, 0, 0, 64), neck = I(c, 0, 0, 40);
+  ellipse(c.g, x, y, 16, 5.5, C.ivory); ellipse(c.g, x, y - 1, 12, 3.5, C.gold); ellipse(c.g, x, y - 1.5, 10, 2.8, C.stone);
+  for (let i = -3; i <= 3; i += 1) {
+    const bottom = x + i * 3.2, crown = ball[0] + i * 4;
+    path(c.g, `M${bottom},${y - 2}Q${neck[0] - i * 2},${neck[1]} ${crown},${ball[1] + 6}`, 'none', { stroke: i % 2 ? C.ivory : '#b6c4b5', 'stroke-width': 1.8 });
+    path(c.g, `M${bottom},${y - 2}Q${neck[0] + i * 2},${neck[1]} ${-crown},${ball[1] + 6}`, 'none', { stroke: '#f9f5dd', 'stroke-width': .75 });
   }
-  shadow(g, 34); plinth(g, 35);
-  path(g, 'M0,-64 -32,-9 0,2Z', C.glass); path(g, 'M0,-64 32,-9 0,2Z', C.teal);
-  path(g, 'M0,-64 -11,-45 0,-42 11,-45Z', C.pale);
-  for (const y of [-45, -30, -15]) { const w = (y + 64) * 32 / 55; path(g, `M${-w},${y}L0,${y + w * .34} ${w},${y}`, 'none', { stroke: C.line, 'stroke-width': .8 }); }
-  for (const x of [-21, -10, 10, 21]) line(g, 0, -63, x, -9 + (32 - Math.abs(x)) * .34, C.line, .7);
-  line(g, 0, -64, 0, 2, C.gold, 1.2);
+  for (const z of [14, 24, 35, 47]) { const p = I(c, 0, 0, z); ellipse(c.g, p[0], p[1], z > 35 ? 7 : 4.2, 1.1, 'none', { stroke: C.gold, 'stroke-width': .75 }); }
+  circle(c.g, ball[0] + .8, ball[1], 13.5, C.goldDark); circle(c.g, ball[0] - .8, ball[1] - 1, 12.7, C.gold);
+  path(c.g, `M${ball[0] - 12},${ball[1] - 4}Q${ball[0] - 6},${ball[1] - 17} ${ball[0] + 7},${ball[1] - 10}Q${ball[0]},${ball[1] - 4} ${ball[0] - 12},${ball[1] - 4}`, C.goldLight);
+  for (const w of [5, 10]) ellipse(c.g, ball[0], ball[1], w, 12.6, 'none', { stroke: '#94723b88', 'stroke-width': .6 });
+  for (const dy of [-6, 1, 7]) ellipse(c.g, ball[0], ball[1] + dy, Math.sqrt(13 ** 2 - dy ** 2), 2.3, 'none', { stroke: '#fff1b9aa', 'stroke-width': .55 });
 }
 
-function mosque(g, top, grand) {
-  const domeFill = grand ? C.teal : C.ivory;
-  if (top) {
-    roof(g, 29, 24, C.stone); rect(g, -22, -18, 44, 36, C.ivory, 2);
-    for (const x of [-26, 26]) for (const y of [-23, 21]) { circle(g, x, y, 3.5, C.gold); circle(g, x, y - 1, 2.4, C.ivory); }
-    for (const x of [-15, 15]) for (const y of [-13, 12]) circle(g, x, y, 5, grand ? C.glass : C.stone);
-    circle(g, 0, -2, grand ? 13 : 11, C.gold); circle(g, 0, -3, grand ? 11 : 9, domeFill); ellipse(g, -3, -6, 4, 3, grand ? C.glass : '#ffffff'); return;
-  }
-  shadow(g, 37); minaret(g, -29, -10, grand ? 48 : 43); minaret(g, 28, -10, grand ? 48 : 43);
-  block(g, -25, -3, 50, 18, 4);
-  for (const x of [-17, 17]) { rect(g, x - 7, -23, 14, 7, C.ivory); dome(g, x, -23, 7, grand ? C.glass : C.stone); }
-  rect(g, -12, -31, 24, 12, C.ivory); dome(g, 0, -31, grand ? 14 : 12, domeFill);
-  path(g, 'M-5,-3v-11Q0,-23 5,-14v11Z', C.teal); path(g, 'M-8,-4v-11Q0,-27 8,-15v11', 'none', { stroke: C.gold, 'stroke-width': 1.5 });
-  for (const x of [-20, -13, 12, 19]) path(g, `M${x},-7v-5q2,-5 4,0v5Z`, C.dark);
-  minaret(g, -34, 1, grand ? 50 : 40); minaret(g, 33, 1, grand ? 50 : 40);
+function akorda(c) {
+  base(c, 29, 22); box(c, -25, -12, 50, 24, 11, 2, C.ivory, 1);
+  box(c, -26, -13, 11, 25, 15, 2, C.ivory, 1); box(c, 15, -13, 11, 25, 15, 2, C.ivory, 1);
+  box(c, -12, -10, 24, 22, 19, 2, C.ivory, 1); rim(c, -12, -10, 24, 22, 21);
+  box(c, -8, -7, 16, 14, 5, 21, C.ivory); dome(c, 0, 0, 27, 9.5);
+  for (let i = 0; i < 3; i += 1) box(c, -14 - i, 14 + i * 1.6, 28 + i * 2, 2, 1, 3 - i * .55, C.ivory);
+  columns(c, -10, 15, 6, 4, 14, 5);
+  const front = [I(c, -14, 16, 20), I(c, 0, 16, 27), I(c, 14, 16, 20)]; polygon(c.g, front, C.ivory); line(c.g, front[0], front[2], C.gold, 1.1);
+  const p = I(c, 0, 0, 47); line(c.g, [p[0], p[1] + 8], p, C.gold, .9); path(c.g, `M${p[0]},${p[1]}l8,1 -1,4 -7,-1Z`, C.teal);
 }
 
-function campus(g, top) {
-  if (top) {
-    roof(g, 34, 22, C.lawn); rect(g, -31, -19, 62, 10, C.ivory); rect(g, -31, -10, 12, 30, C.ivory); rect(g, 19, -10, 12, 30, C.ivory);
-    rect(g, -15, -6, 30, 12, C.stone); rect(g, -5, -4, 10, 18, C.teal); return;
-  }
-  shadow(g, 38); path(g, 'M-30,-4 1,-14 34,-4 3,7Z', C.lawn);
-  block(g, -30, -7, 60, 25, 5); rect(g, -24, -25, 48, 12, C.teal);
-  for (const x of [-17, -8, 1, 10, 19]) line(g, x, -24, x, -13, C.glass, 1);
-  block(g, -35, 0, 13, 24, 6); block(g, 23, 0, 12, 24, 5);
-  block(g, -14, -2, 28, 15, 5); rect(g, -8, -16, 16, 14, C.glass); line(g, 0, -16, 0, -2, C.ivory, 1.5);
-  rect(g, -18, -33, 36, 2.5, C.gold);
+function khan(c) {
+  base(c, 28, 25); const y = c.top ? -3 : -2, peak = c.top ? [7, -48] : [7, -65];
+  ellipse(c.g, 0, y, 34, c.top ? 20 : 13, C.shade); ellipse(c.g, 0, y - 2, 33, c.top ? 18 : 11, C.teal);
+  path(c.g, `M-34,${y - 4}Q-5,-34 ${peak[0]},${peak[1]}Q15,-24 34,${y - 4}Q8,${y + 17} -34,${y - 4}Z`, '#f6f2dc');
+  path(c.g, `M${peak[0]},${peak[1]}Q17,-25 34,${y - 4}Q25,${y + 7} 9,${y + 7}Z`, '#ccd5c8');
+  for (let i = -4; i <= 4; i += 1) { const x = i * 7.2, bottom = y + 7 - Math.abs(i) * 2.6; path(c.g, `M${peak[0]},${peak[1]}Q${x * .4},-21 ${x},${bottom}`, 'none', { stroke: i % 2 ? '#fffdf0' : '#b6c3b6', 'stroke-width': i % 2 ? 1.1 : .65 }); }
+  for (const t of [.32, .57, .78]) { const half = 34 * t, cy = peak[1] * (1 - t) + y * t; path(c.g, `M${-half + 7 * (1-t)},${cy}Q7,${cy + 13 * t} ${half + 7 * (1-t)},${cy}`, 'none', { stroke: '#b6c4b177', 'stroke-width': .65 }); }
+  ellipse(c.g, 0, y - 1, 33, c.top ? 13 : 8.4, 'none', { stroke: C.gold, 'stroke-width': 1.2 });
+  line(c.g, peak, [peak[0] + 2, peak[1] - 10], C.goldDark, 1.4); box(c, -4, 18, 8, 4, 5, 2, C.teal, 1);
 }
 
-function arena(g, top, ice) {
-  if (top) {
-    shadow(g, 35, 24); ellipse(g, 0, -3, 35, 25, C.shade); ellipse(g, 0, -5, 33, 23, C.ivory);
-    ellipse(g, 0, -5, 24, 15, C.teal); rect(g, -18, -14, 36, 18, ice ? C.pale : C.lawn, ice ? 6 : 1);
-    rect(g, -14, -12, 28, 14, 'none', ice ? 5 : 0, { stroke: '#ffffffbb', 'stroke-width': 1 }); line(g, 0, -12, 0, 2, '#ffffffbb', 1); return;
-  }
-  shadow(g, 38); ellipse(g, 0, -7, 36, 12, C.shade); path(g, 'M-35,-17v10Q0,12 35,-7v-10Z', ice ? C.teal : C.glass);
-  for (let x = -28; x <= 28; x += 8) line(g, x, -12, x, -3, C.line, 1);
-  ellipse(g, 0, -19, 36, 16, C.ivory); ellipse(g, 0, -20, 26, 10, C.dark); ellipse(g, 0, -19, 20, 6, ice ? C.pale : C.lawn);
-  if (ice) { path(g, 'M-33,-22Q0,-39 33,-22L20,-16Q0,-27 -20,-16Z', C.glass); line(g, -28, -24, 26, -24, C.line, 1); }
-  else { path(g, 'M-32,-25Q-8,-41 21,-30L15,-23Q-8,-30 -23,-19Z', C.stone); line(g, 0, -24, 0, -15, '#ffffffbb', 1); }
-  path(g, 'M-30,-18Q0,-2 30,-18', 'none', { stroke: C.gold, 'stroke-width': 1.5 });
+function museum(c) {
+  base(c, 30, 23); box(c, -26, -13, 21, 21, 20, 2, C.ivory, 1);
+  box(c, -2, -17, 24, 23, 30, 2, C.gold, 0); box(c, 21, -7, 9, 19, 16, 2, C.ivory, 1);
+  box(c, -19, 8, 31, 10, 10, 2, C.teal, 1); box(c, -29, 7, 10, 13, 13, 2, C.ivory, 1);
+  const facade = [I(c, 1, 6, 7), I(c, 18, 6, 7), I(c, 18, 6, 29), I(c, 1, 6, 29)]; polygon(c.g, facade, '#ebc873');
+  for (let i = 0; i < 6; i += 1) line(c.g, I(c, 1 + i * 3, 6, 7), I(c, 1 + i * 3, 6, 29), '#b38f4555', .65);
+  path(c.g, outline([I(c, 4, 6, 11), I(c, 15, 6, 25), I(c, 16, 6, 24), I(c, 5, 6, 10)]), C.goldLight);
+  rim(c, -2, -17, 24, 23, 32, '#fff0bb', 1); box(c, -15, 19, 29, 3, 1.2, 1.5, C.ivory);
 }
 
-function nurAlem(g, top) {
-  if (top) {
-    shadow(g, 31, 29); circle(g, 0, -2, 31, C.stone); circle(g, 0, -3, 27, C.teal); circle(g, -2, -5, 24, C.glass);
-    ellipse(g, 0, -3, 13, 27, 'none', { stroke: C.line, 'stroke-width': 1 }); ellipse(g, 0, -3, 27, 13, 'none', { stroke: C.line, 'stroke-width': 1 });
-    ellipse(g, -8, -12, 9, 6, C.pale); return;
-  }
-  shadow(g, 32); ellipse(g, 0, -2, 27, 8, C.stone); rect(g, -13, -15, 26, 12, C.dark);
-  circle(g, 0, -33, 28, C.dark); circle(g, -1, -35, 27, C.teal);
-  path(g, 'M-25,-37A26,26 0 0 1 15,-57Q9,-26 -18,-16A26,26 0 0 1 -25,-37Z', C.glass);
-  ellipse(g, -8, -47, 10, 6, C.pale, { transform: 'rotate(-25 -8 -47)' });
-  for (const rx of [10, 20]) ellipse(g, 0, -34, rx, 27, 'none', { stroke: C.line, 'stroke-width': .8 });
-  for (const y of [-48, -34, -20]) { const w = Math.sqrt(27 ** 2 - (y + 34) ** 2); ellipse(g, 0, y, w, 3.6, 'none', { stroke: C.line, 'stroke-width': .7 }); }
-  path(g, 'M-25,-23Q0,-13 25,-23', 'none', { stroke: C.gold, 'stroke-width': 1.3 });
+function opera(c) {
+  base(c, 30, 25); box(c, -23, -16, 46, 28, 17, 3, C.ivory, 1);
+  polygon(c.g, [I(c,-25,-18,20),I(c,0,-18,29),I(c,25,-18,20),I(c,25,10,20),I(c,0,10,29),I(c,-25,10,20)], C.teal);
+  polygon(c.g, [I(c,0,-18,29),I(c,25,-18,20),I(c,25,10,20),I(c,0,10,29)], '#285967');
+  for (let i = 0; i < 4; i += 1) box(c, -26-i*.7, 15+i*1.6, 52+i*1.4, 2, 1, 3-i*.55, C.ivory);
+  columns(c, -22, 16, 8, 6.2, 17, 5);
+  polygon(c.g, [I(c,-27,17,23),I(c,0,17,34),I(c,27,17,23)], C.ivory);
+  polygon(c.g, [I(c,-21,17,24),I(c,0,17,31),I(c,21,17,24)], '#d8d4bd');
+  line(c.g, I(c,-27,17,23),I(c,27,17,23),C.gold,1.2);
+  const p=I(c,0,15,37); path(c.g,`M${p[0]-7},${p[1]}l2,-4 3,1 2,-3 2,3 3,-1 2,4M${p[0]-4},${p[1]+1}h10`, 'none',{stroke:C.goldDark,'stroke-width':1.5});
 }
 
-function station(g, top, modern) {
-  if (top) {
-    roof(g, 34, 18); rect(g, -30, -14, 60, 15, modern ? C.teal : C.stone, 2);
-    for (let y = 7; y <= 21; y += 5) { line(g, -35, y, 35, y, C.edge, 1); for (const x of [-25, -10, 5, 20]) line(g, x, y - 2, x, y + 2, C.stone, 2); }
-    if (!modern) circle(g, 0, -7, 6, C.gold); return;
+function pyramid(c) {
+  base(c, 25, 25); const ground=quad(c,-22,-22,44,44,3),apex=I(c,0,0,58);
+  polygon(c.g,[ground[0],ground[1],apex],C.pale); polygon(c.g,[ground[1],ground[2],apex],C.teal);polygon(c.g,[ground[2],ground[3],apex],C.glass);
+  for(const [left,right] of [[ground[1],ground[2]],[ground[2],ground[3]]]){
+    for(let i=1;i<=5;i++){const f=i/6;line(c.g,[apex[0]+(left[0]-apex[0])*f,apex[1]+(left[1]-apex[1])*f],[apex[0]+(right[0]-apex[0])*f,apex[1]+(right[1]-apex[1])*f],C.line,.55);}
+    for(let i=1;i<5;i++){const f=i/5;line(c.g,apex,[left[0]+(right[0]-left[0])*f,left[1]+(right[1]-left[1])*f],C.line,.55);}
   }
-  shadow(g, 38); block(g, -34, -3, 66, 20, 5, C.stone);
-  if (modern) {
-    rect(g, -30, -22, 60, 16, C.teal); windows(g, -27, -21, 10, 6, 14, 1, C.line);
-    path(g, 'M-37,-25Q0,-47 38,-25L33,-20Q0,-34 -33,-20Z', C.ivory);
-    path(g, 'M-33,-25Q0,-41 33,-25', 'none', { stroke: C.gold, 'stroke-width': 1.3 });
-  } else {
-    windows(g, -30, -19, 4, 7, 10, 3); windows(g, 8, -19, 4, 7, 10, 3);
-    block(g, -8, -4, 16, 35, 3); path(g, 'M-11,-39 0,-47 11,-39Z', C.teal);
-    circle(g, 0, -29, 5, C.ivory); line(g, 0, -29, 0, -32, C.goldDark, 1); line(g, 0, -29, 3, -28, C.goldDark, 1);
-    rect(g, -4, -15, 8, 11, C.dark, 3);
-  }
-  line(g, -33, 3, 33, 3, C.edge, 1); line(g, -32, 6, 34, 6, C.edge, 1);
-  for (let x = -27; x <= 27; x += 9) line(g, x, 2, x, 7, C.stone, 2);
+  const crown=ground.map(p=>[apex[0]+(p[0]-apex[0])*.3,apex[1]+(p[1]-apex[1])*.3]);polygon(c.g,[apex,crown[1],crown[2],crown[3]],'#cde6dfaa');
+  line(c.g,apex,ground[2],C.goldLight,1);rim(c,-22,-22,44,44,3,C.gold,1);
 }
 
-function airport(g, top) {
-  if (top) {
-    shadow(g, 36, 24); rect(g, -31, -10, 62, 19, C.ivory, 5); circle(g, 0, -1, 16, C.teal); ellipse(g, -4, -5, 7, 5, C.glass);
-    for (const x of [-26, -17, 17, 26]) rect(g, x - 2, 7, 4, 15, C.stone, 1);
-    path(g, 'M1,-34 4,-24 16,-18 16,-15 4,-18 4,-8 8,-4 8,-2 1,-4 -6,-2 -6,-4 -2,-8 -2,-18 -14,-15 -14,-18 -2,-24Z', C.gold); return;
-  }
-  shadow(g, 37); block(g, -34, -4, 67, 16, 4); rect(g, -29, -17, 58, 10, C.teal);
-  windows(g, -26, -16, 9, 6, 8, 1, C.line); rect(g, -13, -29, 26, 15, C.ivory); dome(g, 0, -30, 18, C.teal);
-  block(g, 25, -16, 5, 30, 3); rect(g, 22, -48, 12, 7, C.dark, 1); rect(g, 21, -50, 14, 2, C.ivory, 1); line(g, 28, -50, 28, -59, C.gold, 1);
-  path(g, 'M-22,-45l2,-9 3,8 10,4v2l-11,-2 -5,4 -2,-1 3,-5 -8,-3v-2Z', C.gold);
+function mosque(c, grand) {
+  base(c,29,25); minaret(c,-24,-21,grand?49:41);minaret(c,24,-21,grand?49:41);
+  box(c,-23,-17,46,34,12,2,C.ivory,1);box(c,-11,-9,22,21,11,14,C.ivory,1);
+  dome(c,0,0,27,grand?13:10.5,grand?C.teal:C.ivory);
+  for(const[x,y]of[[-17,-8],[17,-8],[-17,12],[17,12]])dome(c,x,y,15,4.8,grand?C.glass:C.ivory);
+  box(c,-9,17,18,5,17,2,C.ivory);
+  const left=I(c,-5,22,3),right=I(c,5,22,3),tip=I(c,0,22,17);
+  path(c.g,`M${left}L${left[0]},${tip[1]+5}Q${tip} ${right[0]},${tip[1]+5}L${right}Z`,C.teal);
+  line(c.g,I(c,-9,22,19),I(c,9,22,19),C.gold,1.2);
+  minaret(c,-25,22,grand?48:39);minaret(c,25,22,grand?48:39);
 }
 
-function towers(g, top) {
-  if (top) {
-    roof(g, 31, 22); for (const [x, y, w, h] of [[-20,-15,15,28],[1,-19,15,32],[18,-4,10,19]]) {
-      rect(g, x, y, w, h, C.dark, 1); rect(g, x + 2, y + 2, w - 4, h - 4, C.glass, 1); line(g, x + w / 2, y + 2, x + w / 2, y + h - 2, C.line, 1);
-    } return;
-  }
-  shadow(g, 31); block(g, -29, -1, 54, 9, 7, C.stone);
-  const tower = (x, base, width, height, depth) => {
-    block(g, x, base, width, height, depth, C.teal);
-    rect(g, x + 2, base - height + 2, width - 4, height - 4, C.glass);
-    for (let y = base - height + 7; y < base - 2; y += 7) line(g, x + 2, y, x + width - 2, y, C.line, .6);
-    line(g, x + width * .45, base - height + 2, x + width * .45, base - 2, C.line, 1);
-  };
-  tower(-24, -5, 17, 46, 6); tower(0, -4, 16, 70, 6); tower(19, -1, 10, 28, 4);
-  path(g, 'M0,-74l6,-4 16,0 -6,4Z', C.goldLight); line(g, 8, -77, 8, -81, C.gold, 1);
+function university(c) {
+  base(c,30,25);box(c,-25,-19,50,11,22,2,C.ivory,1);box(c,-25,-8,11,28,17,2,C.ivory,1);box(c,14,-8,11,28,17,2,C.ivory,1);
+  polygon(c.g,quad(c,-11,-6,22,22,2),C.lawn);polygon(c.g,quad(c,-2,-4,4,27,2.2),C.stone);
+  box(c,-12,4,24,14,14,2,C.teal,1);box(c,-9,5,18,11,1,16,C.pale);
+  for(let i=0;i<5;i++)line(c.g,I(c,-9+i*4.5,5,17),I(c,-9+i*4.5,16,17),C.ivory,.8);
+  rim(c,-25,-19,50,11,24,C.gold,.9);
+  columns(c,-10,19,6,4,13,2);box(c,-14,18,28,3,1.2,15,C.ivory);
 }
 
-function shabyt(g, top) {
-  if (top) {
-    shadow(g, 32, 27); ellipse(g, 0, -3, 32, 27, C.teal); ellipse(g, 0, -5, 29, 24, C.glass); ellipse(g, 0, -5, 13, 11, C.dark); ellipse(g, 0, -4, 10, 8, C.lawn);
-    for (let index = 0; index < 10; index += 1) { const a = index * Math.PI / 5; line(g, Math.cos(a) * 15, -5 + Math.sin(a) * 12, Math.cos(a) * 29, -5 + Math.sin(a) * 24, C.line, .7); } return;
-  }
-  shadow(g, 35); path(g, 'M-32,-25Q0,-7 32,-25v18Q0,12 -32,-7Z', C.teal);
-  for (let x = -26; x <= 26; x += 6.5) line(g, x, -20, x, -4, C.glass, 1);
-  ellipse(g, 0, -27, 32, 17, C.glass); ellipse(g, 0, -28, 16, 8, C.dark); ellipse(g, 0, -25, 11, 4, C.lawn);
-  path(g, 'M-31,-26Q0,-8 31,-26M-32,-28Q0,-48 32,-28', 'none', { stroke: C.ivory, 'stroke-width': 2 });
-  path(g, 'M-13,-29Q0,-36 13,-29', 'none', { stroke: C.gold, 'stroke-width': 1.3 });
+function arena(c, ice) {
+  base(c,30,24); const cy=-8,ry=c.top?23:17;
+  path(c.g,`M-34,${cy}v12Q0,${cy+ry+21} 34,${cy+12}V${cy}Z`,ice?'#426c76':'#659299');
+  for(let x=-28;x<=28;x+=4)line(c.g,[x,cy+4],[x,cy+13+6*(1-Math.abs(x)/34)],'#cbe5df77',.7);
+  ellipse(c.g,0,cy,34,ry,C.ivory);ellipse(c.g,0,cy,26,ry*.7,C.dark);ellipse(c.g,0,cy+1,20,ry*.48,ice?C.pale:C.lawn);
+  path(c.g,`M-33,${cy-3}Q-6,${cy-ry-11} 25,${cy-10}L17,${cy-4}Q-7,${cy-ry+4} -25,${cy+3}Z`,ice?C.glass:'#cbd6c8');
+  path(c.g,`M-33,${cy-3}Q-6,${cy-ry-11} 25,${cy-10}`, 'none',{stroke:'#fffcef','stroke-width':1.8});
+  for(let i=-2;i<=3;i++){const x=i*8;line(c.g,[x,cy-ry+Math.abs(x)*.1],[x+3,cy-ry*.52+Math.abs(x)*.05],C.ivory,.8);}
+  ellipse(c.g,0,cy,33.5,ry,'none',{stroke:C.gold,'stroke-width':.9});
+  if(ice){path(c.g,`M-16,${cy+1}Q0,${cy-8} 16,${cy+1}Q0,${cy+10} -16,${cy+1}Z`,'none',{stroke:'#fff','stroke-width':.7});line(c.g,[0,cy-4],[0,cy+7],'#749eaa',.7);}
+  else {line(c.g,[-13,cy+1],[13,cy+1],'#d9ebd3',.6);ellipse(c.g,0,cy+1,4,2,'none',{stroke:'#d9ebd3','stroke-width':.6});}
+  box(c,-6,24,12,3,5,2,C.teal,1);
 }
 
-function fallback(g, top) {
-  if (top) { roof(g, 22, 18); rect(g, -14, -11, 28, 20, C.teal, 2); circle(g, 0, -1, 5, C.gold); return; }
-  shadow(g, 25); block(g, -20, -2, 40, 25, 5); path(g, 'M-24,-29 0,-43 24,-29Z', C.teal);
-  windows(g, -14, -23, 4, 8, 10, 4); rect(g, -5, -12, 10, 10, C.gold);
+function nurAlem(c) {
+  base(c,26,25);box(c,-17,-15,34,30,5,2,C.stone);const cy=c.top?-24:-31,r=27;
+  circle(c.g,1,cy+1,r,C.dark);circle(c.g,-1,cy-1,r-1,C.teal);
+  path(c.g,`M-26,${cy-3}A26,26 0 0 1 14,${cy-23}Q9,${cy+6} -14,${cy+21}A26,26 0 0 1 -26,${cy-3}Z`,'#78b8bc');
+  for(const rx of [7,15,23])ellipse(c.g,0,cy,rx,r-1,'none',{stroke:'#d6ece18c','stroke-width':.65});
+  for(const dy of [-19,-10,0,10,19])ellipse(c.g,0,cy+dy,Math.sqrt((r-1)**2-dy**2),3.5,'none',{stroke:'#d6ece18c','stroke-width':.6});
+  path(c.g,`M-22,${cy-8}Q-14,${cy-26} 3,${cy-20}Q-5,${cy-10} -22,${cy-8}`, '#dcf4e688');
+  line(c.g,[-18,cy+18],[18,cy-18],'#fffbd699',1.1);ellipse(c.g,0,cy+r-2,9,2.7,C.goldDark);
+  box(c,-7,20,14,4,4,2,C.teal,1);
 }
 
-const BUILDERS = Object.freeze({
-  baiterek, akorda, khan_shatyr: khanShatyr, national_museum: museum, astana_opera: opera,
-  palace_peace: pyramid, hazret_sultan: (g, top) => mosque(g, top, false),
-  grand_mosque: (g, top) => mosque(g, top, true), nazarbayev_university: campus,
-  astana_arena: (g, top) => arena(g, top, false), barys_arena: (g, top) => arena(g, top, true),
-  nur_alem: nurAlem, nurly_zhol_station: (g, top) => station(g, top, true),
-  astana_1_station: (g, top) => station(g, top, false), astana_airport: airport,
-  abu_dhabi_plaza: towers, shabyt,
-});
-
-/**
- * Build a fresh SVG <g>. Translate this group to camera.project(anchor); it is
- * already scaled to screen pixels and should not receive the world matrix.
- * `top` draws a roof plan; `tilted` draws an upright miniature with side faces.
- */
-export function createLandmarkSymbol(id, { projection = 'tilted', size = 64, selected = false } = {}) {
-  const safeSize = Number.isFinite(size) && size > 0 ? size : 64;
-  const group = element('g', {
-    transform: `scale(${safeSize / 80})`, 'data-landmark-id': id,
-    'data-projection': projection === 'top' ? 'top' : 'tilted',
-    'data-illustrative': 'true', role: 'img', 'aria-label': landmarkLabel(id),
-    'stroke-linejoin': 'round',
-  });
-  const title = element('title');
-  title.textContent = `${landmarkLabel(id)} · архитектурная миниатюра`;
-  group.appendChild(title);
-  if (selected) {
-    ellipse(group, 0, projection === 'top' ? 0 : 2, 39, projection === 'top' ? 32 : 12, '#e8c5732b', { stroke: C.selection, 'stroke-width': 1.5 });
+function modernStation(c) {
+  base(c,32,24);box(c,-29,-15,58,27,16,2,C.teal,1);
+  for(const y of [-10,-2,6]){
+    const l=I(c,-32,y,18),m=I(c,0,y,29),r=I(c,32,y,18),lf=I(c,-32,y+4,18),mf=I(c,0,y+4,29),rf=I(c,32,y+4,18);
+    path(c.g,`M${l}Q${m} ${r}L${rf}Q${mf} ${lf}Z`, y===-2?'#e4d6aa':C.ivory);
+    path(c.g,`M${l}Q${m} ${r}`,'none',{stroke:'#fefcf2','stroke-width':1.2});
   }
-  const build = Object.prototype.hasOwnProperty.call(BUILDERS, id) ? BUILDERS[id] : fallback;
-  build(group, projection === 'top');
+  for(const x of [-22,-11,0,11,22])columns(c,x,14,1,0,16,2);
+  for(const y of [18,22]){line(c.g,I(c,-29,y,2),I(c,29,y,2),C.edge,.65);line(c.g,I(c,-29,y+1.4,2),I(c,29,y+1.4,2),C.edge,.65);}
+  const q=I(c,-14,14,10);path(c.g,`M${q[0]},${q[1]}h26`,'none',{stroke:C.goldLight,'stroke-width':1.1});
+  box(c,-13,19,26,4,3,2,C.ivory,1);
+}
+
+function oldStation(c) {
+  base(c,31,24);box(c,-27,-12,54,24,16,2,C.ivory,1);
+  box(c,-10,-13,20,25,21,2,C.ivory,1);box(c,-5,-5,10,10,12,23,C.ivory,0);
+  polygon(c.g,[I(c,-7,-7,35),I(c,0,-7,42),I(c,7,-7,35),I(c,7,7,35),I(c,0,7,42),I(c,-7,7,35)],C.teal);
+  for(const x of [-25,15]){polygon(c.g,quad(c,x,-14,10,28,19),C.teal);rim(c,x,-14,10,28,19,C.gold,.65);}
+  const p=I(c,0,5,30);circle(c.g,p[0],p[1],3.2,C.gold);circle(c.g,p[0],p[1],2.6,C.ivory);line(c.g,p,[p[0],p[1]-1.7],C.dark,.7);line(c.g,p,[p[0]+1.7,p[1]+.4],C.dark,.7);
+  columns(c,-9,15,5,4.5,14,2);box(c,-12,14,24,4,2,16,C.ivory);
+  for(const y of [20,23])line(c.g,I(c,-28,y,2),I(c,29,y,2),C.edge,.7);
+  box(c,-10,20,20,3,1,2,C.stone);
+}
+
+function airport(c) {
+  base(c,32,24);box(c,-28,-11,56,24,12,2,C.teal,1);box(c,-11,-13,22,26,10,14,C.ivory,1);dome(c,0,0,25,13,C.teal);
+  for(const x of [-25,-15,15,25])box(c,x,13,3,10,4,2,C.ivory,0);
+  box(c,23,-20,5,6,31,2,C.ivory);box(c,20,-22,11,10,6,33,C.teal,1);rim(c,20,-22,11,10,39,C.ivory,1);
+  const t=I(c,25,-17,42);line(c.g,t,[t[0],t[1]-8],C.gold,.8);
+  const p=I(c,-18,-7,42);path(c.g,`M${p[0]},${p[1]}l3,-11 2,10 12,7 -1,2 -12,-5 -1,9 4,3 -1,1 -6,-2 -5,1 -1,-1 4,-3 1,-9 -12,2 -1,-2Z`,C.gold);
+}
+
+function towers(c) {
+  base(c,27,22);box(c,-24,-18,47,36,6,2,C.ivory,1);
+  box(c,-19,-13,13,15,46,8,C.teal,1);rim(c,-19,-13,13,15,54,C.pale,.7);
+  box(c,-3,-12,14,16,70,8,C.teal,1);rim(c,-3,-12,14,16,78,C.gold,1);
+  polygon(c.g,quad(c,-1,-10,10,12,79),C.pale);line(c.g,I(c,4,-4,79),I(c,4,-4,86),C.gold,.8);
+  box(c,13,3,9,13,27,8,C.teal,1);box(c,-19,7,13,9,21,8,C.teal,1);
+  line(c.g,I(c,-3,4,10),I(c,-3,4,76),'#edf6e4aa',1.3);line(c.g,I(c,11,4,10),I(c,11,4,76),'#edf6e477',.8);
+}
+
+function shabyt(c) {
+  base(c,29,25);const cy=-13,ry=c.top?23:17;
+  path(c.g,`M-32,${cy-4}Q0,${cy+ry+2} 32,${cy-4}L29,${cy+17}Q0,${cy+ry+22} -29,${cy+17}Z`,C.teal);
+  for(let x=-26;x<=26;x+=4)line(c.g,[x,cy+4+8*(1-Math.abs(x)/28)],[x*.91,cy+18+7*(1-Math.abs(x)/28)],'#a9d6ce',.75);
+  ellipse(c.g,0,cy-4,32,ry,C.glass);ellipse(c.g,0,cy-5,16,ry*.5,C.dark);ellipse(c.g,0,cy,12,ry*.28,'#91ae88');
+  for(let i=0;i<12;i++){const a=i*Math.PI/6;line(c.g,[Math.cos(a)*17,cy-4+Math.sin(a)*ry*.52],[Math.cos(a)*31,cy-4+Math.sin(a)*ry],C.line,.65);}
+  ellipse(c.g,0,cy-4,32,ry,'none',{stroke:C.ivory,'stroke-width':1.6});ellipse(c.g,0,cy-5,16,ry*.5,'none',{stroke:C.gold,'stroke-width':.9});
+  box(c,-7,24,14,4,5,2,C.teal,1);
+}
+
+function fallback(c) { base(c,24,21);box(c,-18,-13,36,26,20,2,C.ivory,1);box(c,-12,-8,24,16,6,22,C.teal,1);rim(c,-18,-13,36,26,22,C.gold,1); }
+const BUILDERS=Object.freeze({baiterek,akorda,khan_shatyr:khan,national_museum:museum,astana_opera:opera,palace_peace:pyramid,
+  hazret_sultan:c=>mosque(c,false),grand_mosque:c=>mosque(c,true),nazarbayev_university:university,
+  astana_arena:c=>arena(c,false),barys_arena:c=>arena(c,true),nur_alem:nurAlem,nurly_zhol_station:modernStation,
+  astana_1_station:oldStation,astana_airport:airport,abu_dhabi_plaza:towers,shabyt});
+
+/** Fresh, self-contained SVG group. Place inside translate(screenX, screenY).
+ * Top is a shallower architectural miniature; tilted emphasizes vertical mass.
+ * No global SVG IDs, filters, timers, randomness or camera dependencies. */
+export function createLandmarkSymbol(id,{projection='tilted',size=64,selected=false}={}) {
+  const scale=(Number.isFinite(size)&&size>0?size:64)/88;
+  const group=node('g',{transform:`scale(${scale})`,'data-landmark-id':id,'data-projection':projection==='top'?'top':'tilted',
+    'data-illustrative':'true','data-style':'architectural-model-v2',role:'img','aria-label':landmarkLabel(id),'stroke-linejoin':'round','stroke-linecap':'round'});
+  const title=node('title');title.textContent=`${landmarkLabel(id)} · архитектурная миниатюра`;group.appendChild(title);
+  if(selected)ellipse(group,0,3,45,projection==='top'?26:18,'#e8c5732b',{stroke:C.selection,'stroke-width':1.3});
+  const builder=Object.hasOwn(BUILDERS,id)?BUILDERS[id]:fallback;builder({g:group,top:projection==='top'});
   return group;
 }

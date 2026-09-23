@@ -64,3 +64,11 @@ Six district contours: https://gis.esaulet.kz/server/rest/services/Hosted/raiony
 Retrieved 2026-09-23; effective boundary date and reuse terms are not stated.
 Water, green-space and building samples: municipal MapServer layers, original responses and metadata retained.
 Five corrected landmark anchors: landmark-positions.json and landmark-osm-source/ contain exact public OSM identities, responses and methods.
+
+## Expanded buildings and green areas
+Complete building source coverage inside the seed bbox: `BUILDING-COVERAGE.md`,
+125,832 features in 16 geographic tiles.
+Named park/woodland geometry: `GREENERY-COVERAGE.md`, OSM snapshot
+2026-09-22T08:45:51Z; raw Overpass response and exact object IDs retained. Combined
+3,696 green features include the earlier 2,000 municipal sample. These shapes are
+source data; rendered trees and architectural heights/materials are illustrative.

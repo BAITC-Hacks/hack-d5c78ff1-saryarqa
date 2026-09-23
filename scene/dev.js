@@ -23,7 +23,7 @@ function mount() {
   panel?.destroy(); scene?.destroy(); root.replaceChildren();
   scene = createScene({ root, assets: fixtureAssets, geography: fixtureGeography, ...(mapData ? { mapData } : {}), onIntent });
   render();
-  if (mapData) { const hud = document.createElement('div'); hud.className = 'atlas-game-hud'; root.querySelector('.atlas-map-shell').appendChild(hud); panel = createPlayPanel({ root: hud, session }); }
+  if (mapData) { const hud = document.createElement('div'); hud.className = 'atlas-game-hud'; root.querySelector('.atlas-map-shell').appendChild(hud); panel = createPlayPanel({ root: hud, session }); render(); }
 }
 try {
   if (!fixture) mapData = await loadAstanaMap();

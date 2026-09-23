@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { buildingManifest } from './fixtures/building-tiles.js';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { ASTANA_MAP_FILES, loadAstanaMap } from '../scene/load-map.js';
@@ -8,6 +9,7 @@ import { loadScenePackage } from '../game/scene-adapter.js';
 const fixture = () => {
   const files = Object.fromEntries(Object.values(ASTANA_MAP_FILES).map(path => [path, { type: 'FeatureCollection', features: [] }]));
   files[ASTANA_MAP_FILES.seed] = { working_bbox: { value: [71.2, 51, 71.8, 51.4] }, center: { lon: 71.45, lat: 51.15 } };
+  files[ASTANA_MAP_FILES.buildingManifest] = buildingManifest({ populated: 1 });
   files[ASTANA_MAP_FILES.trafficCorridors] = [];
   files[ASTANA_MAP_FILES.majorRoads] = [];
   files[ASTANA_MAP_FILES.landmarkPositions] = { schemaVersion:1, positions:[] };
@@ -27,14 +29,19 @@ test('map loader fetches every manifest layer in parallel with the supplied canc
     assert.equal(options.signal, controller.signal);
     return new Promise(resolve => pending.push(() => resolve({ ok: true, json: async () => files[path] })));
   } });
-  assert.equal(requested.length, 11);
-  assert.equal(new Set(requested).size, 11);
+  assert.equal(requested.length, Object.keys(ASTANA_MAP_FILES).length);
+  assert.deepEqual(new Set(requested), new Set(Object.values(ASTANA_MAP_FILES)));
   pending.forEach(resolve => resolve());
   const map = await promise;
   assert.equal(map.geographic, true);
   assert.equal(map.roads.length, 1);
   assert.deepEqual(map.roads[0].points[0], map.projectLonLat([71.4, 51.1]));
   assert.equal(map.sourceStatus.districts, 'empty');
+  assert.equal(map.buildingCount, 1);
+  assert.equal(typeof map.createBuildingSource, 'function');
+  const source = map.createBuildingSource();
+  assert.equal(requested.length, Object.keys(ASTANA_MAP_FILES).length, 'constructing the tile source must not fetch all tiles');
+  source.destroy();
 });
 
 test('map loader rejects unavailable or invalid real layers instead of inventing geometry', async () => {
@@ -51,7 +58,34 @@ test('map loader rejects unavailable or invalid real layers instead of inventing
   await assert.rejects(loadAstanaMap({ fetchImpl }), /INVALID_MAP_DATA:roads/);
 });
 
-test('main app loads the actual sourced atlas through public server routes', async t => {
+test('map loader replaces old greenery with sourced polygons while retaining water geometry', async () => {
+  const files = fixture();
+  const polygon = (id, kind, sourceId, sourceUrl) => ({ type: 'Feature', id,
+    properties: { kind, source: 'Survey source', sourceId, source_url: sourceUrl },
+    geometry: { type: 'Polygon', coordinates: [
+      [[71.4, 51.1], [71.5, 51.1], [71.5, 51.2], [71.4, 51.2], [71.4, 51.1]],
+      [[71.42, 51.12], [71.44, 51.12], [71.44, 51.14], [71.42, 51.14], [71.42, 51.12]],
+    ] } });
+  const water = polygon('river-bank', 'water', 'hydrology-survey', 'https://example.org/water');
+  const fresh = polygon('new-park', 'park', 'greenery-survey', 'https://example.org/greenery');
+  files[ASTANA_MAP_FILES.landscape].features = [water,
+    ...['park', 'green', 'forest', 'wood'].map(kind => polygon(`old-${kind}`, kind, 'old-survey', 'https://example.org/old'))];
+  files[ASTANA_MAP_FILES.greenery].features = [fresh];
+  const before = JSON.stringify(files);
+  const map = await loadAstanaMap({ fetchImpl: async path => ({ ok: true, json: async () => files[path] }) });
+  assert.deepEqual(map.landscape.map(feature => feature.id), ['river-bank', 'new-park']);
+  for (const [actual, original] of [[map.landscape[0], water], [map.landscape[1], fresh]]) {
+    assert.equal(actual.source, original.properties.source);
+    assert.equal(actual.sourceUrl, original.properties.source_url);
+    assert.deepEqual(actual.sourceIds, [original.properties.sourceId]);
+    assert.deepEqual(actual.polygons, [original.geometry.coordinates.map(ring => ring.map(map.projectLonLat))]);
+  }
+  assert.equal(map.greeneryCount, 1);
+  assert.equal(map.sourceStatus.greenery, 'provided');
+  assert.equal(JSON.stringify(files), before);
+});
+
+test('main app loads the actual sourced atlas through public server routes', { timeout: 15000 }, async t => {
   const server = createAppServer();
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   t.after(() => new Promise(resolve => server.close(resolve)));
@@ -79,6 +113,25 @@ test('main app loads the actual sourced atlas through public server routes', asy
   assert.ok(Object.values(ASTANA_MAP_FILES).every(path => requested.includes(path)));
   assert.ok(!requested.includes('/assets/game/manifest.json'));
   assert.ok(!requested.includes('/data/geography/astana.json'));
+  assert.ok(result.mapData.buildingCount > result.mapData.buildings.length);
+  const tileRequests = () => requested.filter(path => path.includes('/buildings-tiles/'));
+  assert.deepEqual(tileRequests(), [], 'initial atlas loading must not fetch the full building collection');
+  let completed;
+  const loaded = new Promise((resolve, reject) => { completed = { resolve, reject }; });
+  const buildings = result.mapData.createBuildingSource({ onChange: () => {
+    const state = buildings.getState();
+    if (state.failed) completed.reject(new Error('A visible building tile failed to load'));
+    else if (!state.pending) completed.resolve();
+  } });
+  t.after(() => buildings.destroy());
+  const [lon, lat] = tower.coordinates;
+  buildings.request([lon - .0001, lat - .0001, lon + .0001, lat + .0001]);
+  await loaded;
+  assert.ok(tileRequests().length > 0 && tileRequests().length < 16);
+  assert.equal(buildings.getState().loadedTiles, tileRequests().length);
+  assert.equal(buildings.getState().failed, 0);
+  assert.ok(buildings.getBuildings().length >= result.mapData.buildings.length);
+  assert.equal(new Set(buildings.getBuildings().map(feature => feature.id)).size, buildings.getBuildings().length);
   const css = await readFile(new URL('../scene/styles.css', import.meta.url), 'utf8');
   assert.match(css, /^@import url\(['"]\.\/atlas\.css['"]\);/);
 });

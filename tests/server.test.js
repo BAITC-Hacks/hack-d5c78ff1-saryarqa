@@ -6,7 +6,7 @@ import { join } from 'node:path';
 import { request } from 'node:http';
 import { createAppServer } from '../server.js';
 import { getCapabilities } from '../api/capabilities.js';
-import { ASTANA_MAP_FILES } from '../scene/load-map.js';
+import { ASTANA_MAP_FILES, BUILDING_TILE_PATHS } from '../scene/load-map.js';
 
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), 'akim-http-'));
@@ -132,7 +132,7 @@ test('capabilities report expected regular resources and update when present', a
 
 test('atlas exposes only its declared data files with GeoJSON MIME and HEAD support', async () => {
   await withServer(async ({ put, hit }) => {
-    for (const path of Object.values(ASTANA_MAP_FILES)) {
+    for (const path of [...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS]) {
       await put(path.slice(1), '{}');
       const response = await hit(path);
       assert.equal(response.status, 200, path);
@@ -143,7 +143,7 @@ test('atlas exposes only its declared data files with GeoJSON MIME and HEAD supp
       assert.equal(head.body, '');
       assert.equal(head.headers['content-length'], response.headers['content-length']);
     }
-    for (const filename of ['private.json', 'districts.geojson', 'osm-major-roads-response.json', 'traffic_corridors.csv']) {
+    for (const filename of ['private.json', 'buildings.geojson', 'districts.geojson', 'osm-major-roads-response.json', 'traffic_corridors.csv', 'buildings-tiles/r4-c0.geojson', 'buildings-tiles/r0-c4.geojson', 'buildings-tiles/r00-c0.geojson', 'buildings-tiles/private.geojson', 'buildings-tiles/r0-c0.json']) {
       const path = `/scene/data/astana/${filename}`;
       await put(path.slice(1), '{}');
       assert.equal((await hit(path)).status, 404, path);
@@ -153,10 +153,10 @@ test('atlas exposes only its declared data files with GeoJSON MIME and HEAD supp
 
 test('atlas readiness requires every render resource independently of legacy assets and geography', async () => {
   await withServer(async ({ root, put, hit }) => {
-    for (const path of ['index.js', 'atlas.js', 'atlas.css', 'styles.css', 'load-map.js', 'geodata.js', 'camera.js']) {
+    for (const path of ['index.js', 'atlas.js', 'atlas.css', 'styles.css', 'load-map.js', 'geodata.js', 'camera.js', 'building-tiles.js', 'buildings.js', 'icons.js', 'vegetation.js', 'landmarks.js', 'effects.js']) {
       await put(`scene/${path}`, '');
     }
-    const paths = Object.values(ASTANA_MAP_FILES);
+    const paths = [...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS];
     for (const path of paths.slice(0, -1)) await put(path.slice(1), '{}');
     assert.equal((await getCapabilities(root)).atlas, false);
     await put(paths.at(-1).slice(1), '{}');
@@ -164,6 +164,11 @@ test('atlas readiness requires every render resource independently of legacy ass
     assert.equal(capabilities.atlas, true);
     assert.equal(capabilities.assets, false);
     assert.equal(capabilities.geography, false);
+    for (const required of ['scene/buildings.js', 'scene/building-tiles.js', 'scene/icons.js', 'scene/vegetation.js', 'scene/landmarks.js', 'scene/effects.js', ...[...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS].map(path => path.slice(1))]) {
+      await rm(join(root, required));
+      assert.equal((await getCapabilities(root)).atlas, false, required);
+      await put(required, '');
+    }
     await rm(join(root, paths.at(-1).slice(1)));
     await symlink(join(root, 'index.html'), join(root, paths.at(-1).slice(1)));
     assert.equal((await getCapabilities(root)).atlas, false);
