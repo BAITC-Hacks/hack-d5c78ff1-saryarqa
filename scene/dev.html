@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Аким · лаборатория городской сцены</title>
+  <link rel="stylesheet" href="./styles.css">
+  <style>
+    body { margin: 0; background: #f4f3e9; color: #234a3d; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .dev-shell { max-width: 1380px; margin: auto; padding: 28px 40px 40px; }
+    .dev-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding-bottom: 32px; }
+    .dev-brand { display: flex; align-items: center; gap: 12px; font-size: 22px; font-weight: 650; letter-spacing: -.04em; }
+    .dev-brand > span { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 12px; background: #254b3d; color: #ecedd8; font-size: 23px; }
+    .dev-tag { color: #818970; font-size: 11px; }
+    .dev-intro { margin-bottom: 24px; display: flex; justify-content: space-between; gap: 26px; align-items: flex-end; }
+    .dev-intro h1 { font-weight: 500; font-size: clamp(27px, 3.4vw, 43px); letter-spacing: -.06em; margin: 6px 0 9px; }
+    .dev-intro p { max-width: 600px; font-size: 12px; line-height: 1.7; color: #7c856e; margin: 0; }
+    .dev-kicker { font-size: 10px; letter-spacing: .16em; color: #8b957a; }
+    .dev-number { font-size: 74px; color: #c7cfb8; line-height: 1; font-weight: 300; letter-spacing: -.08em; }
+    .dev-controls { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 22px; padding: 16px; border: 1px dashed #c9d1bc; border-radius: 12px; }
+    .dev-controls button, .dev-controls select { font: inherit; font-size: 11px; border: 1px solid #cdd4be; border-radius: 7px; background: #fcfbf4; padding: 9px 11px; color: #3f5d40; cursor: pointer; }
+    .dev-controls label { font-size: 11px; display: flex; gap: 5px; align-items: center; }
+    .dev-note { font-size: 11px; line-height: 1.7; color: #879078; margin: 12px 0; }
+    .dev-footer { display: flex; justify-content: space-between; margin-top: 22px; font-size: 10px; color: #8a917f; }
+    #dev-status { overflow-wrap: anywhere; }
+    @media (max-width: 768px) { .dev-shell { padding: 20px 16px; } .dev-number { display: none; } .dev-header { padding-bottom: 24px; } .dev-tag { font-size: 9px; max-width: 140px; text-align: right; } }
+    @media (max-width: 375px) { .dev-shell { padding-inline: 10px; } }
+  </style>
+</head>
+<body>
+  <main class="dev-shell">
+    <header class="dev-header"><div class="dev-brand"><span>а</span> аким<span style="background:none;color:#9ba587;width:auto;font-size:13px;font-weight:400">/ город</span></div><div class="dev-tag">ЛАБОРАТОРИЯ СЦЕНЫ · КОМАНДА 02</div></header>
+    <div class="dev-intro"><div><span class="dev-kicker">ИССЛЕДУЙ. ПЛАНИРУЙ. МЕНЯЙ.</span><h1>Большие решения.<br>Город в миниатюре.</h1><p>Шесть районов, разные истории и один общий город. Осмотри карту, приблизь квартал и пройдись по нему в роли акима.</p></div><span class="dev-number" aria-hidden="true">02</span></div>
+    <div id="scene-root"></div>
+    <div class="dev-controls" aria-label="Тестовые сценарии">
+      <button id="preview" type="button">Показать тестовый план</button><button id="clear" type="button">Убрать план</button>
+      <button id="play" type="button">Воспроизвести</button><button id="pause" type="button">Пауза</button><button id="skip" type="button">Пропустить</button><button id="replay" type="button">Повторить</button>
+      <label>Скорость <select id="speed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select></label>
+      <label><input id="reduced" type="checkbox">Без анимации</label><label><input id="hidden" type="checkbox">Скрыть / Calculator</label>
+      <button id="remount" type="button">Пересоздать сцену</button>
+    </div>
+    <p class="dev-note">Это тестовый стенд, не основной калькулятор. Геометрия условная, изменения показателей в демонстрации вымышлены. Счёт и бюджет здесь не рассчитываются. Стартовые SVG взяты из общей базы; финальные данные и изображения ожидаются от команды 03.</p>
+    <p class="dev-note" id="dev-status" role="status"></p>
+    <footer class="dev-footer"><span>САРЫАРКА · HACKALEM</span><span>Маленькая сцена. Большая ответственность.</span></footer>
+  </main>
+  <script type="module" src="./dev.js"></script>
+</body>
+</html>
