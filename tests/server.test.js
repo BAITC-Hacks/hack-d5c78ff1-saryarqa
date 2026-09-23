@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { request } from 'node:http';
 import { createAppServer } from '../server.js';
 import { getCapabilities } from '../api/capabilities.js';
+import { ASTANA_MAP_FILES } from '../scene/load-map.js';
 
 async function fixture() {
   const root = await mkdtemp(join(tmpdir(), 'akim-http-'));
@@ -106,9 +107,9 @@ test('denies private, unsupported, malformed and traversal targets', async () =>
   });
 });
 
-test('capabilities report only four expected regular files and update when present', async () => {
+test('capabilities report expected regular resources and update when present', async () => {
   await withServer(async ({ root, put, hit }) => {
-    const empty = { scene: false, assets: false, geography: false, cityData: false };
+    const empty = { scene: false, assets: false, geography: false, cityData: false, atlas: false };
     assert.deepEqual(JSON.parse((await hit('/api/capabilities')).body), empty);
     assert.deepEqual(await getCapabilities(root), empty);
     await put('scene/index.js', 'export function createScene() {}');
@@ -119,11 +120,52 @@ test('capabilities report only four expected regular files and update when prese
     assert.equal(response.status, 200);
     assert.equal(response.headers['cache-control'], 'no-store');
     assert.equal(response.headers['content-type'], 'application/json; charset=utf-8');
-    assert.deepEqual(JSON.parse(response.body), { scene: true, assets: true, geography: true, cityData: true });
+    assert.deepEqual(JSON.parse(response.body), { scene: true, assets: true, geography: true, cityData: true, atlas: false });
     const head = await hit('/api/capabilities', 'HEAD');
     assert.equal(head.status, 200);
     assert.equal(head.body, '');
     assert.equal((await hit('/api/capabilities', 'POST')).status, 405);
+  });
+});
+
+test('atlas exposes only its declared data files with GeoJSON MIME and HEAD support', async () => {
+  await withServer(async ({ put, hit }) => {
+    for (const path of Object.values(ASTANA_MAP_FILES)) {
+      await put(path.slice(1), '{}');
+      const response = await hit(path);
+      assert.equal(response.status, 200, path);
+      assert.equal(response.headers['content-type'], path.endsWith('.geojson')
+        ? 'application/geo+json; charset=utf-8' : 'application/json; charset=utf-8');
+      const head = await hit(path, 'HEAD');
+      assert.equal(head.status, 200, path);
+      assert.equal(head.body, '');
+      assert.equal(head.headers['content-length'], response.headers['content-length']);
+    }
+    for (const filename of ['private.json', 'districts.geojson', 'osm-major-roads-response.json', 'traffic_corridors.csv']) {
+      const path = `/scene/data/astana/${filename}`;
+      await put(path.slice(1), '{}');
+      assert.equal((await hit(path)).status, 404, path);
+    }
+  });
+});
+
+test('atlas readiness requires every render resource independently of legacy assets and geography', async () => {
+  await withServer(async ({ root, put, hit }) => {
+    for (const path of ['index.js', 'atlas.js', 'atlas.css', 'styles.css', 'load-map.js', 'geodata.js', 'camera.js']) {
+      await put(`scene/${path}`, '');
+    }
+    const paths = Object.values(ASTANA_MAP_FILES);
+    for (const path of paths.slice(0, -1)) await put(path.slice(1), '{}');
+    assert.equal((await getCapabilities(root)).atlas, false);
+    await put(paths.at(-1).slice(1), '{}');
+    const capabilities = JSON.parse((await hit('/api/capabilities')).body);
+    assert.equal(capabilities.atlas, true);
+    assert.equal(capabilities.assets, false);
+    assert.equal(capabilities.geography, false);
+    await rm(join(root, paths.at(-1).slice(1)));
+    await symlink(join(root, 'index.html'), join(root, paths.at(-1).slice(1)));
+    assert.equal((await getCapabilities(root)).atlas, false);
+    assert.equal((await hit(paths.at(-1))).status, 404);
   });
 });
 

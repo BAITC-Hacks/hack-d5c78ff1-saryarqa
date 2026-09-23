@@ -1,0 +1,71 @@
+@import url('./atlas.css');
+
+.akim-scene { --ink: #234a3d; --muted: #707b6e; --paper: #fbfaf4; --line: #e1e4d7; color: var(--ink); font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; font-size: 14px; line-height: 1.5; min-width: 0; background: var(--paper); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; box-shadow: 0 16px 50px #3d573c08; }
+.akim-scene *, .akim-scene *::before, .akim-scene *::after { box-sizing: border-box; }
+.akim-scene button { appearance: none; font: inherit; cursor: pointer; border: 1px solid var(--line); border-radius: 10px; padding: 9px 13px; color: var(--ink); background: #fffef9; transition: background .15s, border-color .15s; }
+.akim-scene button:hover { background: #eaf0e5; border-color: #b7cbbb; }
+.akim-scene button:focus-visible, .akim-scene a:focus-visible, .akim-scene summary:focus-visible { outline: 3px solid #c18a47; outline-offset: 3px; }
+.akim-scene button[aria-pressed="true"] { background: var(--ink); color: #fffcef; border-color: var(--ink); }
+.akim-scene-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 22px 26px 18px; }
+.akim-scene-view { display: grid; gap: 3px; }
+.akim-scene-eyebrow { color: #7c8773; font-size: 10px; font-weight: 750; letter-spacing: .16em; }
+.akim-scene-view strong { font-size: 20px; letter-spacing: -.03em; font-weight: 650; }
+.akim-scene-controls { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.akim-scene-controls button { font-size: 12px; }
+.akim-scene-separator { width: 1px; height: 22px; background: var(--line); margin: 0 6px; }
+.akim-scene-regions { display: flex; gap: 7px; flex-wrap: wrap; padding: 0 26px 20px; border-bottom: 1px solid var(--line); }
+.akim-scene-regions button { border-radius: 24px; padding: 6px 14px; font-size: 12px; }
+.akim-scene-regions span { font-size: 9px; opacity: .65; margin-left: 6px; }
+.akim-scene-regions .akim-scene-region-number { margin: 0 5px 0 0; opacity: .6; font-weight: 700; }
+.akim-scene-layout { display: grid; grid-template-columns: minmax(0, 1fr) 265px; }
+.akim-scene-map-wrap { min-width: 0; }
+.akim-scene-map { height: 570px; min-height: 320px; position: relative; overflow: hidden; background-color: #edf0e2; background-image: radial-gradient(#97a98b30 .8px, transparent .8px); background-size: 20px 20px; touch-action: pan-y; user-select: none; cursor: grab; }
+.akim-scene-map:active { cursor: grabbing; }
+.akim-scene-map:focus-visible { outline: 3px solid #b59258; outline-offset: -4px; }
+.akim-scene-svg { display: block; width: 100%; height: 100%; }
+.akim-scene-map-note { position: absolute; left: 19px; top: 17px; font-size: 10px; border: 1px solid #c6cdb8; border-radius: 20px; padding: 5px 10px; background: #fbfaf0e8; color: #6b735b; pointer-events: none; max-width: calc(100% - 76px); }
+.akim-scene-compass { position: absolute; top: 20px; right: 21px; font-size: 9px; display: grid; justify-items: center; color: #5a7161; pointer-events: none; }
+.akim-scene-compass span { font-size: 28px; line-height: 1; }
+.akim-scene-camera { position: absolute; right: 15px; bottom: 54px; display: grid; grid-template-columns: repeat(3, 33px); gap: 4px; }
+.akim-scene-camera button { height: 33px; padding: 0; border-color: #d3dbc9; background: #fffef5eb; font-size: 18px; box-shadow: 0 2px 3px #394c2e08; }
+.akim-scene-camera button:last-child { grid-column: 3; }
+.akim-scene-map-caption { position: absolute; bottom: 18px; left: 19px; display: flex; gap: 17px; font-size: 10px; color: #657557; pointer-events: none; }
+.akim-scene-map-label { pointer-events: none; }
+.akim-scene-map-label text { fill: #315444; font-size: 12px; font-weight: 600; }
+.akim-scene-map-label .akim-scene-context-label { font-weight: 400; font-size: 10px; fill: #697664; }
+.akim-scene-mayor-label { font-size: 8px; font-weight: 800; fill: #244e40; paint-order: stroke; stroke: #fff6df; stroke-width: 3px; letter-spacing: .08em; }
+.akim-scene-layer-pieces, .akim-scene-layer-actors, .akim-scene-layer-effects, .akim-scene-layer-labels { pointer-events: none; }
+.akim-scene-marker circle { fill: #fff9df; stroke: #ae9864; stroke-width: 1.5px; stroke-dasharray: 3 2; }
+.akim-scene-marker text { font: 700 9px Inter, sans-serif; fill: #5e5938; }
+.akim-scene-marker-construction circle { fill: #f0d6a1; stroke: #a87940; stroke-dasharray: 4 2; }
+.akim-scene-marker-active circle { fill: #d7ead2; stroke: #618e65; stroke-dasharray: none; }
+.akim-scene-reaction text { font-size: 10px; fill: #514d34; font-weight: 600; }
+.akim-scene-timeline { padding: 15px 22px 6px; }
+.akim-scene-feedback { font-size: 12px; min-height: 20px; display: block; }
+.akim-scene-track { height: 5px; background: #e8eadc; border-radius: 5px; overflow: hidden; margin: 11px 0 6px; }
+.akim-scene-track > span { display: block; height: 100%; background: #94af7c; }
+.akim-scene-timeline small { color: #849078; font-size: 9px; }
+.akim-scene-help { padding: 5px 22px 16px; margin: 0; color: #849078; font-size: 10px; }
+.akim-scene-inspector { border-left: 1px solid var(--line); padding: 25px 22px; min-width: 0; background: #fffef8; }
+.akim-scene-inspector h2 { font-size: 28px; letter-spacing: -.05em; font-weight: 550; line-height: 1.2; margin: 10px 0 12px; }
+.akim-scene-inspector h3 { margin: 0 0 12px; font-size: 13px; font-weight: 650; }
+.akim-scene-inspector p { font-size: 12px; line-height: 1.7; color: #6c7867; margin: 17px 0; }
+.akim-scene-inspector .akim-scene-subtle { font-size: 11px; color: #8a907d; }
+.akim-scene-badge { display: inline-block; border-radius: 5px; background: #eff3e9; padding: 4px 7px; font-size: 9px; letter-spacing: .025em; }
+.akim-scene-inspector .akim-scene-primary { background: #2b5445; color: #fffbea; border-color: #2b5445; padding: 10px 12px; font-size: 11px; }
+.akim-scene-divider { height: 1px; background: var(--line); margin: 26px 0; }
+.akim-scene-observation { display: grid; gap: 4px; margin-bottom: 18px; }
+.akim-scene-observation strong { font-size: 19px; font-weight: 550; }
+.akim-scene-observation span { font-size: 11px; }
+.akim-scene-observation small { font-size: 10px; color: #839078; }
+.akim-scene a { color: #49694c; font-size: 11px; overflow-wrap: anywhere; }
+.akim-scene details { margin-top: 20px; font-size: 10px; color: #839078; overflow-wrap: anywhere; }
+.akim-scene summary { cursor: pointer; padding: 5px 0; color: #718160; }
+.akim-scene details pre { font-size: 9px; white-space: pre-wrap; overflow-wrap: anywhere; max-height: 190px; overflow: auto; }
+.akim-scene-missing { border-top: 1px solid var(--line); padding-top: 10px; }
+.akim-scene[data-reduced-motion="true"] * { transition: none; animation: none; }
+@media (max-width: 1024px) { .akim-scene-toolbar { align-items: flex-start; flex-direction: column; gap: 12px; } .akim-scene-layout { grid-template-columns: minmax(0, 1fr) 225px; } .akim-scene-map { height: 490px; } .akim-scene-inspector { padding: 22px 17px; } }
+@media (max-width: 768px) { .akim-scene-layout { grid-template-columns: minmax(0, 1fr); } .akim-scene-inspector { border-left: 0; border-top: 1px solid var(--line); } .akim-scene-map { height: 440px; } .akim-scene-toolbar { padding: 18px 16px 14px; } .akim-scene-regions { padding: 0 16px 16px; } .akim-scene-regions button { min-height: 37px; } .akim-scene-camera { grid-template-columns: repeat(3, 39px); } .akim-scene-camera button { height: 39px; } }
+@media (max-width: 430px) { .akim-scene { border-radius: 15px; } .akim-scene-map { height: 410px; } .akim-scene-controls { gap: 5px; } .akim-scene-controls button { padding: 9px; font-size: 11px; } .akim-scene-separator { display: none; } .akim-scene-regions { gap: 5px; } .akim-scene-regions button { font-size: 11px; padding: 7px 11px; } .akim-scene-map-caption { left: 12px; gap: 8px; font-size: 8px; } .akim-scene-map-note { left: 12px; font-size: 9px; } .akim-scene-view strong { font-size: 19px; } .akim-scene-timeline { padding-inline: 15px; } .akim-scene-help { padding-inline: 15px; } }
+@media (max-width: 600px) { .akim-scene-camera { grid-template-columns: repeat(7, minmax(0, 1fr)); left: 12px; right: 12px; bottom: 47px; } .akim-scene-camera button:last-child { grid-column: auto; } }
+@media (prefers-reduced-motion: reduce) { .akim-scene * { animation: none; transition: none; } }

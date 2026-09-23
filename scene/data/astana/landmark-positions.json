@@ -1,0 +1,152 @@
+{
+  "schemaVersion": 1,
+  "retrievedAt": "2026-09-23T11:20:27.880676+00:00",
+  "outputCrs": "EPSG:4326",
+  "coordinateOrder": "longitude,latitude",
+  "license": "ODbL-1.0",
+  "attribution": "© OpenStreetMap contributors",
+  "copyrightUrl": "https://www.openstreetmap.org/copyright",
+  "note": "Verified feature identity by exact landmark name/category and Wikidata ID. Baseline user data is unchanged. Building positions are explicitly derived centroid anchors. Other seed landmarks remain unverified.",
+  "positions": [
+    {
+      "id": "baiterek",
+      "name": "Бәйтерек",
+      "source": "OpenStreetMap contributors",
+      "sourceName": "Бәйтерек",
+      "sourceUrl": "https://www.openstreetmap.org/way/230401645",
+      "source_url": "https://www.openstreetmap.org/way/230401645",
+      "apiUrl": "https://api.openstreetmap.org/api/0.6/way/230401645/full",
+      "coordinates": [
+        71.43045442867498,
+        51.12828821951731
+      ],
+      "originalCoordinates": [
+        71.4256,
+        51.1283
+      ],
+      "originalSource": "Kazakhstan Travel",
+      "originalSourceUrl": "https://kazakhstan.travel/tourist-spot/en/42/baiterek-monument",
+      "method": "Area-weighted centroid of named OSM closed building footprint in WGS84; derived display anchor, not a surveyed point",
+      "differenceMeters": 338.76,
+      "osmType": "way",
+      "osmId": 230401645,
+      "osmVersion": 33,
+      "osmTimestamp": "2026-08-09T20:44:02Z",
+      "wikidata": "Q804210",
+      "rawResponse": "landmark-osm-source/way-230401645.osm",
+      "rawSha256": "4c1a8e831b53203765f7e73dabf4d6c6ecca9fdce4561104f0d38fa120284932"
+    },
+    {
+      "id": "akorda",
+      "name": "Ақорда",
+      "source": "OpenStreetMap contributors",
+      "sourceName": "Ақорда резиденциясы",
+      "sourceUrl": "https://www.openstreetmap.org/way/166198046",
+      "source_url": "https://www.openstreetmap.org/way/166198046",
+      "apiUrl": "https://api.openstreetmap.org/api/0.6/way/166198046/full",
+      "coordinates": [
+        71.44643690630186,
+        51.12580317220944
+      ],
+      "originalCoordinates": [
+        71.44647,
+        51.1258
+      ],
+      "originalSource": "OpenStreetMap/Mapcarta",
+      "originalSourceUrl": "https://mapcarta.com/W26423900",
+      "method": "Area-weighted centroid of named OSM closed building footprint in WGS84; derived display anchor, not a surveyed point",
+      "differenceMeters": 2.34,
+      "osmType": "way",
+      "osmId": 166198046,
+      "osmVersion": 26,
+      "osmTimestamp": "2025-12-22T14:39:30Z",
+      "wikidata": "Q413579",
+      "rawResponse": "landmark-osm-source/way-166198046.osm",
+      "rawSha256": "f5638c86ac42c47764dc330e62467c3753bbada359bce9186cd72f58f5919fcb"
+    },
+    {
+      "id": "khan_shatyr",
+      "name": "Хан Шатыр",
+      "source": "OpenStreetMap contributors",
+      "sourceName": "Хан Шатыр",
+      "sourceUrl": "https://www.openstreetmap.org/way/460703779",
+      "source_url": "https://www.openstreetmap.org/way/460703779",
+      "apiUrl": "https://api.openstreetmap.org/api/0.6/way/460703779/full",
+      "coordinates": [
+        71.40384352725712,
+        51.132496502827266
+      ],
+      "originalCoordinates": [
+        71.40387,
+        51.13251
+      ],
+      "originalSource": "OpenStreetMap/Mapcarta",
+      "originalSourceUrl": "https://mapcarta.com/W112793677",
+      "method": "Area-weighted centroid of named OSM closed building footprint in WGS84; derived display anchor, not a surveyed point",
+      "differenceMeters": 2.38,
+      "osmType": "way",
+      "osmId": 460703779,
+      "osmVersion": 16,
+      "osmTimestamp": "2025-12-19T15:41:57Z",
+      "wikidata": "Q671484",
+      "rawResponse": "landmark-osm-source/way-460703779.osm",
+      "rawSha256": "3d54fdcbdb6ef24b54edd2eb0376d938d151cfaed9926fde96597b2f8ba4f9b7"
+    },
+    {
+      "id": "astana_opera",
+      "name": "Astana Opera",
+      "source": "OpenStreetMap contributors",
+      "sourceName": "Астана Опера",
+      "sourceUrl": "https://www.openstreetmap.org/way/917478479",
+      "source_url": "https://www.openstreetmap.org/way/917478479",
+      "apiUrl": "https://api.openstreetmap.org/api/0.6/way/917478479/full",
+      "coordinates": [
+        71.41068505424144,
+        51.13552071529857
+      ],
+      "originalCoordinates": [
+        71.4085,
+        51.1341
+      ],
+      "originalSource": "Kazakhstan Travel",
+      "originalSourceUrl": "https://kazakhstan.travel/tourist-spot/en/45/astana-opera",
+      "method": "Area-weighted centroid of named OSM closed building footprint in WGS84; derived display anchor, not a surveyed point",
+      "differenceMeters": 219.55,
+      "osmType": "way",
+      "osmId": 917478479,
+      "osmVersion": 3,
+      "osmTimestamp": "2025-11-29T10:07:23Z",
+      "wikidata": "Q21371563",
+      "rawResponse": "landmark-osm-source/way-917478479.osm",
+      "rawSha256": "82b9cd841b05505006b138ff57b762ad6ed3d0584a4f57b736822b56ff3bcd67"
+    },
+    {
+      "id": "national_museum",
+      "name": "Национальный музей Республики Казахстан",
+      "source": "OpenStreetMap contributors",
+      "sourceName": "Қазақстан Республикасының Ұлттық Мұражайы",
+      "sourceUrl": "https://www.openstreetmap.org/node/4894937300",
+      "source_url": "https://www.openstreetmap.org/node/4894937300",
+      "apiUrl": "https://api.openstreetmap.org/api/0.6/node/4894937300",
+      "coordinates": [
+        71.4693823,
+        51.1182297
+      ],
+      "originalCoordinates": [
+        71.467,
+        51.1184
+      ],
+      "originalSource": "Kazakhstan Travel",
+      "originalSourceUrl": "https://kazakhstan.travel/tourist-spot/en/44/national-museum-of-the-republic-of-kazakhstan",
+      "method": "OSM named feature node coordinates",
+      "differenceMeters": 167.36,
+      "osmType": "node",
+      "osmId": 4894937300,
+      "osmVersion": 19,
+      "osmTimestamp": "2026-01-23T04:12:07Z",
+      "wikidata": "Q18405670",
+      "rawResponse": "landmark-osm-source/node-4894937300.osm",
+      "rawSha256": "61b4909ecc1180bfe4233a148f5c6785207c6acbb30ac05d1f47ce4f9e969950"
+    }
+  ]
+}

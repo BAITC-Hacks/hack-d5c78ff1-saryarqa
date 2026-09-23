@@ -1,0 +1,100 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "botanical_garden",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.41657,
+          51.10617
+        ]
+      },
+      "properties": {
+        "id": "botanical_garden",
+        "name": "Ботанический сад",
+        "importance": 5,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/W647053080",
+        "kind": "park_anchor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "presidential_park",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.45969,
+          51.12493
+        ]
+      },
+      "properties": {
+        "id": "presidential_park",
+        "name": "Президентский парк",
+        "importance": 4,
+        "source": "geographic listing",
+        "source_url": "https://www.geographic.org/geographic_names/name.php?uni=-9656429&fid=3342&c=kazakhstan",
+        "kind": "park_anchor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "lovers_park",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.40921,
+          51.13149
+        ]
+      },
+      "properties": {
+        "id": "lovers_park",
+        "name": "Парк влюблённых",
+        "importance": 4,
+        "source": "OpenStreetMap-derived listing",
+        "source_url": "https://www.mypacer.com/routes/233255/lovers-park-walking-and-running-nur-sultan-kazakhstan",
+        "kind": "park_anchor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "zhetysu_park",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.43845,
+          51.13599
+        ]
+      },
+      "properties": {
+        "id": "zhetysu_park",
+        "name": "Парк Жетісу",
+        "importance": 3,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/W422461510",
+        "kind": "park_anchor"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "triathlon_park",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.45,
+          51.13604
+        ]
+      },
+      "properties": {
+        "id": "triathlon_park",
+        "name": "Триатлон парк",
+        "importance": 3,
+        "source": "event geodata",
+        "source_url": "https://www.finishers.com/en/event/astana-triathlon",
+        "kind": "park_anchor"
+      }
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (2942766 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node id="2635117330" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1317438" lon="71.4038560"/>
+ <node id="2635117334" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1317527" lon="71.4035829"/>
+ <node id="2635117336" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1317564" lon="71.4041636"/>
+ <node id="2635117338" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1317911" lon="71.4033614"/>
+ <node id="2635117340" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1317950" lon="71.4044169"/>
+ <node id="2635117342" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1318446" lon="71.4031645"/>
+ <node id="2635117343" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1318624" lon="71.4046648"/>
+ <node id="2635117351" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1319061" lon="71.4029823"/>
+ <node id="2635117354" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:14Z" user="chnav" uid="248768" lat="51.1319720" lon="71.4049094"/>
+ <node id="2635117370" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1320118" lon="71.4027894"/>
+ <node id="2635117373" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1320831" lon="71.4050977"/>
+ <node id="2635117377" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1321607" lon="71.4026258"/>
+ <node id="2635117379" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1322104" lon="71.4052263"/>
+ <node id="2635117382" visible="true" version="3" changeset="165570250" timestamp="2025-04-29T01:06:40Z" user="GravaneCanal" uid="18414165" lat="51.1322674" lon="71.4052461"/>
+ <node id="2635117386" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1323356" lon="71.4025104"/>
+ <node id="2635117388" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1323537" lon="71.4052753"/>
+ <node id="2635117398" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1324808" lon="71.4052565"/>
+ <node id="2635117400" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1325287" lon="71.4024699"/>
+ <node id="2635117403" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1325987" lon="71.4052075"/>
+ <node id="2635117405" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1326930" lon="71.4051354"/>
+ <node id="2635117407" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1327218" lon="71.4025104"/>
+ <node id="2635117409" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1328294" lon="71.4050150"/>
+ <node id="2635117413" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1329018" lon="71.4026292"/>
+ <node id="2635117415" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1329849" lon="71.4048136"/>
+ <node id="2635117420" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1330563" lon="71.4028182"/>
+ <node id="2635117422" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1330932" lon="71.4046083"/>
+ <node id="2635117424" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1331568" lon="71.4044232"/>
+ <node id="2635117426" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1331749" lon="71.4030644"/>
+ <node id="2635117432" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1332253" lon="71.4042011"/>
+ <node id="2635117434" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1332494" lon="71.4033512"/>
+ <node id="2635117436" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1332620" lon="71.4039203"/>
+ <node id="2635117440" visible="true" version="1" changeset="20177308" timestamp="2014-01-24T13:37:15Z" user="chnav" uid="248768" lat="51.1332740" lon="71.4036487"/>
+ <node id="5306060655" visible="true" version="1" changeset="54949320" timestamp="2017-12-27T08:39:01Z" user="Алекс Мок" uid="4814295" lat="51.1331379" lon="71.4029875"/>
+ <node id="11201579165" visible="true" version="1" changeset="141451161" timestamp="2023-09-19T06:01:59Z" user="talgautb" uid="2005799" lat="51.1320880" lon="71.4027056"/>
+ <node id="13293842421" visible="true" version="1" changeset="174445236" timestamp="2025-11-10T05:11:41Z" user="MNbrn" uid="6319160" lat="51.1330635" lon="71.4028327"/>
+ <node id="13293842636" visible="true" version="1" changeset="174445236" timestamp="2025-11-10T05:11:34Z" user="MNbrn" uid="6319160" lat="51.1330630" lon="71.4028321"/>
+ <node id="13293842641" visible="true" version="1" changeset="174445236" timestamp="2025-11-10T05:11:48Z" user="MNbrn" uid="6319160" lat="51.1321916" lon="71.4026054"/>
+ <node id="13293843723" visible="true" version="1" changeset="174445236" timestamp="2025-11-10T05:11:50Z" user="MNbrn" uid="6319160" lat="51.1325921" lon="71.4024832"/>
+ <node id="13293843902" visible="true" version="1" changeset="174445236" timestamp="2025-11-10T05:11:35Z" user="MNbrn" uid="6319160" lat="51.1328901" lon="71.4026215"/>
+ <node id="13293890836" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:25Z" user="MNbrn" uid="6319160" lat="51.1332125" lon="71.4032093"/>
+ <node id="13293891036" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:09:53Z" user="MNbrn" uid="6319160" lat="51.1321358" lon="71.4026531"/>
+ <node id="13293891041" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:30Z" user="MNbrn" uid="6319160" lat="51.1332011" lon="71.4031653"/>
+ <node id="13293891144" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:10Z" user="MNbrn" uid="6319160" lat="51.1327345" lon="71.4050988"/>
+ <node id="13293891146" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:14Z" user="MNbrn" uid="6319160" lat="51.1329106" lon="71.4049099"/>
+ <node id="13293891321" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:09:34Z" user="MNbrn" uid="6319160" lat="51.1320714" lon="71.4027238"/>
+ <node id="13293891615" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:09:47Z" user="MNbrn" uid="6319160" lat="51.1331486" lon="71.4030098"/>
+ <node id="13293891727" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:13Z" user="MNbrn" uid="6319160" lat="51.1328864" lon="71.4049412"/>
+ <node id="13293891730" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:20Z" user="MNbrn" uid="6319160" lat="51.1332377" lon="71.4041060"/>
+ <node id="13293891930" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:08Z" user="MNbrn" uid="6319160" lat="51.1323843" lon="71.4052708"/>
+ <node id="13293893104" visible="true" version="1" changeset="174446375" timestamp="2025-11-10T06:10:15Z" user="MNbrn" uid="6319160" lat="51.1331079" lon="71.4045655"/>
+ <node id="13294095002" visible="true" version="1" changeset="174451874" timestamp="2025-11-10T09:03:11Z" user="MNbrn" uid="6319160" lat="51.1321052" lon="71.4026868">
+  <tag k="door" v="yes"/>
+  <tag k="entrance" v="yes"/>
+  <tag k="level" v="1"/>
+ </node>
+ <node id="13294095101" visible="true" version="1" changeset="174451874" timestamp="2025-11-10T09:03:10Z" user="MNbrn" uid="6319160" lat="51.1323048" lon="71.4052588">
+  <tag k="automatic_door" v="yes"/>
+  <tag k="door" v="yes"/>
+  <tag k="entrance" v="main"/>
+  <tag k="level" v="1"/>
+  <tag k="wheelchair" v="yes"/>
+ </node>
+ <node id="13294095201" visible="true" version="1" changeset="174451874" timestamp="2025-11-10T09:03:10Z" user="MNbrn" uid="6319160" lat="51.1331887" lon="71.4031175">
+  <tag k="door" v="yes"/>
+  <tag k="entrance" v="yes"/>
+  <tag k="level" v="1"/>
+ </node>
+ <way id="460703779" visible="true" version="16" changeset="176146037" timestamp="2025-12-19T15:41:57Z" user="MNbrn" uid="6319160">
+  <nd ref="2635117382"/>
+  <nd ref="13294095101"/>
+  <nd ref="2635117388"/>
+  <nd ref="13293891930"/>
+  <nd ref="2635117398"/>
+  <nd ref="2635117403"/>
+  <nd ref="2635117405"/>
+  <nd ref="13293891144"/>
+  <nd ref="2635117409"/>
+  <nd ref="13293891727"/>
+  <nd ref="13293891146"/>
+  <nd ref="2635117415"/>
+  <nd ref="2635117422"/>
+  <nd ref="13293893104"/>
+  <nd ref="2635117424"/>
+  <nd ref="2635117432"/>
+  <nd ref="13293891730"/>
+  <nd ref="2635117436"/>
+  <nd ref="2635117440"/>
+  <nd ref="2635117434"/>
+  <nd ref="13293890836"/>
+  <nd ref="13293891041"/>
+  <nd ref="13294095201"/>
+  <nd ref="2635117426"/>
+  <nd ref="13293891615"/>
+  <nd ref="5306060655"/>
+  <nd ref="13293842421"/>
+  <nd ref="13293842636"/>
+  <nd ref="2635117420"/>
+  <nd ref="2635117413"/>
+  <nd ref="13293843902"/>
+  <nd ref="2635117407"/>
+  <nd ref="13293843723"/>
+  <nd ref="2635117400"/>
+  <nd ref="2635117386"/>
+  <nd ref="13293842641"/>
+  <nd ref="2635117377"/>
+  <nd ref="13293891036"/>
+  <nd ref="13294095002"/>
+  <nd ref="11201579165"/>
+  <nd ref="13293891321"/>
+  <nd ref="2635117370"/>
+  <nd ref="2635117351"/>
+  <nd ref="2635117342"/>
+  <nd ref="2635117338"/>
+  <nd ref="2635117334"/>
+  <nd ref="2635117330"/>
+  <nd ref="2635117336"/>
+  <nd ref="2635117340"/>
+  <nd ref="2635117343"/>
+  <nd ref="2635117354"/>
+  <nd ref="2635117373"/>
+  <nd ref="2635117379"/>
+  <nd ref="2635117382"/>
+  <tag k="addr:city" v="Астана"/>
+  <tag k="addr:country" v="KZ"/>
+  <tag k="addr:housenumber" v="37"/>
+  <tag k="addr:street" v="Тұран даңғылы"/>
+  <tag k="building" v="yes"/>
+  <tag k="building:levels" v="5"/>
+  <tag k="building:roof:height" v="100"/>
+  <tag k="int_name" v="Khan Shatyr"/>
+  <tag k="name" v="Хан Шатыр"/>
+  <tag k="name:de" v="Khan Shatyr"/>
+  <tag k="name:en" v="Khan Shatyr"/>
+  <tag k="name:ja" v="ハーン・シャティア"/>
+  <tag k="name:ru" v="Хан Шатыр"/>
+  <tag k="opening_hours" v="Mo-Su,PH 10:00-23:00"/>
+  <tag k="roof:shape" v="cone"/>
+  <tag k="shop" v="mall"/>
+  <tag k="wheelchair" v="yes"/>
+  <tag k="wikidata" v="Q671484"/>
+  <tag k="wikimedia_commons" v="Category:Khan Shatyry Entertainment Center"/>
+  <tag k="wikipedia" v="en:Khan Shatyr Entertainment Center"/>
+ </way>
+</osm>

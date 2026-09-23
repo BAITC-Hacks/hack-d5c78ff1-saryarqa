@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (2942765 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node id="4894937300" visible="true" version="19" changeset="177591667" timestamp="2026-01-23T04:12:07Z" user="ZereKuluspayeva" uid="23739157" lat="51.1182297" lon="71.4693823">
+  <tag k="name" v="Қазақстан Республикасының Ұлттық Мұражайы"/>
+  <tag k="name:de" v="Nationalmuseum der Republik Kasachstan"/>
+  <tag k="name:en" v="National Museum of the Republic of Kazakhstan"/>
+  <tag k="name:ja" v="国立博物館"/>
+  <tag k="name:pl" v="Muzeum Narodowe Republiki Kazachstanu"/>
+  <tag k="name:ru" v="Национальный музей Республики Казахстан"/>
+  <tag k="start_date" v="2014-07-02"/>
+  <tag k="tourism" v="museum"/>
+  <tag k="website" v="https://nmrk.kz/"/>
+  <tag k="wikidata" v="Q18405670"/>
+  <tag k="wikimedia_commons" v="Category:National Museum of the Republic of Kazakhstan"/>
+ </node>
+</osm>

@@ -1,0 +1,345 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "baiterek",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.4256,
+          51.1283
+        ]
+      },
+      "properties": {
+        "id": "baiterek",
+        "name": "Бәйтерек",
+        "category": "landmark",
+        "importance": 5,
+        "source": "Kazakhstan Travel",
+        "source_url": "https://kazakhstan.travel/tourist-spot/en/42/baiterek-monument",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "akorda",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.44647,
+          51.1258
+        ]
+      },
+      "properties": {
+        "id": "akorda",
+        "name": "Ақорда",
+        "category": "government",
+        "importance": 5,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/W26423900",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "khan_shatyr",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.40387,
+          51.13251
+        ]
+      },
+      "properties": {
+        "id": "khan_shatyr",
+        "name": "Хан Шатыр",
+        "category": "landmark",
+        "importance": 5,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/W112793677",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "national_museum",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.467,
+          51.1184
+        ]
+      },
+      "properties": {
+        "id": "national_museum",
+        "name": "Национальный музей Республики Казахстан",
+        "category": "culture",
+        "importance": 4,
+        "source": "Kazakhstan Travel",
+        "source_url": "https://kazakhstan.travel/tourist-spot/en/44/national-museum-of-the-republic-of-kazakhstan",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "astana_opera",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.4085,
+          51.1341
+        ]
+      },
+      "properties": {
+        "id": "astana_opera",
+        "name": "Astana Opera",
+        "category": "culture",
+        "importance": 4,
+        "source": "Kazakhstan Travel",
+        "source_url": "https://kazakhstan.travel/tourist-spot/en/45/astana-opera",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "palace_peace",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.4614,
+          51.1231
+        ]
+      },
+      "properties": {
+        "id": "palace_peace",
+        "name": "Дворец мира и согласия",
+        "category": "culture",
+        "importance": 4,
+        "source": "Kazakhstan Travel",
+        "source_url": "https://kazakhstan.travel/tourist-spot/en/43/palace-of-peace-and-reconciliation",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "hazret_sultan",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.4697,
+          51.126
+        ]
+      },
+      "properties": {
+        "id": "hazret_sultan",
+        "name": "Мечеть Хазрет Султан",
+        "category": "religion",
+        "importance": 4,
+        "source": "Kazakhstan Travel",
+        "source_url": "https://kazakhstan.travel/tourist-spot/en/46/hazret-sultan-mosque",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "grand_mosque",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.4059,
+          51.0731
+        ]
+      },
+      "properties": {
+        "id": "grand_mosque",
+        "name": "Главная мечеть Астаны",
+        "category": "religion",
+        "importance": 4,
+        "source": "Kazakhstan Travel",
+        "source_url": "https://kazakhstan.travel/tourist-spot/en/308/astana-grand-mosque",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nazarbayev_university",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.39944,
+          51.09
+        ]
+      },
+      "properties": {
+        "id": "nazarbayev_university",
+        "name": "Nazarbayev University",
+        "category": "university",
+        "importance": 4,
+        "source": "Wikidata",
+        "source_url": "https://www.wikidata.org/wiki/Q6963460",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "astana_arena",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.40261,
+          51.10819
+        ]
+      },
+      "properties": {
+        "id": "astana_arena",
+        "name": "Astana Arena",
+        "category": "sport",
+        "importance": 4,
+        "source": "Wikidata",
+        "source_url": "https://www.wikidata.org/wiki/Q177478",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "barys_arena",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.39463,
+          51.10925
+        ]
+      },
+      "properties": {
+        "id": "barys_arena",
+        "name": "Барыс Арена",
+        "category": "sport",
+        "importance": 3,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/W368628712",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nur_alem",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.41613,
+          51.08937
+        ]
+      },
+      "properties": {
+        "id": "nur_alem",
+        "name": "Нұр Әлем / EXPO",
+        "category": "landmark",
+        "importance": 5,
+        "source": "venue geodata",
+        "source_url": "https://untappd.com/v/nur-alem/6817766",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "nurly_zhol_station",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.53172,
+          51.11236
+        ]
+      },
+      "properties": {
+        "id": "nurly_zhol_station",
+        "name": "Вокзал Нұрлы жол",
+        "category": "transport",
+        "importance": 5,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/N5764279563",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "astana_1_station",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.40999,
+          51.1959
+        ]
+      },
+      "properties": {
+        "id": "astana_1_station",
+        "name": "Вокзал Астана-1",
+        "category": "transport",
+        "importance": 4,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/N114678681",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "astana_airport",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.46629,
+          51.02589
+        ]
+      },
+      "properties": {
+        "id": "astana_airport",
+        "name": "Международный аэропорт Астаны",
+        "category": "transport",
+        "importance": 5,
+        "source": "OpenStreetMap/Mapcarta",
+        "source_url": "https://mapcarta.com/27231432",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "abu_dhabi_plaza",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.4279,
+          51.12259
+        ]
+      },
+      "properties": {
+        "id": "abu_dhabi_plaza",
+        "name": "Abu Dhabi Plaza",
+        "category": "business",
+        "importance": 3,
+        "source": "Autotravel",
+        "source_url": "https://autotravel.ru/otklik.php/35709",
+        "kind": "landmark"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "shabyt",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.4732,
+          51.1228
+        ]
+      },
+      "properties": {
+        "id": "shabyt",
+        "name": "Қазақ ұлттық өнер университеті / Шабыт",
+        "category": "university",
+        "importance": 3,
+        "source": "Autotravel",
+        "source_url": "https://autotravel.ru/otklik.php/31578",
+        "kind": "landmark"
+      }
+    }
+  ]
+}
