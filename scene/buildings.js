@@ -12,6 +12,7 @@ const MATERIALS = Object.freeze([
   { roof: '#c5cec1', edge: '#86978a', light: '#bdc8b5', dark: '#8b9e91' },
   { roof: '#d8c9b4', edge: '#9e8d78', light: '#cbbca4', dark: '#9d9485' },
 ]);
+const footprintCache = new WeakMap();
 
 const element = (tag, attributes) => {
   const node = document.createElementNS(NS, tag);
@@ -55,6 +56,97 @@ function getBounds(polygon) {
     maxX = Math.max(maxX, point[0]); maxY = Math.max(maxY, point[1]);
   }
   return { minX, minY, width: maxX - minX, height: maxY - minY };
+}
+
+function cachedFootprint(building) {
+  if (!building || typeof building !== 'object') return null;
+  const cached = footprintCache.get(building);
+  if (cached?.geometry === building.polygons) return cached;
+  const parts = [];
+  const bounds = [Infinity, Infinity, -Infinity, -Infinity];
+  for (const polygon of Array.isArray(building.polygons) ? building.polygons : []) {
+    if (!Array.isArray(polygon) || !polygon.length || !polygon.every(ring => Array.isArray(ring)
+      && ring.length >= 3 && ring.every(finitePoint))) continue;
+    const box = getBounds(polygon);
+    const partBounds = [box.minX, box.minY, box.minX + box.width, box.minY + box.height];
+    const area = Math.max(0, Math.abs(signedArea(polygon[0]))
+      - polygon.slice(1).reduce((total, ring) => total + Math.abs(signedArea(ring)), 0));
+    if (!(area > 0) || !Number.isFinite(area)) continue;
+    parts.push({ bounds: partBounds, polygon, area });
+    bounds[0] = Math.min(bounds[0], partBounds[0]); bounds[1] = Math.min(bounds[1], partBounds[1]);
+    bounds[2] = Math.max(bounds[2], partBounds[2]); bounds[3] = Math.max(bounds[3], partBounds[3]);
+  }
+  const result = { geometry: building.polygons, bounds, parts };
+  footprintCache.set(building, result);
+  return result;
+}
+
+const intersects = (a, b) => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
+const encloses = (outer, inner) => outer[0] <= inner[0] && outer[1] <= inner[1]
+  && outer[2] >= inner[2] && outer[3] >= inner[3];
+
+// Sutherland–Hodgman clipping is needed only at viewport edges. Whole visible
+// polygons use cached areas; most offscreen buildings need only four comparisons.
+function clippedRingArea(ring, bounds) {
+  let points = samePoint(ring[0], ring.at(-1)) ? ring.slice(0, -1) : ring.slice();
+  for (const [axis, edge, direction] of [[0, bounds[0], 1], [0, bounds[2], -1], [1, bounds[1], 1], [1, bounds[3], -1]]) {
+    if (points.length < 3) return 0;
+    const output = [];
+    let previous = points.at(-1);
+    let previousInside = (previous[axis] - edge) * direction >= 0;
+    for (const current of points) {
+      const currentInside = (current[axis] - edge) * direction >= 0;
+      if (currentInside !== previousInside) {
+        const fraction = (edge - previous[axis]) / (current[axis] - previous[axis]);
+        const crossing = [previous[0] + fraction * (current[0] - previous[0]),
+          previous[1] + fraction * (current[1] - previous[1])];
+        crossing[axis] = edge;
+        output.push(crossing);
+      }
+      if (currentInside) output.push(current);
+      previous = current; previousInside = currentInside;
+    }
+    points = output;
+  }
+  return points.length >= 3 ? Math.abs(signedArea(points)) : 0;
+}
+
+/**
+ * Pick loaded source features for the current viewport, not their source order.
+ * Bounds are [left, top, right, bottom] in the same world space as polygons.
+ * A footprint must cover at least 5 screen pixels² in the viewport. Sorting uses
+ * its visible area (minus courtyards), then stable identity; small nearby blocks
+ * naturally appear as zoom increases. Returned entries are original objects.
+ * Treat source geometry as immutable. Replacing building.polygons invalidates
+ * the WeakMap entry; evicted tile features are free to be garbage-collected.
+ */
+export function selectVisibleBuildings(buildings, { viewBounds, pixelsPerWorldUnit = 1, maxCount = 1800 } = {}) {
+  if (!Array.isArray(buildings) || !Array.isArray(viewBounds) || viewBounds.length !== 4
+    || !viewBounds.every(Number.isFinite) || viewBounds[0] >= viewBounds[2] || viewBounds[1] >= viewBounds[3]
+    || !Number.isFinite(pixelsPerWorldUnit) || pixelsPerWorldUnit <= 0
+    || !Number.isFinite(maxCount) || maxCount < 1) return [];
+  const pixelAreaScale = pixelsPerWorldUnit * pixelsPerWorldUnit;
+  if (!Number.isFinite(pixelAreaScale)) return [];
+  const minimumWorldArea = 5 / pixelAreaScale;
+  const candidates = [];
+  for (const building of buildings) {
+    const cached = cachedFootprint(building);
+    if (!cached?.parts.length || !intersects(cached.bounds, viewBounds)) continue;
+    let visibleArea = 0;
+    for (const part of cached.parts) {
+      if (!intersects(part.bounds, viewBounds)) continue;
+      if (encloses(viewBounds, part.bounds)) { visibleArea += part.area; continue; }
+      // A viewport wholly inside a courtyard contributes zero, not its bbox area.
+      visibleArea += Math.max(0, clippedRingArea(part.polygon[0], viewBounds)
+        - part.polygon.slice(1).reduce((sum, ring) => sum + clippedRingArea(ring, viewBounds), 0));
+    }
+    if (visibleArea < minimumWorldArea) continue;
+    const key = String(building.id ?? cached.bounds.join(','));
+    candidates.push({ building, visibleArea, key });
+  }
+  candidates.sort((left, right) => right.visibleArea - left.visibleArea
+    || (left.key < right.key ? -1 : left.key > right.key ? 1 : 0));
+  return candidates.slice(0, Math.floor(maxCount)).map(candidate => candidate.building);
 }
 
 /**
