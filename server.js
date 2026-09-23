@@ -2,13 +2,14 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { gunzipSync } from 'node:zlib';
 import analyze from './api/analyze.js';
 import services from './api/services.js';
 import player from './api/player.js';
 import runs from './api/runs.js';
 import leaderboard from './api/leaderboard.js';
 import { getCapabilities, isSafeFile } from './api/capabilities.js';
-import { ASTANA_MAP_FILES, BUILDING_TILE_PATHS } from './scene/load-map.js';
+import { ASTANA_MAP_FILES, BUILDING_TILE_PATHS, CITY_MAP_FILES } from './scene/load-map.js';
 
 const defaultRoot = dirname(fileURLToPath(import.meta.url));
 const MAX_BODY_BYTES = 4096;
@@ -47,7 +48,7 @@ const mime = new Map([
 ]);
 const sceneTypes = new Set(['.js', '.css', '.svg', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.avif']);
 const assetTypes = new Set(['.svg', '.png', '.webp', '.json', '.mp3', '.ogg', '.wav', '.m4a', '.aac']);
-const atlasDataPaths = new Set([...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS]);
+const atlasDataPaths = new Set([...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS, ...Object.values(CITY_MAP_FILES).flatMap(Object.values)]);
 
 function send(res, status, body, contentType = 'text/plain; charset=utf-8', headers = {}) {
   res.writeHead(status, {
@@ -148,13 +149,23 @@ export function createAppServer({ rootDir = defaultRoot } = {}) {
       send(res, 405, 'Method not allowed', 'text/plain; charset=utf-8', { Allow: 'GET, HEAD' });
       return;
     }
-    if (!await isSafeFile(root, entry.parts)) {
+    const compressedParts = atlasDataPaths.has(route.pathname)
+      ? [...entry.parts.slice(0, -1), `${entry.parts.at(-1)}.gz`] : null;
+    const compressed = compressedParts && await isSafeFile(root, compressedParts);
+    if (!compressed && !await isSafeFile(root, entry.parts)) {
       send(res, 404, 'Not found');
       return;
     }
     try {
-      const body = await readFile(resolve(root, ...entry.parts));
-      send(res, 200, body, entry.type, { 'Content-Length': body.length });
+      let body = await readFile(resolve(root, ...(compressed ? compressedParts : entry.parts)));
+      const acceptsGzip = String(req.headers['accept-encoding'] || '').split(',').some(value => {
+        const [name, ...parameters] = value.trim().split(';');
+        return name === 'gzip' && !parameters.some(p => /^\s*q=0(?:\.0*)?\s*$/.test(p));
+      });
+      const headers = compressed ? { Vary: 'Accept-Encoding' } : {};
+      if (compressed && acceptsGzip) headers['Content-Encoding'] = 'gzip';
+      else if (compressed) body = gunzipSync(body);
+      send(res, 200, body, entry.type, { ...headers, 'Content-Length': body.length });
     } catch {
       send(res, 404, 'Not found');
     }

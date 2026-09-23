@@ -155,7 +155,7 @@ test('atlas exposes only its declared data files with GeoJSON MIME and HEAD supp
   });
 });
 
-test('atlas readiness requires every render resource independently of legacy assets and geography', async () => {
+test('atlas readiness requires every render resource independently of legacy assets and geography', async (t) => {
   await withServer(async ({ root, put, hit }) => {
     for (const path of ['index.js', 'atlas.js', 'atlas.css', 'styles.css', 'load-map.js', 'geodata.js', 'camera.js', 'building-tiles.js', 'buildings.js', 'icons.js', 'vegetation.js', 'landmarks.js', 'effects.js']) {
       await put(`scene/${path}`, '');
@@ -174,9 +174,20 @@ test('atlas readiness requires every render resource independently of legacy ass
       await put(required, '');
     }
     await rm(join(root, paths.at(-1).slice(1)));
-    await symlink(join(root, 'index.html'), join(root, paths.at(-1).slice(1)));
     assert.equal((await getCapabilities(root)).atlas, false);
-    assert.equal((await hit(paths.at(-1))).status, 404);
+    await t.test('a symlink cannot satisfy atlas readiness', async (subtest) => {
+      try {
+        await symlink(join(root, 'index.html'), join(root, paths.at(-1).slice(1)));
+      } catch (cause) {
+        if (['EPERM', 'EACCES', 'ENOTSUP'].includes(cause.code)) {
+          subtest.skip(`symlink creation unavailable: ${cause.code}`);
+          return;
+        }
+        throw cause;
+      }
+      assert.equal((await getCapabilities(root)).atlas, false);
+      assert.equal((await hit(paths.at(-1))).status, 404);
+    });
   });
 });
 

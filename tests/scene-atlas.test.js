@@ -511,3 +511,24 @@ test('bundled Astana geography adapts all six attributed districts and gives Nur
   }
   assert.equal(moved, true);
 });
+
+test('atlas renders visible building geometry after the former 2600th feature', t => {
+  const harness = atlasHarness(t);
+  const buildings = Array.from({ length: 3500 }, (_, i) => ({ id: `complete-${i}`, polygons: square(495 + (i % 50) * .1, 345 + Math.floor(i / 50) * .1, .05) }));
+  const scene = harness.mount(harness.root, () => {}, { ...atlasData, buildings, fullCity: true });
+  scene.update({ snapshot: sceneSnapshot({ projection: 'top' }), context: { reducedMotion: true } });
+  const paths = harness.root.querySelector('.atlas-layer-buildings').children;
+  assert.equal(paths.reduce((sum, path) => sum + (path.getAttribute('d').match(/M/g) || []).length, 0), 3500);
+  assert.ok(paths.length < 100, 'complete geometry is batched instead of creating thousands of DOM nodes');
+});
+
+
+test('full city roads retain all visible segments in bounded SVG batches', t => {
+  const harness = atlasHarness(t);
+  const roads = Array.from({ length: 3500 }, (_, i) => ({ id: 'city-road-' + i, kind: i % 2 ? 'primary' : 'residential', points: [[499, 349], [501, 351]] }));
+  const scene = harness.mount(harness.root, () => {}, { ...atlasData, roads, fullCity: true });
+  scene.update({ snapshot: sceneSnapshot({ projection: 'top' }), context: { reducedMotion: true } });
+  const paths = harness.root.querySelector('.atlas-layer-roads').children;
+  assert.equal(paths.reduce((sum, path) => sum + Number(path.getAttribute('data-segment-count')), 0), 3500);
+  assert.ok(paths.length < 40);
+});

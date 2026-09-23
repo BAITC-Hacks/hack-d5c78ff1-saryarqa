@@ -2,6 +2,9 @@ import { DISTRICTS, INDICATORS, MEASURES, BASELINE, realizedMeasureEffects } fro
 import { createGameSession } from './game/session.js';
 import { REGIONS, getRegion } from './game/contracts.js';
 import { createSceneAdapter } from './game/scene-adapter.js';
+import { CITIES } from './scene/cities.js';
+let currentCity = 'astana';
+let astanaMode = null;
 import { createForecast } from './game/forecast.js';
 import { policyArt, iconArt } from './game/art.js';
 import { explainLocally, mountAdvisorChat } from './game/advisor.js';
@@ -526,6 +529,7 @@ function renderInspector() {
 }
 
 function completeWithoutScene() {
+  if (currentCity !== 'astana') return;
   if (sceneStatus.phase === 'loading' || sceneStatus.phase === 'ready' || !state.result || state.playback.status === 'complete') return;
   const revision = state.planRevision;
   queueMicrotask(() => {
@@ -566,6 +570,24 @@ function renderCalculator() {
   calculateButton.addEventListener('click', calculate); calculatorPanel.append(calculateButton);
 }
 
+function renderCityChrome() {
+  const city = CITIES[currentCity], browsing = !city.simulation;
+  document.body.dataset.city = currentCity;
+  byId('city-name').textContent = city.name;
+  document.title = city.name + ' — Аким на 5 часов';
+  byId('city-note').hidden = !browsing;
+  for (const selector of ['.command-panel', '.mission-bar', '.region-heading', '#region-buttons', '.plan-dock', '.world-toolbar', '.district-inspector', '#rules', '#sample-button', '#game-phase', '.personal-best', '.mode-toolbar', '#cloud-panel']) {
+    const node = $(selector); if (node) node.hidden = browsing;
+  }
+  if (browsing) {
+    byId('game-panel').hidden = false;
+    byId('playback-panel').hidden = true;
+    byId('results').hidden = true;
+    calculatorPanel.hidden = true;
+  }
+  $('.scene-notice p').textContent = browsing ? 'Загружаем улицы, здания и парки города.' : 'Можно собирать план, пока загружается город.';
+}
+
 function renderShell() {
   const game = state.mode === 'game';
   document.body.dataset.mode = state.mode;
@@ -596,6 +618,7 @@ function renderShell() {
   else byId('results').hidden = true;
   renderInspector();
   completeWithoutScene();
+  renderCityChrome();
 }
 
 for (const region of REGIONS) {
@@ -634,7 +657,7 @@ const unsubscribe = session.subscribe((next) => {
   }
 });
 
-adapter = createSceneAdapter({ root: byId('scene-root'), session, onStatus(status) {
+adapter = createSceneAdapter({ root: byId('scene-root'), session, getCityId: () => currentCity, onStatus(status) {
   sceneStatus = status;
   const ready = status.phase === 'ready';
   byId('scene-notice').hidden = ready;
@@ -642,6 +665,19 @@ adapter = createSceneAdapter({ root: byId('scene-root'), session, onStatus(statu
   byId('scene-retry').hidden = status.phase === 'loading' || ready;
   renderShell();
 } });
+byId('city-select').addEventListener('change', () => {
+  const next = byId('city-select').value;
+  if (!CITIES[next] || next === currentCity) return;
+  if (currentCity === 'astana') {
+    astanaMode = state.mode;
+    if (state.playback.status === 'playing') dispatch({ type: 'PLAYBACK_CONTROL', command: 'pause' });
+  }
+  byId('placement-dialog')?.close();
+  currentCity = next;
+  dispatch({ type: 'SET_MODE', mode: currentCity === 'astana' ? (astanaMode || 'game') : 'game' });
+  renderShell();
+  adapter.connect();
+});
 adapter.connect();
 cloud.connect();
 window.addEventListener('pagehide', (event) => { if (event.persisted) return; adapter.destroy(); accountUI.destroy(); cloudPanel.destroy(); cloud.destroy(); aiController?.abort(); advisorChat.destroy(); unsubscribe(); session.destroy(); });
