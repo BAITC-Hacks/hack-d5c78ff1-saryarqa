@@ -34,7 +34,7 @@ function normalizeDecision(input) {
 }
 
 /** One authoritative plan for the game scene and direct calculator. */
-export function createGameSession({ storage } = {}) {
+export function createGameSession({ storage, presentationFactory = createPresentation } = {}) {
   let destroyed = false;
   let nextRunId = 0;
   const subscribers = new Set();
@@ -146,9 +146,9 @@ export function createGameSession({ storage } = {}) {
         state.validation = validatePlan(state.plan);
         if (!result.valid) return refused('INVALID_PLAN', result.errors.map((item) => item.message).join(' '));
         state.result = result;
-        state.presentation = createPresentation(result, state.plan, state.planRevision);
+        state.presentation = presentationFactory(result, state.plan, state.planRevision);
         nextRunId += 1;
-        state.playback = { status: state.mode === 'game' ? 'playing' : 'complete', speed: 1, runId: nextRunId };
+        state.playback = { status: state.mode === 'game' && state.presentation ? 'playing' : 'complete', speed: 1, runId: nextRunId };
         if (!state.personalBest || result.score > state.personalBest.score) {
           state.personalBest = { plan: result.plan, score: result.score, rulesVersion: RULES_VERSION };
           savePersonalBest(storage, result.plan);
@@ -182,7 +182,7 @@ export function createGameSession({ storage } = {}) {
         return changed();
       }
       case 'PLAYBACK_COMPLETE': {
-        if (!state.result || action.planRevision !== state.planRevision || (action.runId !== undefined && action.runId !== state.playback.runId)) return refused('STALE_PLAYBACK', 'Старое воспроизведение отменено.');
+        if (!state.result || action.planRevision !== state.planRevision || action.runId !== state.playback.runId) return refused('STALE_PLAYBACK', 'Старое воспроизведение отменено.');
         if (state.playback.status === 'complete') return accepted();
         if (state.playback.status !== 'playing') return refused('INVALID_PLAYBACK_STATE', 'Воспроизведение сейчас не идёт.');
         state.playback = { ...state.playback, status: 'complete' };

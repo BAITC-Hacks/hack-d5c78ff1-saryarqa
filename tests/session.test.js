@@ -94,12 +94,24 @@ test('replay run IDs reject stale completion and skip never changes score/best',
   session.dispatch({ type: 'PLAYBACK_CONTROL', command: 'replay' });
   const current = session.getSnapshot();
   assert.equal(session.dispatch({ type: 'PLAYBACK_COMPLETE', planRevision: current.planRevision, runId: old.playback.runId }).error.code, 'STALE_PLAYBACK');
+  assert.equal(session.dispatch({ type: 'PLAYBACK_COMPLETE', planRevision: current.planRevision }).error.code, 'STALE_PLAYBACK');
   assert.equal(session.getSnapshot().playback.status, 'playing');
   session.dispatch({ type: 'PLAYBACK_CONTROL', command: 'skip' });
   const after = session.getSnapshot();
   assert.equal(after.playback.status, 'complete');
   assert.equal(after.result.score, old.result.score);
   assert.deepEqual(after.personalBest, old.personalBest);
+  session.destroy();
+});
+
+test('missing presentation metadata reveals the valid result without starting playback', () => {
+  const session = createGameSession({ storage: null, presentationFactory: () => null });
+  loadSample(session);
+  assert.equal(session.dispatch({ type: 'FINALIZE' }).ok, true);
+  const state = session.getSnapshot();
+  assert.ok(Math.abs(state.result.score - 56.54307) < 1e-10);
+  assert.equal(state.presentation, null);
+  assert.equal(state.playback.status, 'complete');
   session.destroy();
 });
 
