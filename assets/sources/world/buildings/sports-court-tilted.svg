@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" data-anchor-x="64" data-anchor-y="112">
+  <title>Sports Court — tilted view</title>
+  <g><path d="M17 65 64 42l47 23-47 24z" fill="#70C44D"/>
+<path d="M17 65 64 89v18L17 83z" fill="#1D8E63"/>
+<path d="M64 89 111 65v18l-47 24z" fill="#1D8E63"/>
+<path d="m29 65 35-17 35 17-35 18zM64 48v35" fill="none" stroke="#FFF8EA" stroke-width="3"/>
+<path d="m57 63 7-4 7 4-7 4z" fill="none" stroke="#FFF8EA" stroke-width="3"/></g>
+</svg>

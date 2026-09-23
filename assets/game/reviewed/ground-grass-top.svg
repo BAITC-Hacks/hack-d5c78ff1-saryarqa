@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Paper-cut grass tile — top view</title>
+  <defs>
+    <pattern id="fiber" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M4 8l3-1M23 5l2 1M13 23l3-1M29 27l2 1" stroke="#faf2d9" stroke-width="1" opacity=".24"/>
+    </pattern>
+    <pattern id="tufts" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M13 18l2-4 2 4m27 23 2-4 2 4M29 55l2-3 2 3" fill="none" stroke="#286b59" stroke-width="1.5" stroke-linecap="round" opacity=".55"/>
+    </pattern>
+  </defs>
+  <path fill="#4f9c79" d="M0 0h256v256H0z"/>
+  <path fill="#82bd85" opacity=".65" d="M0 31c47-9 74 12 116 7S199 12 256 23v71c-56 13-85-9-131-3S43 110 0 94zm0 132c52-13 83 9 126 2s76-22 130-8v76c-52-12-84 8-126 12S49 217 0 231z"/>
+  <path fill="url(#fiber)" d="M0 0h256v256H0z"/>
+  <path fill="url(#tufts)" d="M0 0h256v256H0z"/>
+</svg>

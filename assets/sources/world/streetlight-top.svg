@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Streetlight — top-down</title>
+  <desc>Editable miniature game asset. Anchor: bottom centre for tilted view; centre for top view. No geographic claim.</desc>
+  <circle cx="128" cy="128" r="29" fill="#344c4c"/><circle cx="128" cy="128" r="21" fill="#f7e3a9"/><circle cx="128" cy="128" r="11" fill="#fff4d2"/><path d="M99 128H72" stroke="#344c4c" stroke-width="8" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,19 @@
+filename,purpose,view,viewBox,anchor point,source/creator,license,status
+effects/placement-pulse.svg,placement pulse,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/connection-path.svg,connection path,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/positive-improvement.svg,positive improvement,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/negative-tradeoff.svg,negative tradeoff,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/critical-warning.svg,critical warning,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/greenery-improved.svg,greenery improved,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/cleaner-air.svg,cleaner air,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/better-transit.svg,better transit,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/safer-roads.svg,safer roads,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/school-access.svg,school access,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/clinic-access.svg,clinic access,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/utilities-improved.svg,utilities improved,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/citizen-cheer.svg,citizen cheer,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/citizen-calm.svg,citizen calm,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/citizen-concerned.svg,citizen concerned,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/finish-higher.svg,finish higher,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/finish-restrained.svg,finish restrained,both,0 0 64 64,center,Original project artwork,Project-owned; redistribution license not specified,final
+effects/effects.css,District path styles and brief animation with reduced motion static fallback,both,n/a,n/a,Original project artwork,Project-owned; redistribution license not specified,final

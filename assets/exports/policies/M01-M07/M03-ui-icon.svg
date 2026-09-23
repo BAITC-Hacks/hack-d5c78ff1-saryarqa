@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="M03 LRT extension UI icon">
+  <title>M03 LRT extension UI icon</title>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="#138B95"/>
+  <rect x="14" y="13" width="36" height="34" rx="11" fill="#FFF8E9" stroke="#203743" stroke-width="3"/><rect x="20" y="21" width="24" height="14" rx="3" fill="#9ED6DE" stroke="#203743" stroke-width="2"/><circle cx="23" cy="41" r="2.5" fill="#203743"/><circle cx="41" cy="41" r="2.5" fill="#203743"/><path d="m18 54-5 6m33-6 5 6M17 57h30" stroke="#FFF8E9" stroke-width="3" stroke-linecap="round"/>
+</svg>

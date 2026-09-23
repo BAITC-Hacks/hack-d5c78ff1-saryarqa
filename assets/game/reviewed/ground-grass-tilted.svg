@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 218" width="320" height="218">
+  <title>Paper-cut grass tile — tilted view</title>
+  <defs>
+    <clipPath id="top"><path d="M160 16 306 82 160 148 14 82Z"/></clipPath>
+    <pattern id="fiber" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="m4 7 3-1m11 11 3 1" stroke="#edf7dc" stroke-width="1" opacity=".3"/>
+    </pattern>
+  </defs>
+  <path d="M14 82 160 148 306 82v22l-146 67L14 104Z" fill="#2d725c"/>
+  <path d="M160 148 306 82v22l-146 67Z" fill="#25634f"/>
+  <path d="M160 16 306 82 160 148 14 82Z" fill="#4f9c79"/>
+  <g clip-path="url(#top)">
+    <path d="M-17 51c67-15 105 34 171 22s91-34 188-16v39c-78-17-117 25-189 29S42 83-17 103Z" fill="#82bd85" opacity=".65"/>
+    <path d="M160 16 306 82 160 148 14 82Z" fill="url(#fiber)"/>
+    <g fill="none" stroke="#286b59" stroke-width="1.6" stroke-linecap="round" opacity=".55">
+      <path d="m75 73 2-5 2 5m50 33 2-5 2 5m81-49 2-5 2 5m44 35 2-5 2 5m-112-39 2-5 2 5m31 67 2-5 2 5"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "botanical_garden",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          71.41657,
+          51.10617
+        ]
+      },
+      "properties": {
+        "id": "botanical_garden",
+        "name": "Ботанический сад",
+        "importance": 5,
+        "kind": "park_anchor"
+      }
+    }
+  ]
+}

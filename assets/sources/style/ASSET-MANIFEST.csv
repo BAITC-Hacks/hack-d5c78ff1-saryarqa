@@ -1,0 +1,12 @@
+filename,purpose,view,dimensions_or_viewBox,anchor_point,source_creator,license,status
+assets/sources/style/build-style.mjs,Editable scene generator,both,source code,none,Original Codex design for project,project-owned,final
+assets/sources/style/style-system.md,Visual specification,both,Markdown,none,Original Codex design for project,project-owned,final
+assets/sources/style/palette.svg,Editable palette swatches,both,800x380,none,Original Codex design for project,project-owned,final
+assets/sources/style/scene-top.svg,Fictional composition style sample,top,640x480,center,Original Codex design for project,project-owned,final
+assets/sources/style/scene-tilted.svg,Fictional composition style sample,tilted,800x480,center,Original Codex design for project,project-owned,final
+assets/sources/style/preview-style.svg,Editable combined review sheet,both,1540x615,none,Original Codex design for project,project-owned,final
+assets/exports/style/palette.svg,Palette export,both,800x380,none,Original Codex design for project,project-owned,final
+assets/exports/style/scene-top.svg,Scene export; not geographic data,top,640x480,center,Original Codex design for project,project-owned,final
+assets/exports/style/scene-tilted.svg,Scene export; not geographic data,tilted,800x480,center,Original Codex design for project,project-owned,final
+assets/exports/style/preview-style.svg,Combined review sheet SVG,both,1540x615,none,Original Codex design for project,project-owned,final
+assets/exports/style/preview-style.png,Combined review sheet PNG,both,1540x615,none,Original Codex design for project,project-owned,final

@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="900" viewBox="0 0 1280 900" role="img" aria-labelledby="title desc">
+  <title id="title">Astana geographic source reference</title>
+  <desc id="desc">Non-geographic research sheet comparing official 2026 district areas with a public GIS layer. No district shape is drawn.</desc>
+  <rect width="1280" height="900" fill="#f4f0e8"/>
+  <rect x="38" y="38" width="1204" height="824" rx="22" fill="#fffdf8" stroke="#c9c1b5" stroke-width="2"/>
+  <text x="82" y="102" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#766c5d" letter-spacing="3">АСТАНА  /  ГЕОГРАФИЧЕСКИЕ ИСТОЧНИКИ</text>
+  <text x="82" y="154" font-family="Arial, sans-serif" font-size="38" font-weight="bold" fill="#263b3b">Справочный лист карты</text>
+  <rect x="82" y="180" width="1116" height="86" rx="12" fill="#8b2f32"/>
+  <text x="110" y="216" font-family="Arial, sans-serif" font-size="25" font-weight="bold" fill="#fffdf8">ГРАНИЦЫ 2026 НЕ ПОДТВЕРЖДЕНЫ</text>
+  <text x="110" y="245" font-family="Arial, sans-serif" font-size="18" fill="#fffdf8">для повторного использования как игровые векторные ассеты</text>
+  <text x="82" y="316" font-family="Arial, sans-serif" font-size="23" font-weight="bold" fill="#263b3b">Шесть районов: площадь по официальному сообщению 2026</text>
+  <text x="82" y="347" font-family="Arial, sans-serif" font-size="15" fill="#766c5d">Цветные строки — перечень, не расположение районов на карте.</text>
+  <g font-family="Arial, sans-serif" font-size="18" fill="#263b3b">
+    <rect x="82" y="369" width="1116" height="54" rx="8" fill="#eef3ed"/><circle cx="110" cy="396" r="10" fill="#89a883"/><text x="139" y="403">Алматы</text><text x="680" y="403">8 412 га</text><text x="924" y="403" fill="#8b2f32">GIS +73 га</text>
+    <rect x="82" y="430" width="1116" height="54" rx="8" fill="#edf2f5"/><circle cx="110" cy="457" r="10" fill="#7e9fb2"/><text x="139" y="464">Байқоңыр</text><text x="680" y="464">18 190 га</text><text x="924" y="464" fill="#8b2f32">GIS +105 га</text>
+    <rect x="82" y="491" width="1116" height="54" rx="8" fill="#eef3ed"/><circle cx="110" cy="518" r="10" fill="#75a69c"/><text x="139" y="525">Есиль</text><text x="680" y="525">20 518 га</text><text x="924" y="525" fill="#8b2f32">GIS +37 га</text>
+    <rect x="82" y="552" width="1116" height="54" rx="8" fill="#edf2f5"/><circle cx="110" cy="579" r="10" fill="#b4a877"/><text x="139" y="586">Нұра</text><text x="680" y="586">18 516 га</text><text x="924" y="586" fill="#8b2f32">GIS +381 га</text>
+    <rect x="82" y="613" width="1116" height="54" rx="8" fill="#eef3ed"/><circle cx="110" cy="640" r="10" fill="#b58f83"/><text x="139" y="647">Сарыарка</text><text x="680" y="647">7 144 га</text><text x="924" y="647" fill="#8b2f32">GIS −373 га</text>
+    <rect x="82" y="674" width="1116" height="54" rx="8" fill="#edf2f5"/><circle cx="110" cy="701" r="10" fill="#9d97b5"/><text x="139" y="708">Сарайшық</text><text x="680" y="708">6 953 га</text><text x="924" y="708" fill="#8b2f32">GIS +33 га</text>
+  </g>
+  <text x="82" y="770" font-family="Arial, sans-serif" font-size="16" fill="#263b3b">Официальные площади: gov.kz, Управление архитектуры Астаны, 14.08.2026</text>
+  <text x="82" y="798" font-family="Arial, sans-serif" font-size="15" fill="#766c5d">Векторный слой: gis.esaulet.kz / Hosted / raiony / FeatureServer / 0 — только справка</text>
+  <text x="82" y="830" font-family="Arial, sans-serif" font-size="14" fill="#766c5d">OSM/Nominatim тоже не прошёл проверку площадей. Контуры, дороги и река в этом листе отсутствуют.</text>
+</svg>

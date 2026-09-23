@@ -1,0 +1,1251 @@
+{
+  "schemaVersion": 1,
+  "reviewedAt": "2026-09-23",
+  "archive": {
+    "name": "akim-three-laptop-handoff-final.zip",
+    "sha256": "21633c000f9020cf659ca5990b3d25440f3d496c03fd2a021e1c6809f6d60908",
+    "entries": 9,
+    "content": "Markdown handoff only; no art or geometry",
+    "security": "All entries inspected before extraction. Only relative .md entries accepted; absolute/traversal/colon paths rejected. Extracted to new OS temp directory; no scripts executed."
+  },
+  "imports": [
+    {
+      "source": "assets/exports/icons/category-transport.svg",
+      "destination": "assets/game/reviewed/category.transport.svg",
+      "sha256": "2e600c775ac19be50b1803faea327634037b9212afaa0d138e9499ef514c36f9",
+      "bytes": 513,
+      "sourceSha256": "0dd4afdc5a25e1594962eb5d21822f7ffce7f20de48fcca956c692fdeb221c90",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/category-ecology.svg",
+      "destination": "assets/game/reviewed/category.ecology.svg",
+      "sha256": "cae5ae462eed58517fdf591ad25bbec6ef8eb58bc9b4659881668c0594b3bc00",
+      "bytes": 364,
+      "sourceSha256": "31ec1533db440b87b8b2398cc12e679aef4af602668bc894060e580a745a1728",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/category-social-services.svg",
+      "destination": "assets/game/reviewed/category.social.svg",
+      "sha256": "427cff46843022e23437d39945bfb4c8922602c9ae5d967a65ef243b387d4c83",
+      "bytes": 563,
+      "sourceSha256": "77dba1c9ca3bb40552ca5be646c4615c4d12c8aad72ea307fab65de5c3038063",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/category-safety.svg",
+      "destination": "assets/game/reviewed/category.safety.svg",
+      "sha256": "1ab124bfdbcac459d3ef46d8ec8e76ec8f88d6bcd9e40326fa1f2f27e24ea038",
+      "bytes": 336,
+      "sourceSha256": "018b00c01817868e7b49946e670e3eda348fef391fbaac7b31cdf6797c8e4bb8",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/category-city-services.svg",
+      "destination": "assets/game/reviewed/category.services.svg",
+      "sha256": "6bafd8ffdad60e4a0fed025e772d3738384b4715b61c183123f588d3ed29584b",
+      "bytes": 406,
+      "sourceSha256": "27e50bf45c3a98f32624f60149af66d4b6c48606ccfc5c2a27158d35360ba7f3",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-T1-traffic.svg",
+      "destination": "assets/game/reviewed/indicator.T1.svg",
+      "sha256": "faf8f60dde566ff62bf5f913a975ced43d771eec2aed41a820176f21c9b47d2e",
+      "bytes": 407,
+      "sourceSha256": "59eae130acfe07a1909781c083c3910671e0c11a3e567e1e2a49982f46e46428",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-T2-transit.svg",
+      "destination": "assets/game/reviewed/indicator.T2.svg",
+      "sha256": "823d7f073332b2403c61223b7e815811697b907b8e21ae62362056d2defcf0f4",
+      "bytes": 513,
+      "sourceSha256": "71d4f4c1ac25ca7cc7882103de2f63127a3b84345c3f17c007cc6520b0257caa",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-S1-education.svg",
+      "destination": "assets/game/reviewed/indicator.S1.svg",
+      "sha256": "f386d4a6a69fe2177c289a4349aa97e9f15a500d2da834795c12d5bbd47a6a6c",
+      "bytes": 344,
+      "sourceSha256": "28e2aa3fb6cf3cd5b988dd190997c857dfd01c57337a4d286a6b6fadc7c4bd54",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-S2-health.svg",
+      "destination": "assets/game/reviewed/indicator.S2.svg",
+      "sha256": "49aa583eb58e8e6b32962124920e4ef303dbc79db2f666fbd97c0fb98f199ce2",
+      "bytes": 405,
+      "sourceSha256": "2b352eb1c1fc49789456866c02d5e190ac8705117db8482091a226e02ce542e8",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-B1-lighting.svg",
+      "destination": "assets/game/reviewed/indicator.B1.svg",
+      "sha256": "a482f8fca67725fa838bcf00705f665260a540c6f6429d3650f7dcabeb1c0db9",
+      "bytes": 518,
+      "sourceSha256": "eb8e36c2bc7d96029a56ac964b2b8930caa37aa6b0bd6f61c2458ec36543b504",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-B2-crossing.svg",
+      "destination": "assets/game/reviewed/indicator.B2.svg",
+      "sha256": "084b9cf4b5a5c309892763296968aa1ad7f1a2c23f0da5d556257a8053715ef1",
+      "bytes": 366,
+      "sourceSha256": "9f583074611efe409a96adb2946a68a72d20a878bc7a6aca55803d233fe4dd7c",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-C1-utilities.svg",
+      "destination": "assets/game/reviewed/indicator.C1.svg",
+      "sha256": "986ccee3fa48d66fc80552baf4922a2fa709856f6402d303a929c18e764311df",
+      "bytes": 395,
+      "sourceSha256": "a4c82d616238749cb85a0fb4495e923c4b6c58259b3286d16f0b0122518f82b1",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-C2-requests.svg",
+      "destination": "assets/game/reviewed/indicator.C2.svg",
+      "sha256": "53b9d6f446e5df33666c1b396665ed89ce4135b77575c2ee69419fc6f974ec20",
+      "bytes": 380,
+      "sourceSha256": "8ae0fe09eb8dd78ebab2c6b10654ca6787cfdfd24213f5171f2182bf374586b6",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/sources/world/ground-grass-top.svg",
+      "destination": "assets/game/reviewed/ground-grass-top.svg",
+      "sha256": "0d26c5fa9f7d760f45ca65a162e513acde06799d2dafc4e723e3a7d7d82750e1",
+      "bytes": 929,
+      "sourceSha256": "0d26c5fa9f7d760f45ca65a162e513acde06799d2dafc4e723e3a7d7d82750e1",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/sources/world/ground-grass-tilted.svg",
+      "destination": "assets/game/reviewed/ground-grass-tilted.svg",
+      "sha256": "ad421842230d8f7dd6e7a91b2fcad90443edf1f9a5db92e5620bd3da1da68674",
+      "bytes": 1038,
+      "sourceSha256": "ad421842230d8f7dd6e7a91b2fcad90443edf1f9a5db92e5620bd3da1da68674",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/sources/world/road-straight-top.svg",
+      "destination": "assets/game/reviewed/road-straight-top.svg",
+      "sha256": "69b85cb5458357b86f8c7372aeed3bebd23288d9639c86a73945c8682d87eb1d",
+      "bytes": 735,
+      "sourceSha256": "69b85cb5458357b86f8c7372aeed3bebd23288d9639c86a73945c8682d87eb1d",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/sources/world/road-straight-tilted.svg",
+      "destination": "assets/game/reviewed/road-straight-tilted.svg",
+      "sha256": "c50affb5bf36b940f92ecd037583e32863034de1c0bc80e3a0d0765070684e3f",
+      "bytes": 981,
+      "sourceSha256": "c50affb5bf36b940f92ecd037583e32863034de1c0bc80e3a0d0765070684e3f",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-E1-greenery.svg",
+      "destination": "assets/game/reviewed/indicator.E1.svg",
+      "sha256": "cae5ae462eed58517fdf591ad25bbec6ef8eb58bc9b4659881668c0594b3bc00",
+      "bytes": 364,
+      "sourceSha256": "31ec1533db440b87b8b2398cc12e679aef4af602668bc894060e580a745a1728",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    },
+    {
+      "source": "assets/exports/icons/indicator-E2-air.svg",
+      "destination": "assets/game/reviewed/indicator.E2.svg",
+      "sha256": "408d491106035cc9d31841d097b410b195316eb2bbff51bf5a55f717603f08f5",
+      "bytes": 329,
+      "sourceSha256": "dca329215531300c6600b250e2d62576d92f1585c258ba8784586dec4ac138f1",
+      "transform": "Only CRLF-to-LF text normalization; SVG drawing unchanged"
+    }
+  ],
+  "inventory": [
+    {
+      "path": "assets/previews/agent-01-style-v2.png",
+      "bytes": 1583125,
+      "sha256": "14900785103ba0bcf673d005bf66253a13dd555019764bc0af95f1eadb9274c1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1774,
+      "height": 887,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-01-style.png",
+      "bytes": 2398676,
+      "sha256": "6cfc2cc2dbcf842669534808a37d1d16cc0472f9589f39d040c3c1267e9675bf",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1774,
+      "height": 887,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-03-world.png",
+      "bytes": 1901080,
+      "sha256": "08fb0f255d2c7c90b4ffee269d72a37919054a263e13476a7a1d057ee94e00bb",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1536,
+      "height": 1024,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-04-buildings-v2.png",
+      "bytes": 1300647,
+      "sha256": "2a5e19d4a39874a43ecfbfef4fcd9805dde559bac246619721b95c88e6818609",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 2169,
+      "height": 725,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-04-buildings.png",
+      "bytes": 1812371,
+      "sha256": "ea1150f61c8a81b6be3a142f33114cdd93bed95188f7deeb5a11c60455bb8de2",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 2170,
+      "height": 725,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-05-characters.png",
+      "bytes": 1490514,
+      "sha256": "84dd34ada59d6a8e1c9406866bc3bfc4cb9c6a8c68893f393f800e2dc3260775",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1942,
+      "height": 809,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-06-vehicles-v2.png",
+      "bytes": 1579941,
+      "sha256": "8d640b09a8c46e89ad65f6915bed19b1b7f798c59c742a94d34844631fe708f7",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1536,
+      "height": 1024,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-06-vehicles.png",
+      "bytes": 2452011,
+      "sha256": "936ec3393e29d112f6ceb2f9c2458695ccf012ef2067e9cceea81935e9527bd3",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1536,
+      "height": 1024,
+      "colorType": 6,
+      "alphaChannel": true,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-07-policies-M01-M07.png",
+      "bytes": 1857299,
+      "sha256": "acbb2f70f5c6e3029e229d4309c3fd23394ac4c0e4a2e9ffcd1b1e1d36b8d130",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1915,
+      "height": 821,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-08-policies-M08-M14.png",
+      "bytes": 1476209,
+      "sha256": "667924a8c2fb6f05292860e1545eb8973c1a878adaade2532864da09edf3523f",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1659,
+      "height": 948,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-09-hud-icons.png",
+      "bytes": 1478946,
+      "sha256": "0dd9948dbfbef9eeae7e4f3e72656644407fbd638ea3ecd6a1e8afed76831b09",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1536,
+      "height": 1024,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/previews/agent-10-effects.png",
+      "bytes": 1467144,
+      "sha256": "ded9ebc61ea6a91bb04ba5bbb99511fb19fd338b3c06d85522c06fac511c9c26",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 1774,
+      "height": 887,
+      "colorType": 2,
+      "alphaChannel": false,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/sources/effects/ASSET-MANIFEST.csv",
+      "bytes": 2001,
+      "sha256": "ee31812f906cfa970f17b7650f21b3becbe2a8b8e9bce37a25269a53f7c26aaf",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/sources/effects/better-transit.svg",
+      "bytes": 483,
+      "sha256": "48717fd70a04ca3897bfaff248dba25e85af0d6a7477f9281fa768e986dcfc22",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/citizen-calm.svg",
+      "bytes": 450,
+      "sha256": "08d71d7f5b4f925c2d9cd9b2fcb7cd2f3bb49e25de080a47cee5a2c6eba3a855",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/citizen-cheer.svg",
+      "bytes": 639,
+      "sha256": "02044de317479be69eafff895e0574423d2ee3b5df18600c881e1d44f4ac70ce",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/citizen-concerned.svg",
+      "bytes": 534,
+      "sha256": "11d0325c5c736fbb74abbb78adf18520bca5118f9a115b24edeea95879756e24",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/cleaner-air.svg",
+      "bytes": 367,
+      "sha256": "0442e31a3f9f8df5c4790dc9e980ba328b7119c0a18483d5a41e10c612366735",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/clinic-access.svg",
+      "bytes": 509,
+      "sha256": "1f1f897a607eef05603dd9ed7384998611d76d7a6a7499f4b9232b4a93521040",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/connection-path.svg",
+      "bytes": 478,
+      "sha256": "4b64583c55e846565766b72b729c76233baa89b5ddb3711fd227bd3213303234",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/critical-warning.svg",
+      "bytes": 349,
+      "sha256": "09831cc9e7fa499e68e0d7020edf8f07e7d8c0660e5b4cbdc309480f811a4da1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/effects.css",
+      "bytes": 1650,
+      "sha256": "630c7e64133bfdc4a7bb41dd6a322fbc7e8ad12b8420e1a0454e9426d53c3c01",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/sources/effects/finish-higher.svg",
+      "bytes": 437,
+      "sha256": "a4a656abc1cbb5fb162a0c9f99c302918e95cdf099d77e863252cd3a72456603",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/finish-restrained.svg",
+      "bytes": 432,
+      "sha256": "b0b96b91ab89c105a45b90af8ab8be4ac5418d598b6c4983d0d2bebe98edf9ae",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/generate-effects.mjs",
+      "bytes": 8557,
+      "sha256": "2e4432e1292a8f73e2c6f8f881d30b8d47f23196ba32dee0b4086cb38db2eddf",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/sources/effects/greenery-improved.svg",
+      "bytes": 655,
+      "sha256": "9d3fa97cd27c93442001e238a8b04a596c1a4d71a48728f63411ae53d56a38e2",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/negative-tradeoff.svg",
+      "bytes": 363,
+      "sha256": "3d8b3e648073ed8522a869340eddac497388aea0684c9536f0f60c92bb056fa4",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/placement-pulse.svg",
+      "bytes": 435,
+      "sha256": "f93d741427d12da4690720fc82f5f64a4d343532b14fc51aba9fbfde58dee3e0",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/positive-improvement.svg",
+      "bytes": 325,
+      "sha256": "b094b637666e750165cd35eb82bb1fd9ec9b424169a7d459a257f488484398cf",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/README.md",
+      "bytes": 1464,
+      "sha256": "8207b469644f18a298fa1041f6a18af5f03f9a39f20a3865e833d7790ca4ad5c",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/sources/effects/safer-roads.svg",
+      "bytes": 575,
+      "sha256": "0989a7d1f53565f157d3784fc3c97a34ed1c4c25d42798d97e3efabc82255fce",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/school-access.svg",
+      "bytes": 573,
+      "sha256": "867b895883201a14e5f6b2f7f0a0cd702e8cea9a2639bc4a3b752223486f947c",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/effects/utilities-improved.svg",
+      "bytes": 398,
+      "sha256": "b560e1c40af78033625d77ffdea2620bc5d9f787811695927f2326746ad3822d",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/ASSET-MANIFEST.csv",
+      "bytes": 5730,
+      "sha256": "1f46451c4ef124c6c02c4f13924ebb40301dfd0206c528590daf97da9e0ea738",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/sources/icons/build_favicon.cjs",
+      "bytes": 1537,
+      "sha256": "b618440b4a519ffcab7670c78a950c4b08a7159535a3fa9a781763c498e21898",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/sources/icons/build_icons.py",
+      "bytes": 8311,
+      "sha256": "758c22bccc063d4469e8a75afaa241c7a8d9bad1a0f05b65dbe15d26c80547c1",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/sources/icons/category-city-services.svg",
+      "bytes": 407,
+      "sha256": "27e50bf45c3a98f32624f60149af66d4b6c48606ccfc5c2a27158d35360ba7f3",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/category-ecology.svg",
+      "bytes": 365,
+      "sha256": "31ec1533db440b87b8b2398cc12e679aef4af602668bc894060e580a745a1728",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/category-safety.svg",
+      "bytes": 337,
+      "sha256": "018b00c01817868e7b49946e670e3eda348fef391fbaac7b31cdf6797c8e4bb8",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/category-social-services.svg",
+      "bytes": 564,
+      "sha256": "77dba1c9ca3bb40552ca5be646c4615c4d12c8aad72ea307fab65de5c3038063",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/category-transport.svg",
+      "bytes": 514,
+      "sha256": "0dd4afdc5a25e1594962eb5d21822f7ffce7f20de48fcca956c692fdeb221c90",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-budget.svg",
+      "bytes": 326,
+      "sha256": "d2339bb35e3372823317fe557be19e9a931e811e11fe468bfc5b26ffad92b4b1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-compare.svg",
+      "bytes": 313,
+      "sha256": "a3713c68664c8b1bf4eb430c3221235ea1e019461ab3cff0e2e5cc287728f6b8",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-critical.svg",
+      "bytes": 516,
+      "sha256": "d2fd4658362f0cf5a5d802061a82e543e980ee4da1765d4d173df56f3c81c022",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-info.svg",
+      "bytes": 347,
+      "sha256": "a5cb6ad9bc4022c9dcd34ec36bf758a4da8837cecad76a827e950ca955a37548",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-locked.svg",
+      "bytes": 334,
+      "sha256": "61367306e7220c9f5de89f7cc6ff4db4c927456ca63ddf86bfedb2bca1ee1d1a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-pause.svg",
+      "bytes": 353,
+      "sha256": "01c1b107b8bf6354b9d9d4be16fd6279f8e3e0b85ea895eaeec19e364c2d635a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-play.svg",
+      "bytes": 229,
+      "sha256": "2193e1ef9172ec0ca836e194906b8fc626eb7e843f206bb2b7431c9cda527e9a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-quarter.svg",
+      "bytes": 555,
+      "sha256": "917bc4182b5bc85d1db5912cd2942b69dd9da930038561fb337c1fef42911a6e",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-score.svg",
+      "bytes": 357,
+      "sha256": "c784b1693b85361a04b68fc3edc6886026d9bc845ade0515dff431083b9a061a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-selected.svg",
+      "bytes": 599,
+      "sha256": "a413b57838ea0cd5335fa163fab16c43a17f90e07941fd068d35f58592125901",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-skip.svg",
+      "bytes": 247,
+      "sha256": "9d3f2fff991745e220bf970580650bec984cec29aa78162b5e5545786ab67791",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-sound-off.svg",
+      "bytes": 375,
+      "sha256": "72251e0757c25ffb19d01f82bc4e425b8d5257ec9d9da72079c9e64e93bad5be",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-sound-on.svg",
+      "bytes": 333,
+      "sha256": "3a5346021cf8cbc22624c6d946ebf0b54dcfe448ffb0b0cead95b8a0d5786630",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-synergy.svg",
+      "bytes": 270,
+      "sha256": "13c691f4ee80d6cb9a3bcdbaf823a53694124f7f876a6c2b1f7b43365ad4759a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-turn.svg",
+      "bytes": 304,
+      "sha256": "f0d469f8ce3e00bcd5b4b41675119500451b03707f6f1eac65656fea85e5112b",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-undo.svg",
+      "bytes": 260,
+      "sha256": "b89f254ae3eb8a4565f25021fbed57e54c1c6878d2af51d7c07f4aebd72c0a9a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/hud-warning.svg",
+      "bytes": 300,
+      "sha256": "04811f12883d802391b168c451aa8156dee0426765a91fae6d37e6ff229b1dd3",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-B1-lighting.svg",
+      "bytes": 519,
+      "sha256": "eb8e36c2bc7d96029a56ac964b2b8930caa37aa6b0bd6f61c2458ec36543b504",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-B2-crossing.svg",
+      "bytes": 367,
+      "sha256": "9f583074611efe409a96adb2946a68a72d20a878bc7a6aca55803d233fe4dd7c",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-C1-utilities.svg",
+      "bytes": 396,
+      "sha256": "a4c82d616238749cb85a0fb4495e923c4b6c58259b3286d16f0b0122518f82b1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-C2-requests.svg",
+      "bytes": 381,
+      "sha256": "8ae0fe09eb8dd78ebab2c6b10654ca6787cfdfd24213f5171f2182bf374586b6",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-E1-greenery.svg",
+      "bytes": 365,
+      "sha256": "31ec1533db440b87b8b2398cc12e679aef4af602668bc894060e580a745a1728",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-E2-air.svg",
+      "bytes": 330,
+      "sha256": "dca329215531300c6600b250e2d62576d92f1585c258ba8784586dec4ac138f1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-S1-education.svg",
+      "bytes": 345,
+      "sha256": "28e2aa3fb6cf3cd5b988dd190997c857dfd01c57337a4d286a6b6fadc7c4bd54",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-S2-health.svg",
+      "bytes": 406,
+      "sha256": "2b352eb1c1fc49789456866c02d5e190ac8705117db8482091a226e02ce542e8",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-T1-traffic.svg",
+      "bytes": 408,
+      "sha256": "59eae130acfe07a1909781c083c3910671e0c11a3e567e1e2a49982f46e46428",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/indicator-T2-transit.svg",
+      "bytes": 514,
+      "sha256": "71d4f4c1ac25ca7cc7882103de2f63127a3b84345c3f17c007cc6520b0257caa",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/logo-app.svg",
+      "bytes": 434,
+      "sha256": "0c0abb853c3f7759da703d7dd72dc0297c928792206fa28db57fb3b736ee82be",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/map-bus.svg",
+      "bytes": 514,
+      "sha256": "0dd4afdc5a25e1594962eb5d21822f7ffce7f20de48fcca956c692fdeb221c90",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/map-citizen.svg",
+      "bytes": 325,
+      "sha256": "54fc0ba13bb7293efba0f20af908287dd6df2a8e019bba0851a0f09f47fb9f8e",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/map-citywide.svg",
+      "bytes": 394,
+      "sha256": "e2b5ce4370beb2c52d0492fa1ae4ec0ef1c356deb70886aafd92beadbe5eae9a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/map-district.svg",
+      "bytes": 329,
+      "sha256": "676fe3e9c4d9a80e4203318efb821737c0ceff4589ed244e8e078e2ba8f81558",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/map-lrt.svg",
+      "bytes": 565,
+      "sha256": "e39a827494d0854d45aa8348e2582fd9f84777b8ba071fa12aebaf9031b21c8d",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/map-road.svg",
+      "bytes": 266,
+      "sha256": "ec815e8fb24ca66f5eeed86739d621ba08cd89524dff30628c7d4686fe346785",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/icons/map-transport.svg",
+      "bytes": 401,
+      "sha256": "232ce6184459dee487577fb6412b2ebee6c0e7e5d6950047df860e1f2796ae33",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/world/ground-grass-tilted.svg",
+      "bytes": 1038,
+      "sha256": "ad421842230d8f7dd6e7a91b2fcad90443edf1f9a5db92e5620bd3da1da68674",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/world/ground-grass-top.svg",
+      "bytes": 929,
+      "sha256": "0d26c5fa9f7d760f45ca65a162e513acde06799d2dafc4e723e3a7d7d82750e1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/world/road-straight-tilted.svg",
+      "bytes": 981,
+      "sha256": "c50affb5bf36b940f92ecd037583e32863034de1c0bc80e3a0d0765070684e3f",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/sources/world/road-straight-top.svg",
+      "bytes": 735,
+      "sha256": "69b85cb5458357b86f8c7372aeed3bebd23288d9639c86a73945c8682d87eb1d",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/better-transit.svg",
+      "bytes": 483,
+      "sha256": "48717fd70a04ca3897bfaff248dba25e85af0d6a7477f9281fa768e986dcfc22",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/citizen-calm.svg",
+      "bytes": 450,
+      "sha256": "08d71d7f5b4f925c2d9cd9b2fcb7cd2f3bb49e25de080a47cee5a2c6eba3a855",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/citizen-cheer.svg",
+      "bytes": 639,
+      "sha256": "02044de317479be69eafff895e0574423d2ee3b5df18600c881e1d44f4ac70ce",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/citizen-concerned.svg",
+      "bytes": 534,
+      "sha256": "11d0325c5c736fbb74abbb78adf18520bca5118f9a115b24edeea95879756e24",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/cleaner-air.svg",
+      "bytes": 367,
+      "sha256": "0442e31a3f9f8df5c4790dc9e980ba328b7119c0a18483d5a41e10c612366735",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/clinic-access.svg",
+      "bytes": 509,
+      "sha256": "1f1f897a607eef05603dd9ed7384998611d76d7a6a7499f4b9232b4a93521040",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/connection-path.svg",
+      "bytes": 478,
+      "sha256": "4b64583c55e846565766b72b729c76233baa89b5ddb3711fd227bd3213303234",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/critical-warning.svg",
+      "bytes": 349,
+      "sha256": "09831cc9e7fa499e68e0d7020edf8f07e7d8c0660e5b4cbdc309480f811a4da1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/effects.css",
+      "bytes": 1650,
+      "sha256": "630c7e64133bfdc4a7bb41dd6a322fbc7e8ad12b8420e1a0454e9426d53c3c01",
+      "disposition": "retained outside runtime; not imported by this checkpoint"
+    },
+    {
+      "path": "assets/exports/effects/finish-higher.svg",
+      "bytes": 437,
+      "sha256": "a4a656abc1cbb5fb162a0c9f99c302918e95cdf099d77e863252cd3a72456603",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/finish-restrained.svg",
+      "bytes": 432,
+      "sha256": "b0b96b91ab89c105a45b90af8ab8be4ac5418d598b6c4983d0d2bebe98edf9ae",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/greenery-improved.svg",
+      "bytes": 655,
+      "sha256": "9d3fa97cd27c93442001e238a8b04a596c1a4d71a48728f63411ae53d56a38e2",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/negative-tradeoff.svg",
+      "bytes": 363,
+      "sha256": "3d8b3e648073ed8522a869340eddac497388aea0684c9536f0f60c92bb056fa4",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/placement-pulse.svg",
+      "bytes": 435,
+      "sha256": "f93d741427d12da4690720fc82f5f64a4d343532b14fc51aba9fbfde58dee3e0",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/positive-improvement.svg",
+      "bytes": 325,
+      "sha256": "b094b637666e750165cd35eb82bb1fd9ec9b424169a7d459a257f488484398cf",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/safer-roads.svg",
+      "bytes": 575,
+      "sha256": "0989a7d1f53565f157d3784fc3c97a34ed1c4c25d42798d97e3efabc82255fce",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/school-access.svg",
+      "bytes": 573,
+      "sha256": "867b895883201a14e5f6b2f7f0a0cd702e8cea9a2639bc4a3b752223486f947c",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/effects/utilities-improved.svg",
+      "bytes": 398,
+      "sha256": "b560e1c40af78033625d77ffdea2620bc5d9f787811695927f2326746ad3822d",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/favicon/favicon-16.png",
+      "bytes": 577,
+      "sha256": "47f3bf133254daf8c5f6c8aa42fea0ab4d26de8c691e3dbb72130e7389f1ee22",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 16,
+      "height": 16,
+      "colorType": 6,
+      "alphaChannel": true,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/exports/favicon/favicon-192.png",
+      "bytes": 4692,
+      "sha256": "034c822db45765802f9030adbcf3da660a869a8dd92b086f875d226e0d03530b",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 192,
+      "height": 192,
+      "colorType": 6,
+      "alphaChannel": true,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/exports/favicon/favicon-32.png",
+      "bytes": 943,
+      "sha256": "d48ae9d7df79ee90c27d9c9742516d2008b0d59be0fea7939262587ffba394b9",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 32,
+      "height": 32,
+      "colorType": 6,
+      "alphaChannel": true,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/exports/favicon/favicon-512.png",
+      "bytes": 13554,
+      "sha256": "7a22ae77a189efacadf827b79724466069beff59f49cef530d636aacbc2893a6",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 512,
+      "height": 512,
+      "colorType": 6,
+      "alphaChannel": true,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/exports/favicon/favicon-64.png",
+      "bytes": 1693,
+      "sha256": "e968ce0eab5584302681a6b1acb9acbf74cd005ab5f30d2c10f41f8acd8f7c03",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "width": 64,
+      "height": 64,
+      "colorType": 6,
+      "alphaChannel": true,
+      "note": "Alpha channel presence does not prove transparent background; composite previews need individual exports."
+    },
+    {
+      "path": "assets/exports/favicon/favicon.svg",
+      "bytes": 434,
+      "sha256": "0c0abb853c3f7759da703d7dd72dc0297c928792206fa28db57fb3b736ee82be",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/category-city-services.svg",
+      "bytes": 407,
+      "sha256": "27e50bf45c3a98f32624f60149af66d4b6c48606ccfc5c2a27158d35360ba7f3",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/category-ecology.svg",
+      "bytes": 365,
+      "sha256": "31ec1533db440b87b8b2398cc12e679aef4af602668bc894060e580a745a1728",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/category-safety.svg",
+      "bytes": 337,
+      "sha256": "018b00c01817868e7b49946e670e3eda348fef391fbaac7b31cdf6797c8e4bb8",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/category-social-services.svg",
+      "bytes": 564,
+      "sha256": "77dba1c9ca3bb40552ca5be646c4615c4d12c8aad72ea307fab65de5c3038063",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/category-transport.svg",
+      "bytes": 514,
+      "sha256": "0dd4afdc5a25e1594962eb5d21822f7ffce7f20de48fcca956c692fdeb221c90",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-budget.svg",
+      "bytes": 326,
+      "sha256": "d2339bb35e3372823317fe557be19e9a931e811e11fe468bfc5b26ffad92b4b1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-compare.svg",
+      "bytes": 313,
+      "sha256": "a3713c68664c8b1bf4eb430c3221235ea1e019461ab3cff0e2e5cc287728f6b8",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-critical.svg",
+      "bytes": 516,
+      "sha256": "d2fd4658362f0cf5a5d802061a82e543e980ee4da1765d4d173df56f3c81c022",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-info.svg",
+      "bytes": 347,
+      "sha256": "a5cb6ad9bc4022c9dcd34ec36bf758a4da8837cecad76a827e950ca955a37548",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-locked.svg",
+      "bytes": 334,
+      "sha256": "61367306e7220c9f5de89f7cc6ff4db4c927456ca63ddf86bfedb2bca1ee1d1a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-pause.svg",
+      "bytes": 353,
+      "sha256": "01c1b107b8bf6354b9d9d4be16fd6279f8e3e0b85ea895eaeec19e364c2d635a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-play.svg",
+      "bytes": 229,
+      "sha256": "2193e1ef9172ec0ca836e194906b8fc626eb7e843f206bb2b7431c9cda527e9a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-quarter.svg",
+      "bytes": 555,
+      "sha256": "917bc4182b5bc85d1db5912cd2942b69dd9da930038561fb337c1fef42911a6e",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-score.svg",
+      "bytes": 357,
+      "sha256": "c784b1693b85361a04b68fc3edc6886026d9bc845ade0515dff431083b9a061a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-selected.svg",
+      "bytes": 599,
+      "sha256": "a413b57838ea0cd5335fa163fab16c43a17f90e07941fd068d35f58592125901",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-skip.svg",
+      "bytes": 247,
+      "sha256": "9d3f2fff991745e220bf970580650bec984cec29aa78162b5e5545786ab67791",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-sound-off.svg",
+      "bytes": 375,
+      "sha256": "72251e0757c25ffb19d01f82bc4e425b8d5257ec9d9da72079c9e64e93bad5be",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-sound-on.svg",
+      "bytes": 333,
+      "sha256": "3a5346021cf8cbc22624c6d946ebf0b54dcfe448ffb0b0cead95b8a0d5786630",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-synergy.svg",
+      "bytes": 270,
+      "sha256": "13c691f4ee80d6cb9a3bcdbaf823a53694124f7f876a6c2b1f7b43365ad4759a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-turn.svg",
+      "bytes": 304,
+      "sha256": "f0d469f8ce3e00bcd5b4b41675119500451b03707f6f1eac65656fea85e5112b",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-undo.svg",
+      "bytes": 260,
+      "sha256": "b89f254ae3eb8a4565f25021fbed57e54c1c6878d2af51d7c07f4aebd72c0a9a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/hud-warning.svg",
+      "bytes": 300,
+      "sha256": "04811f12883d802391b168c451aa8156dee0426765a91fae6d37e6ff229b1dd3",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-B1-lighting.svg",
+      "bytes": 519,
+      "sha256": "eb8e36c2bc7d96029a56ac964b2b8930caa37aa6b0bd6f61c2458ec36543b504",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-B2-crossing.svg",
+      "bytes": 367,
+      "sha256": "9f583074611efe409a96adb2946a68a72d20a878bc7a6aca55803d233fe4dd7c",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-C1-utilities.svg",
+      "bytes": 396,
+      "sha256": "a4c82d616238749cb85a0fb4495e923c4b6c58259b3286d16f0b0122518f82b1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-C2-requests.svg",
+      "bytes": 381,
+      "sha256": "8ae0fe09eb8dd78ebab2c6b10654ca6787cfdfd24213f5171f2182bf374586b6",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-E1-greenery.svg",
+      "bytes": 365,
+      "sha256": "31ec1533db440b87b8b2398cc12e679aef4af602668bc894060e580a745a1728",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-E2-air.svg",
+      "bytes": 330,
+      "sha256": "dca329215531300c6600b250e2d62576d92f1585c258ba8784586dec4ac138f1",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-S1-education.svg",
+      "bytes": 345,
+      "sha256": "28e2aa3fb6cf3cd5b988dd190997c857dfd01c57337a4d286a6b6fadc7c4bd54",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-S2-health.svg",
+      "bytes": 406,
+      "sha256": "2b352eb1c1fc49789456866c02d5e190ac8705117db8482091a226e02ce542e8",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-T1-traffic.svg",
+      "bytes": 408,
+      "sha256": "59eae130acfe07a1909781c083c3910671e0c11a3e567e1e2a49982f46e46428",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/indicator-T2-transit.svg",
+      "bytes": 514,
+      "sha256": "71d4f4c1ac25ca7cc7882103de2f63127a3b84345c3f17c007cc6520b0257caa",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/logo-app.svg",
+      "bytes": 434,
+      "sha256": "0c0abb853c3f7759da703d7dd72dc0297c928792206fa28db57fb3b736ee82be",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/map-bus.svg",
+      "bytes": 514,
+      "sha256": "0dd4afdc5a25e1594962eb5d21822f7ffce7f20de48fcca956c692fdeb221c90",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/map-citizen.svg",
+      "bytes": 325,
+      "sha256": "54fc0ba13bb7293efba0f20af908287dd6df2a8e019bba0851a0f09f47fb9f8e",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/map-citywide.svg",
+      "bytes": 394,
+      "sha256": "e2b5ce4370beb2c52d0492fa1ae4ec0ef1c356deb70886aafd92beadbe5eae9a",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/map-district.svg",
+      "bytes": 329,
+      "sha256": "676fe3e9c4d9a80e4203318efb821737c0ceff4589ed244e8e078e2ba8f81558",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/map-lrt.svg",
+      "bytes": 565,
+      "sha256": "e39a827494d0854d45aa8348e2582fd9f84777b8ba071fa12aebaf9031b21c8d",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/map-road.svg",
+      "bytes": 266,
+      "sha256": "ec815e8fb24ca66f5eeed86739d621ba08cd89524dff30628c7d4686fe346785",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    },
+    {
+      "path": "assets/exports/icons/map-transport.svg",
+      "bytes": 401,
+      "sha256": "232ce6184459dee487577fb6412b2ebee6c0e7e5d6950047df860e1f2796ae33",
+      "disposition": "retained outside runtime; not imported by this checkpoint",
+      "svgSecurity": "pass-conservative-intake"
+    }
+  ],
+  "starterFiles": [
+    {
+      "path": "assets/game/measure-icons.svg",
+      "bytes": 3205,
+      "sha256": "df34f6f926f85d40c45c9be674a6cbddf376951928c27117c436cfc6fc2ba321",
+      "sourceId": "starter-original",
+      "baseline": "1ee0698c4e18788a30ab30bee560a8740bcd3989"
+    },
+    {
+      "path": "assets/game/miniature-kit.svg",
+      "bytes": 3439,
+      "sha256": "7bd780e64a8818eefc4cd5076c31a0fd4bb3c451d1d6af2d1d39690707924d92",
+      "sourceId": "starter-original",
+      "baseline": "1ee0698c4e18788a30ab30bee560a8740bcd3989"
+    }
+  ]
+}
