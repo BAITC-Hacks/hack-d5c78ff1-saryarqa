@@ -1,100 +1,133 @@
 .akim-scene .atlas-play-panel {
-  width: 280px;
+  --play-forest: #183d35;
+  --play-ivory: #f6f8f5;
+  --play-gold: #c59a50;
+  --play-muted: #647568;
+  width: 300px;
   max-width: calc(100% - 24px);
-  color: #254a3d;
-  font: 12px/1.45 -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--play-forest);
+  font: 13px/1.5 "Avenir Next", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   pointer-events: auto;
   z-index: 25;
 }
 .akim-scene .atlas-play-panel .atlas-play-content {
   box-sizing: border-box;
-  max-height: min(76vh, 700px);
+  max-height: min(78vh, 760px);
   overflow: auto;
   overscroll-behavior: contain;
   scrollbar-width: thin;
-  scrollbar-color: #b4bfaa transparent;
-  border: 1px solid #d4d9c8;
-  border-radius: 18px;
-  background: #fbfaf1f5;
-  box-shadow: 0 12px 40px #14382a1c, 0 2px 6px #14382a0a;
-  padding: 17px;
-  backdrop-filter: blur(16px);
+  scrollbar-color: #b9c3b3 transparent;
+  border: 1px solid #fffffa;
+  border-radius: 20px;
+  background: var(--play-ivory);
+  box-shadow: 0 16px 48px #183d3526, 0 2px 8px #183d350f;
+  padding: 20px;
 }
 .akim-scene .atlas-play-panel [hidden] { display: none !important; }
 .akim-scene .atlas-play-panel button,
 .akim-scene .atlas-play-panel select { font: inherit; color: inherit; }
-.akim-scene .atlas-play-panel button { cursor: pointer; }
-.akim-scene .atlas-play-panel button:disabled { cursor: default; opacity: .42; }
+.akim-scene .atlas-play-panel button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.akim-scene .atlas-play-panel button:disabled { cursor: default; opacity: .45; }
 .akim-scene .atlas-play-panel button:focus-visible,
-.akim-scene .atlas-play-panel select:focus-visible { outline: 3px solid #b4934d; outline-offset: 3px; }
-.akim-scene .atlas-play-panel .atlas-play-eyebrow { color: #89917b; font-size: 8px; font-weight: 650; letter-spacing: .12em; }
-.akim-scene .atlas-play-panel .atlas-play-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 5px 0 14px; }
-.akim-scene .atlas-play-panel h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -.04em; }
-.akim-scene .atlas-play-panel .atlas-play-toggle { border: 1px solid #d2d7c7; border-radius: 8px; background: transparent; padding: 7px 9px; font-size: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-toggle:hover { background: #e9eddd; }
-.akim-scene .atlas-play-panel .atlas-play-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-metrics > div { display: flex; flex-direction: column; border-left: 2px solid #cbd4b8; padding-left: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-metrics strong { font-size: 26px; line-height: 1.2; font-weight: 500; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
-.akim-scene .atlas-play-panel .atlas-play-metrics span { font-size: 9px; color: #7e8a70; }
-.akim-scene .atlas-play-panel .atlas-play-metrics .is-over-budget { border-color: #c07859; color: #a14c30; }
-.akim-scene .atlas-play-panel .atlas-play-progress { height: 4px; border-radius: 9px; background: #e1e6d5; margin-top: 14px; overflow: hidden; }
-.akim-scene .atlas-play-panel .atlas-play-progress span { display: block; height: 100%; width: 0; background: #829960; border-radius: inherit; transition: width .2s ease; }
-.akim-scene .atlas-play-panel .atlas-play-summary { margin: 9px 0 12px; color: #738166; font-size: 10px; line-height: 1.5; }
-.akim-scene .atlas-play-panel .atlas-play-editor { border-top: 1px solid #dde2d1; margin-top: 10px; padding-top: 12px; }
-.akim-scene .atlas-play-panel .atlas-play-rules { margin: 0 0 14px; color: #7d876f; font-size: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-group { margin: 0 0 15px; }
-.akim-scene .atlas-play-panel .atlas-play-group h3 { margin: 0 0 7px; font-size: 10px; letter-spacing: .035em; color: #8b915e; font-weight: 650; }
-.akim-scene .atlas-play-panel .atlas-play-measure { border: 1px solid #e0e4d6; border-radius: 10px; padding: 10px; margin-bottom: 6px; background: #fffffb; }
-.akim-scene .atlas-play-panel .atlas-play-measure.is-selected { border-color: #96a980; background: #edf2e3; }
-.akim-scene .atlas-play-panel .atlas-play-measure-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
-.akim-scene .atlas-play-panel .atlas-play-measure-name { font-size: 11px; line-height: 1.4; font-weight: 550; }
-.akim-scene .atlas-play-panel .atlas-play-add { flex: 0 0 30px; height: 30px; border: 1px solid #bfcdb0; border-radius: 50%; background: #f9fbf2; font-size: 20px; line-height: 1; }
-.akim-scene .atlas-play-panel .is-selected .atlas-play-add { background: #456b48; border-color: #456b48; color: #fffdf2; }
-.akim-scene .atlas-play-panel .atlas-play-measure-meta { margin: 5px 0 0; font-size: 9px; color: #7d896f; }
-.akim-scene .atlas-play-panel .atlas-play-assignment { display: block; margin-top: 9px; }
-.akim-scene .atlas-play-panel .atlas-play-assignment span { display: block; font-size: 9px; color: #728467; margin-bottom: 4px; }
-.akim-scene .atlas-play-panel .atlas-play-assignment select { box-sizing: border-box; width: 100%; border: 1px solid #b8c7aa; border-radius: 6px; background: #fcfdf5; padding: 8px; font-size: 11px; }
-.akim-scene .atlas-play-panel .atlas-play-errors { padding: 10px 10px 10px 24px; margin: 6px 0 12px; border-radius: 9px; color: #925633; background: #f3ecda; font-size: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-errors li + li { margin-top: 5px; }
-.akim-scene .atlas-play-panel .atlas-play-boundary-note { margin: 0 0 12px; color: #87907c; font-size: 9px; }
-.akim-scene .atlas-play-panel .atlas-play-status { margin: 9px 0; font-size: 10px; color: #76846b; }
-.akim-scene .atlas-play-panel .atlas-play-status[data-state="ready"] { color: #476b3e; }
+.akim-scene .atlas-play-panel select:focus-visible { outline: 3px solid var(--play-gold); outline-offset: 3px; }
+.akim-scene .atlas-play-panel .atlas-play-eyebrow { display: flex; align-items: center; gap: 7px; color: #7c663b; font-size: 11px; font-weight: 600; letter-spacing: .01em; }
+.akim-scene .atlas-play-panel .atlas-play-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--play-gold); border-radius: 50%; box-shadow: 0 0 0 4px #c59a5019; }
+.akim-scene .atlas-play-panel .atlas-play-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin: 9px 0 19px; }
+.akim-scene .atlas-play-panel h2 { margin: 0; font-size: 24px; font-weight: 600; letter-spacing: -.055em; line-height: 1.15; }
+.akim-scene .atlas-play-panel .atlas-play-toggle { flex: 0 0 auto; border: 1px solid #cfdbcd; border-radius: 8px; background: #edf2e8; padding: 8px 9px; font-size: 11px; font-weight: 600; line-height: 1.2; transition: background .15s, border-color .15s; }
+.akim-scene .atlas-play-panel .atlas-play-toggle:hover { background: #e1eada; border-color: #9eb09a; }
+.akim-scene .atlas-play-panel .atlas-play-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 0; background: var(--play-forest); color: #fffcef; padding: 16px 15px; border-radius: 13px 13px 0 0; }
+.akim-scene .atlas-play-panel .atlas-play-metrics > div { display: flex; flex-direction: column; gap: 3px; }
+.akim-scene .atlas-play-panel .atlas-play-metrics > div + div { border-left: 1px solid #ffffff26; padding-left: 20px; }
+.akim-scene .atlas-play-panel .atlas-play-metrics strong { font-size: 31px; line-height: 1; font-weight: 500; letter-spacing: -.055em; font-variant-numeric: tabular-nums; }
+.akim-scene .atlas-play-panel .atlas-play-metrics span { font-size: 11px; color: #c6d5c9; white-space: nowrap; }
+.akim-scene .atlas-play-panel .atlas-play-metrics .is-over-budget strong { color: #ffbf95; }
+.akim-scene .atlas-play-panel .atlas-play-progress { height: 4px; border-radius: 0 0 4px 4px; background: #dae3d5; overflow: hidden; }
+.akim-scene .atlas-play-panel .atlas-play-progress span { display: block; height: 100%; width: 100%; background: var(--play-gold); transition: width .25s ease; }
+.akim-scene .atlas-play-panel .atlas-play-progress.is-over-budget { background: #ca7754; }
+.akim-scene .atlas-play-panel .atlas-play-slots { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 7px; margin: 14px 0 10px; }
+.akim-scene .atlas-play-panel .atlas-play-slot { display: grid; place-items: center; position: relative; height: 37px; border: 1px dashed #c8d1c1; border-radius: 8px; color: #84907c; background: #f3f4e9; font-size: 11px; font-weight: 650; font-variant-numeric: tabular-nums; transition: background .15s, border-color .15s; }
+.akim-scene .atlas-play-panel .atlas-play-slot:hover { background: #e6ecdc; border-color: #a8b899; color: var(--play-forest); }
+.akim-scene .atlas-play-panel .atlas-play-slot.is-filled { border: 1px solid #bdcdb7; background: #e8efdf; color: #355a42; font-size: 20px; }
+.akim-scene .atlas-play-panel .atlas-play-slot.is-filled::after { content: ''; position: absolute; width: 4px; height: 4px; right: 5px; top: 5px; border-radius: 50%; background: #6a8850; }
+.akim-scene .atlas-play-panel .atlas-play-slot.is-unassigned { border-color: #c8a268; background: #f5eedf; }
+.akim-scene .atlas-play-panel .atlas-play-slot.is-unassigned::after { background: #b27f37; }
+.akim-scene .atlas-play-panel .atlas-play-summary { margin: 0 0 13px; color: var(--play-muted); font-size: 12px; line-height: 1.5; }
+.akim-scene .atlas-play-panel .atlas-play-editor { border-top: 1px solid #dde2d3; margin-top: 15px; padding-top: 15px; }
+.akim-scene .atlas-play-panel .atlas-play-rules { margin: 0 0 19px; color: #63735f; font-size: 12px; line-height: 1.6; }
+.akim-scene .atlas-play-panel .atlas-play-group { margin: 0 0 21px; }
+.akim-scene .atlas-play-panel .atlas-play-group h3 { display: flex; align-items: center; gap: 7px; margin: 0 0 9px; font-size: 12px; color: #435d42; font-weight: 650; }
+.akim-scene .atlas-play-panel .atlas-play-direction-mark { display: grid; place-items: center; width: 21px; height: 21px; border-radius: 6px; background: #e9ecdb; color: #7c793f; font-size: 14px; }
+.akim-scene .atlas-play-panel .atlas-play-measure { border: 1px solid #dfe4d5; border-radius: 12px; padding: 12px; margin-bottom: 8px; background: #fffef8; transition: border-color .15s, background .15s; }
+.akim-scene .atlas-play-panel .atlas-play-measure:hover { border-color: #b9c8ad; }
+.akim-scene .atlas-play-panel .atlas-play-measure.is-selected { border-color: #91ab83; background: #edf3e5; border-left: 3px solid #648653; padding-left: 10px; }
+.akim-scene .atlas-play-panel .atlas-play-measure-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+.akim-scene .atlas-play-panel .atlas-play-measure-name { font-size: 13px; line-height: 1.45; font-weight: 600; }
+.akim-scene .atlas-play-panel .atlas-play-add { flex: 0 0 30px; height: 30px; border: 1px solid #c5d1bb; border-radius: 9px; background: #f6f8ef; font-size: 21px; line-height: 1; }
+.akim-scene .atlas-play-panel .atlas-play-add:not(:disabled):hover { border-color: #547446; background: #e5eddc; }
+.akim-scene .atlas-play-panel .is-selected .atlas-play-add { background: var(--play-forest); border-color: var(--play-forest); color: #fffcef; }
+.akim-scene .atlas-play-panel .is-selected .atlas-play-add:hover { background: #355d42; }
+.akim-scene .atlas-play-panel .atlas-play-measure-meta { display: flex; align-items: center; gap: 8px; margin: 9px 0 0; font-size: 11px; color: #687961; }
+.akim-scene .atlas-play-panel .atlas-play-measure-cost { border: 1px solid #d8dfca; border-radius: 5px; background: #f0f2e6; padding: 2px 6px; color: #516841; font-weight: 650; }
+.akim-scene .atlas-play-panel .atlas-play-measure-timing { margin: 6px 0 0; font-size: 11px; color: #788367; }
+.akim-scene .atlas-play-panel .atlas-play-assignment { display: block; margin-top: 11px; padding-top: 10px; border-top: 1px solid #d7e2cb; }
+.akim-scene .atlas-play-panel .atlas-play-assignment span { display: block; font-size: 11px; color: #556c4a; margin-bottom: 5px; font-weight: 550; }
+.akim-scene .atlas-play-panel .atlas-play-assignment select { box-sizing: border-box; width: 100%; min-height: 37px; border: 1px solid #b6c7a8; border-radius: 7px; background: #fffef6; padding: 8px; font-size: 12px; }
+.akim-scene .atlas-play-panel .atlas-play-errors { padding: 12px 12px 12px 27px; margin: 8px 0 15px; border: 1px solid #e6d7b9; border-radius: 10px; color: #8a592f; background: #f7efde; font-size: 12px; }
+.akim-scene .atlas-play-panel .atlas-play-errors li + li { margin-top: 7px; }
+.akim-scene .atlas-play-panel .atlas-play-boundary-note { margin: 0 0 16px; color: #6f7b63; font-size: 11px; line-height: 1.6; }
+.akim-scene .atlas-play-panel .atlas-play-status { margin: 12px 0; font-size: 12px; color: #64745b; line-height: 1.5; }
+.akim-scene .atlas-play-panel .atlas-play-status[data-state="ready"] { color: #487138; }
 .akim-scene .atlas-play-panel .atlas-play-status[data-state="error"] { color: #a14c30; }
-.akim-scene .atlas-play-panel .atlas-play-primary { display: block; width: 100%; border: 0; border-radius: 10px; padding: 12px 8px; background: #294f3e; color: #fafbec; font-size: 11px; font-weight: 550; }
-.akim-scene .atlas-play-panel .atlas-play-primary:not(:disabled):hover { background: #38664b; }
-.akim-scene .atlas-play-panel .atlas-play-shortcuts { display: flex; justify-content: space-between; gap: 8px; margin: 8px 0 0; }
-.akim-scene .atlas-play-panel .atlas-play-text-button { border: 0; background: transparent; padding: 4px 0; font-size: 10px; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: #b0bc9e; }
-.akim-scene .atlas-play-panel .atlas-play-playback { border-top: 1px solid #d9e0cc; padding-top: 9px; margin-top: 9px; }
-.akim-scene .atlas-play-panel .atlas-play-playback-heading { margin: 0 0 8px; font-size: 11px; font-weight: 550; }
+.akim-scene .atlas-play-panel .atlas-play-primary { display: flex; width: 100%; min-height: 44px; align-items: center; justify-content: center; border: 1px solid var(--play-forest); border-radius: 10px; padding: 11px 13px; background: var(--play-forest); color: #fffcef; font-size: 13px; font-weight: 600; box-shadow: 0 4px 10px #183d3512; transition: background .15s, transform .15s; }
+.akim-scene .atlas-play-panel .atlas-play-primary:not(:disabled):hover { background: #2b5645; transform: translateY(-1px); }
+.akim-scene .atlas-play-panel .atlas-play-primary:disabled { background: #e4e8db; color: #839079; border-color: #dce2d2; opacity: 1; box-shadow: none; }
+.akim-scene .atlas-play-panel .atlas-play-shortcuts { display: flex; justify-content: space-between; gap: 8px; margin: 9px 0 0; }
+.akim-scene .atlas-play-panel .atlas-play-text-button { min-height: 36px; border: 1px solid #d6dec9; border-radius: 8px; background: #f3f5e9; padding: 7px 10px; font-size: 11px; font-weight: 550; }
+.akim-scene .atlas-play-panel .atlas-play-text-button:first-child { flex: 1; }
+.akim-scene .atlas-play-panel .atlas-play-text-button:last-child { color: #718165; border-color: transparent; background: transparent; }
+.akim-scene .atlas-play-panel .atlas-play-text-button:not(:disabled):hover { background: #e9eedd; border-color: #bcccad; }
+.akim-scene .atlas-play-panel .atlas-play-playback { border-top: 1px solid #d9e0cc; padding-top: 13px; margin-top: 13px; }
+.akim-scene .atlas-play-panel .atlas-play-playback-heading { display: flex; align-items: center; gap: 7px; margin: 0 0 10px; font-size: 13px; font-weight: 600; }
+.akim-scene .atlas-play-panel .atlas-play-playback-heading::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--play-gold); }
 .akim-scene .atlas-play-panel .atlas-play-playback-buttons { display: flex; gap: 7px; }
-.akim-scene .atlas-play-panel .atlas-play-playback-buttons button { flex: 1; border: 1px solid #c3ceb4; border-radius: 7px; background: #f5f7eb; padding: 8px 5px; font-size: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-speed { display: flex; justify-content: space-between; align-items: center; margin-top: 9px; font-size: 10px; color: #7c896c; }
-.akim-scene .atlas-play-panel .atlas-play-speed select { border: 1px solid #cad3be; padding: 5px 7px; border-radius: 6px; background: #fafbf4; }
-.akim-scene .atlas-play-panel .atlas-play-result { border-top: 1px solid #d9e0cc; padding-top: 13px; margin-top: 13px; }
-.akim-scene .atlas-play-panel .atlas-play-result h3 { margin: 0 0 8px; font-size: 12px; font-weight: 600; }
+.akim-scene .atlas-play-panel .atlas-play-playback-buttons button { flex: 1; min-height: 38px; border: 1px solid #c5d1b7; border-radius: 8px; background: #f0f4e6; padding: 9px 5px; font-size: 12px; font-weight: 550; }
+.akim-scene .atlas-play-panel .atlas-play-playback-buttons button:hover { background: #e7eedb; border-color: #9fb58b; }
+.akim-scene .atlas-play-panel .atlas-play-speed { display: flex; justify-content: space-between; align-items: center; margin-top: 10px; font-size: 12px; color: #647658; }
+.akim-scene .atlas-play-panel .atlas-play-speed select { border: 1px solid #cad3be; padding: 6px 9px; border-radius: 7px; background: #fffdf6; }
+.akim-scene .atlas-play-panel .atlas-play-result { border-top: 1px solid #d9e0cc; padding-top: 17px; margin-top: 17px; }
+.akim-scene .atlas-play-panel .atlas-play-result h3 { margin: 0 0 13px; font-size: 15px; font-weight: 650; letter-spacing: -.02em; }
 .akim-scene .atlas-play-panel .atlas-play-result-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-result-header strong { font-size: 35px; font-weight: 450; letter-spacing: -.065em; line-height: 1; font-variant-numeric: tabular-nums; }
-.akim-scene .atlas-play-panel .atlas-play-result-header span { padding: 4px 7px; border-radius: 6px; background: #e8efdc; font-size: 10px; }
-.akim-scene .atlas-play-panel .atlas-play-result > p { color: #859072; font-size: 9px; margin: 6px 0 12px; }
-.akim-scene .atlas-play-panel .atlas-play-gain { display: grid; grid-template-columns: 1fr auto 40px; gap: 7px; padding: 6px 0; border-bottom: 1px solid #e3e7d9; font-size: 10px; font-variant-numeric: tabular-nums; }
-.akim-scene .atlas-play-panel .atlas-play-gain > span:nth-child(2) { color: #929b85; font-size: 9px; align-self: center; }
-.akim-scene .atlas-play-panel .atlas-play-gain strong { text-align: right; font-weight: 600; }
-.akim-scene .atlas-play-panel [data-sign="positive"] { color: #497334; }
+.akim-scene .atlas-play-panel .atlas-play-result-header strong { font-size: 42px; font-weight: 500; letter-spacing: -.065em; line-height: 1; font-variant-numeric: tabular-nums; }
+.akim-scene .atlas-play-panel .atlas-play-result-header span { padding: 5px 7px; border-radius: 7px; background: #e6eed9; font-size: 11px; font-weight: 650; }
+.akim-scene .atlas-play-panel .atlas-play-result > p { color: #6b7b60; font-size: 11px; margin: 7px 0 17px; }
+.akim-scene .atlas-play-panel .atlas-play-gain { display: grid; grid-template-columns: 1fr auto 43px; gap: 6px; align-items: center; padding: 9px 0; border-bottom: 1px solid #e1e7d6; font-size: 12px; font-variant-numeric: tabular-nums; }
+.akim-scene .atlas-play-panel .atlas-play-gain > span:nth-child(2) { color: #7c896e; font-size: 10px; white-space: nowrap; }
+.akim-scene .atlas-play-panel .atlas-play-gain strong { text-align: right; font-weight: 650; }
+.akim-scene .atlas-play-panel [data-sign="positive"] { color: #457231; }
 .akim-scene .atlas-play-panel [data-sign="negative"] { color: #a25532; }
-.akim-scene .atlas-play-panel .atlas-play-tradeoffs h4 { color: #9a683d; font-size: 10px; margin: 12px 0 5px; }
-.akim-scene .atlas-play-panel .atlas-play-tradeoffs p { font-size: 9px; margin: 4px 0; color: #966d48; }
-.akim-scene .atlas-play-panel .atlas-play-tradeoffs .atlas-play-critical { margin-top: 10px; color: #7f8b70; }
-.akim-scene .atlas-play-panel .atlas-play-best { margin: 11px 0 0; border-radius: 8px; background: #f0ebd9; padding: 8px; color: #918044; font-size: 9px; }
-.akim-scene .atlas-play-panel .atlas-play-disclaimer { margin: 12px 0 0; font-size: 8px; line-height: 1.55; color: #959b86; }
-@media (max-width: 600px) {
-  .akim-scene .atlas-play-panel { width: 250px; }
-  .akim-scene .atlas-play-panel .atlas-play-content { max-height: 60vh; padding: 13px; border-radius: 14px; }
-  .akim-scene .atlas-play-panel .atlas-play-assignment select { font-size: 16px; }
+.akim-scene .atlas-play-panel .atlas-play-tradeoffs h4 { color: #986237; font-size: 12px; margin: 15px 0 7px; }
+.akim-scene .atlas-play-panel .atlas-play-tradeoffs p { font-size: 11px; line-height: 1.6; margin: 5px 0; color: #94633a; }
+.akim-scene .atlas-play-panel .atlas-play-tradeoffs .atlas-play-critical { margin-top: 12px; color: #6b7b5e; }
+.akim-scene .atlas-play-panel .atlas-play-best { margin: 14px 0 0; border: 1px solid #e7d6af; border-radius: 9px; background: #f5edda; padding: 10px; color: #8b692f; font-size: 12px; font-weight: 550; }
+.akim-scene .atlas-play-panel .atlas-play-disclaimer { margin: 14px 0 0; font-size: 10px; line-height: 1.5; color: #7c8970; }
+@media (max-width: 768px) {
+  .akim-scene .atlas-play-panel { width: 100%; max-width: none; }
+  .akim-scene .atlas-play-panel .atlas-play-content { max-height: 68vh; padding: 20px; border-radius: 16px; }
+  .akim-scene .atlas-play-panel .atlas-play-metrics { padding: 16px 18px; }
+  .akim-scene .atlas-play-panel .atlas-play-header { margin-bottom: 17px; }
+  .akim-scene .atlas-play-panel h2 { font-size: 24px; }
+  .akim-scene .atlas-play-panel .atlas-play-slots { gap: 9px; }
+  .akim-scene .atlas-play-panel .atlas-play-slot { height: 41px; }
+  .akim-scene .atlas-play-panel .atlas-play-assignment select,
+  .akim-scene .atlas-play-panel .atlas-play-speed select { font-size: 16px; }
   .akim-scene .atlas-play-panel .atlas-play-toggle,
   .akim-scene .atlas-play-panel .atlas-play-add,
   .akim-scene .atlas-play-panel .atlas-play-text-button,
-  .akim-scene .atlas-play-panel .atlas-play-playback-buttons button { min-height: 36px; }
+  .akim-scene .atlas-play-panel .atlas-play-playback-buttons button { min-height: 40px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  .akim-scene .atlas-play-panel button,
+  .akim-scene .atlas-play-panel .atlas-play-measure,
   .akim-scene .atlas-play-panel .atlas-play-progress span { transition: none; }
 }
