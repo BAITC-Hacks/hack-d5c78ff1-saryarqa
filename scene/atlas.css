@@ -145,3 +145,19 @@
 .akim-scene .atlas-building-status:disabled { cursor:progress; opacity:1; }
 .akim-scene .atlas-building-status[hidden] { display:none; }
 @media(max-width:768px) { .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-building-status { top:calc(max(63vh,470px) - 126px); bottom:auto; } }
+
+/* Purpose-drawn city symbols, with a consistent optical size. */
+.akim-scene .atlas-icon { display:inline-block; flex:0 0 auto; vertical-align:middle; pointer-events:none; }
+.akim-scene .atlas-layer-tools button { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:9px 11px; border-radius:11px; background:#ffffffee; border-color:#d1ddd0; }
+.akim-scene .atlas-layer-tools span { margin:0; }
+.akim-scene .atlas-layer-tools button[aria-pressed=true] { color:#245547; background:#eef5ea; border-color:#acc4ae; }
+.akim-scene .atlas-search>span { display:flex; color:#688375; }
+.akim-scene .atlas-place-list button>i { color:#3b7260; background:#e8f0e9; border-radius:9px; }
+.akim-scene .atlas-source-link { display:inline-flex; align-items:center; gap:5px; }
+.akim-scene .atlas-place-card>button { display:grid; place-items:center; width:30px; height:30px; border-radius:50%; background:#edf3ee; }
+.akim-scene .atlas-camera-tools button { border-color:#c5d7ca; border-radius:12px; color:#345f51; background:#ffffffee; }
+.akim-scene .atlas-compass .atlas-icon { margin:auto; }
+.akim-scene .atlas-search-results button { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+@media(max-width:430px) { .akim-scene .atlas-layer-tools { gap:5px; left:14px; right:14px; } .akim-scene .atlas-layer-tools button { padding:8px; gap:4px; flex:1; } .akim-scene .atlas-layer-tools .atlas-icon { width:17px; height:17px; } }
+
+@media(max-width:430px) { .akim-scene .atlas-layer-tools { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); } .akim-scene .atlas-layer-tools button { flex-direction:column; padding:7px 2px; gap:3px; } .akim-scene .atlas-layer-tools span { font-size:9px; } }

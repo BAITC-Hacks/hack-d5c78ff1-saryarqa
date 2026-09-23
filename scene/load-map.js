@@ -11,6 +11,7 @@ export const ASTANA_MAP_FILES = Object.freeze({
   roads: '/scene/data/astana/roads.geojson',
   intersections: '/scene/data/astana/intersections.geojson',
   landscape: '/scene/data/astana/landscape-render.geojson',
+  greenery: '/scene/data/astana/greenery-render.geojson',
   buildings: '/scene/data/astana/buildings-render.geojson',
   buildingManifest: '/scene/data/astana/buildings-manifest.json',
   trafficCorridors: '/scene/data/astana/traffic_corridors.json',
@@ -37,6 +38,10 @@ export async function loadAstanaMap({ fetchImpl = fetch, signal } = {}) {
   }));
   const layers = Object.fromEntries(entries);
   const mapData = createGeoData(layers);
+  const greenery = createGeoData({ seed: layers.seed, landscape: layers.greenery });
+  mapData.landscape = [...mapData.landscape.filter(feature => !/park|green|forest|wood/.test(feature.kind)), ...greenery.landscape];
+  mapData.greeneryCount = greenery.landscape.length;
+  mapData.sourceStatus.greenery = greenery.sourceStatus.landscape;
   mapData.buildingCount = layers.buildingManifest.featureCount;
   mapData.createBuildingSource = ({ onChange } = {}) => createBuildingTileSource({
     manifest: layers.buildingManifest, seed: layers.seed, fallback: mapData.buildings, fetchImpl, onChange,

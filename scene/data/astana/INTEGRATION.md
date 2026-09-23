@@ -71,3 +71,10 @@ The 150 road nodes are connectivity candidates, not surveyed traffic junctions.
 render file remains only a fast initial fallback. The browser loads visible tiles
 and replaces duplicate source IDs with full coverage geometry. See
 `BUILDING-COVERAGE.md` for counts, query, simplification, checksums and source limits.
+
+### Visible greenery update
+
+`greenery-render.geojson` replaces the old green subset at runtime, retaining the
+water collection. Its 3,696 source polygons combine 1,696 OSM park/garden/wood/forest
+features and 2,000 explicitly sampled municipal patches. See `GREENERY-COVERAGE.md`.
+Decorative trees are placed within these shapes; they are not observed tree locations.

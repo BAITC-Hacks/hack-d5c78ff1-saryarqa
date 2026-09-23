@@ -1,6 +1,8 @@
 import { createCamera, pointInRegion, regionBounds, polygonsToPath, segmentsCross } from './camera.js';
 import { createLandmarkSymbol } from './landmarks.js';
 import { createEffects } from './effects.js';
+import { iconMarkup, categoryIcon } from './icons.js';
+import { createVegetation } from './vegetation.js';
 import { buildBuildings, selectVisibleBuildings } from './buildings.js';
 
 const NS = 'http://www.w3.org/2000/svg';
@@ -12,6 +14,25 @@ const html = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp
 const safeLink = value => /^https?:\/\//.test(value || '') ? value : null;
 const distance = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1]);
 const linePath = points => points?.length ? `M${points.map(p => p.join(',')).join('L')}` : '';
+// Nonzero winding unions overlapping green sources while retaining interior rings.
+const greenPath = feature => feature.polygons.map(polygon => polygon.map((ring,index) => {
+  const area = ring.reduce((sum,p,i) => { const q=ring[(i+1)%ring.length]; return sum+p[0]*q[1]-q[0]*p[1]; },0);
+  return `${linePath((area>0)===(index===0) ? ring : [...ring].reverse())}Z`;
+}).join('')).join('');
+function createParkSymbol(size, projection) {
+  const group = el('g', {transform:`scale(${size/88})`, 'data-illustrative':'true'});
+  group.appendChild(el('ellipse',{cx:2,cy:4,rx:30,ry:11,fill:'#234b4224'}));
+  group.appendChild(el('path',{d:'M-29 0Q-33-14-8-19L25-10Q39 0 17 10L-15 12Z',fill:'#b5cf97',stroke:'#dce9c5','stroke-width':2}));
+  group.appendChild(el('path',{d:'M-23 5Q-5-12 25-4',fill:'none',stroke:'#edf0d1','stroke-width':5}));
+  for (const [x,y,r,color] of [[-16,-5,10,'#5f9266'],[10,-8,13,'#3e7860'],[23,2,8,'#84a768']]) {
+    const h=projection==='top'?13:22;
+    group.appendChild(el('ellipse',{cx:x+4,cy:y+3,rx:r*.9,ry:4,fill:'#325c4230'}));
+    group.appendChild(el('path',{d:`M${x} ${y}v-${h*.8}`,stroke:'#756849','stroke-width':3,'stroke-linecap':'round'}));
+    group.appendChild(el('circle',{cx:x,cy:y-h,r,fill:color}));
+    group.appendChild(el('circle',{cx:x-r*.22,cy:y-h-r*.22,r:r*.68,fill:'#b7d58a',opacity:.5}));
+  }
+  return group;
+}
 
 /** Optional real-geography renderer. Snapshot semantics and intents remain v1. */
 export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
@@ -19,17 +40,17 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   const map = mapData;
   const container = document.createElement('section');
   container.className = 'akim-scene akim-atlas';
-  container.innerHTML = `<header class="atlas-header"><div class="atlas-brand"><span>а</span><strong>Аким<small>Астана</small></strong></div><div class="atlas-breadcrumb">Город, который меняешь ты <span>/</span> <b>Астана</b></div><div class="atlas-header-end"><span class="atlas-live-dot"></span>Городская лаборатория <button data-act="sources" type="button" aria-label="Источники данных">ⓘ</button></div></header>
+  container.innerHTML = `<header class="atlas-header"><div class="atlas-brand"><span>а</span><strong>Аким<small>Астана</small></strong></div><div class="atlas-breadcrumb">Город, который меняешь ты <span>/</span> <b>Астана</b></div><div class="atlas-header-end"><span class="atlas-live-dot"></span>Городская лаборатория <button data-act="sources" type="button" aria-label="Источники данных">${iconMarkup('info',18)}</button></div></header>
   <div class="atlas-body"><aside class="atlas-sidebar"><div class="atlas-sidebar-head"><h1>Твоя Астана</h1><p>Исследуй город.<br>Выбирай, что изменить.</p></div>
-    <div class="atlas-search-wrap"><label class="atlas-search"><span>⌕</span><input aria-label="Найти место в Астане" placeholder="Найти место в Астане…" autocomplete="off"></label><div class="atlas-search-results" hidden></div></div>
+    <div class="atlas-search-wrap"><label class="atlas-search"><span>${iconMarkup('search',20)}</span><input aria-label="Найти место в Астане" placeholder="Найти место в Астане…" autocomplete="off"></label><div class="atlas-search-results" hidden></div></div>
     <div class="atlas-tabs" role="tablist" aria-label="Содержание карты"><button data-tab="places" role="tab" aria-selected="true">Места</button><button data-tab="roads" role="tab" aria-selected="false">Дороги</button><button data-tab="districts" role="tab" aria-selected="false">Районы</button></div>
-    <div class="atlas-sidebar-content"></div><div class="atlas-sidebar-bottom"><span>⌁</span><p>Приближай знакомые места.<br>Решения добавляй в свой план.</p></div></aside>
+    <div class="atlas-sidebar-content"></div><div class="atlas-sidebar-bottom"><span>${iconMarkup('route',24)}</span><p>Приближай знакомые места.<br>Решения добавляй в свой план.</p></div></aside>
     <div class="atlas-map-shell"><div class="atlas-map-top"><div class="atlas-map-title"><span class="atlas-pill">ASTANA</span><span>6 районов на одной карте</span></div><div class="atlas-projections"><button type="button" data-act="top">Карта</button><button type="button" data-act="tilted">2.5D</button></div></div>
       <div class="atlas-stage" tabindex="0" role="group" aria-label="Карта Астаны. Стрелки перемещают камеру, плюс и минус меняют масштаб."><svg class="atlas-svg" aria-label="Реальная география Астаны" role="img"></svg></div>
-      <div class="atlas-layer-tools" role="group" aria-label="Слои карты"><button type="button" data-layer="buildings" aria-pressed="true">▥ <span>Здания</span></button><button type="button" data-layer="landmarks" aria-pressed="true">◈ <span>Места</span></button><button type="button" data-layer="traffic" aria-pressed="false">⇄ <span>Нагрузка</span></button><button type="button" data-layer="labels" aria-pressed="true">Aa <span>Подписи</span></button></div>
-      <div class="atlas-place-card" hidden></div><button class="atlas-building-status" data-act="retry-buildings" type="button" hidden></button><div class="atlas-camera-tools"><button type="button" data-act="zoom-in" aria-label="Приблизить">+</button><button type="button" data-act="zoom-out" aria-label="Отдалить">−</button><button type="button" data-act="center" aria-label="Центр Астаны">⌾</button><button type="button" data-act="overview" aria-label="Вся территория">⤢</button></div>
-      <div class="atlas-compass" aria-hidden="true"><span>С</span>↑</div><div class="atlas-scale"><i></i><span></span></div>
-      <div class="atlas-map-credit"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a> <button data-act="sources" type="button" aria-label="Источники карты">ⓘ</button></div>
+      <div class="atlas-layer-tools" role="group" aria-label="Слои карты"><button type="button" data-layer="buildings" aria-pressed="true">${iconMarkup('buildings')}<span>Здания</span></button><button type="button" data-layer="landmarks" aria-pressed="true">${iconMarkup('pin')}<span>Места</span></button><button type="button" data-layer="vegetation" aria-pressed="true">${iconMarkup('leaf')}<span>Зелень</span></button><button type="button" data-layer="traffic" aria-pressed="false">${iconMarkup('traffic')}<span>Нагрузка</span></button><button type="button" data-layer="labels" aria-pressed="true">${iconMarkup('labels')}<span>Подписи</span></button></div>
+      <div class="atlas-place-card" hidden></div><button class="atlas-building-status" data-act="retry-buildings" type="button" hidden></button><div class="atlas-camera-tools"><button type="button" data-act="zoom-in" aria-label="Приблизить">${iconMarkup('plus')}</button><button type="button" data-act="zoom-out" aria-label="Отдалить">${iconMarkup('minus')}</button><button type="button" data-act="center" aria-label="Центр Астаны">${iconMarkup('locate')}</button><button type="button" data-act="overview" aria-label="Вся территория">${iconMarkup('expand')}</button></div>
+      <div class="atlas-compass" aria-hidden="true"><span>С</span>${iconMarkup('north',24)}</div><div class="atlas-scale"><i></i><span></span></div>
+      <div class="atlas-map-credit"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">© OpenStreetMap contributors</a> <button data-act="sources" type="button" aria-label="Источники карты">${iconMarkup('info',18)}</button></div>
       <div class="atlas-status-bar"><span class="atlas-mode-status">Обзор Астаны</span><span class="atlas-status-help">Перетаскивай карту · Ctrl/⌘ + колесо — масштаб</span><span class="atlas-object-count"></span></div>
     </div></div><div class="atlas-playback"><span class="atlas-feedback" role="status"></span><div><i></i></div><small>Восемь кварталов · визуализация рассчитанного результата</small></div>`;
   root.appendChild(container);
@@ -37,13 +58,15 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   const stage = $('.atlas-stage'), surface = $('.atlas-svg');
   const ground = el('g', { class: 'atlas-ground' }); surface.appendChild(ground);
   const layers = {};
-  for (const name of ['districts', 'parks', 'water', 'road-casing', 'roads', 'buildings', 'traffic', 'intersections']) { layers[name] = el('g', { class: `atlas-layer-${name}` }); ground.appendChild(layers[name]); }
+  for (const name of ['districts', 'parks', 'water', 'road-casing', 'roads', 'vegetation', 'buildings', 'traffic', 'intersections']) { layers[name] = el('g', { class: `atlas-layer-${name}` }); ground.appendChild(layers[name]); }
   for (const name of ['vehicles', 'landmarks', 'labels', 'effects', 'mayor']) { layers[name] = el('g', { class: `atlas-layer-${name}` }); surface.appendChild(layers[name]); }
   const camera = createCamera({ viewBox: map.viewBox, width: 1000, height: 700, projection: 'tilted', maxZoom: 40 });
   const features = [...map.landmarks, ...map.parkAnchors.map(p => ({ ...p, category: 'park_anchor' }))];
   const featureMap = new Map(features.map(p => [p.id, p]));
-  const enabled = { buildings: true, landmarks: true, traffic: false, labels: true };
+  const enabled = { buildings: true, landmarks: true, traffic: false, labels: true, vegetation: true };
   let policyCards = [];
+  const greenAreas = (map.landscape || []).filter(f => /park|green|forest|wood/.test(f.kind));
+  const waterAreas = (map.landscape || []).filter(f => /water|river|hydro/.test(f.kind));
   const listeners = [];
   // Accept the six attributed source polygons without claiming their effective date is verified.
   const sourcedSix = Object.keys(districtNames).every(id => map.regions?.some(r => r.regionId === id && r.status !== 'historical' && r.sourceIds?.includes('astana-municipal-six-districts')));
@@ -54,7 +77,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   let snapshot = null, context = {}, destroyed = false, frame = null, lastTime = null, frames = 0, totalRenderMs = 0;
   let width = 1000, height = 700, selected = 'baiterek', currentTab = 'places', drag = null, lastProjection = null, currentView = null;
   let movingSeconds = 0, destination = null, mayor = null, walkable = null, selectedCorridor = null, inspectorSignature = '';
-  let buildingTimer = null, buildingSignature = '', renderedBuildingCount = 0;
+  let buildingTimer = null, buildingSignature = '', greenerySignature = '', renderedBuildingCount = 0;
   const buildingSource = map.createBuildingSource?.({ onChange: () => {
     if (destroyed) return;
     buildingSignature = ''; setupWalkable(); refreshBuildings();
@@ -68,14 +91,13 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   const sourceName = 'Муниципальный геопортал Астаны';
 
   function buildGround() {
-    for (const name of ['districts', 'parks', 'water', 'road-casing', 'roads', 'buildings', 'traffic', 'intersections']) layers[name].replaceChildren();
+    for (const name of ['districts', 'parks', 'water', 'road-casing', 'roads', 'vegetation', 'buildings', 'traffic', 'intersections']) layers[name].replaceChildren();
     for (const region of worldRegions) {
       const path = el('path', { d: polygonsToPath(region), fill: 'none', stroke: '#728c77', 'stroke-width': 1, 'stroke-dasharray': '6 6', 'vector-effect': 'non-scaling-stroke', opacity: .55, 'fill-rule': 'evenodd', 'data-district': region.regionId });
       layers.districts.appendChild(path);
     }
-    for (const feature of map.landscape || []) {
-      const water = /water|river|hydro/.test(feature.kind);
-      (water ? layers.water : layers.parks).appendChild(el('path', { d: polygonsToPath(feature), fill: water ? '#8dbfcc' : '#b4cda7', stroke: water ? '#609bad' : '#94b989', 'stroke-width': .25, 'fill-rule': 'evenodd', class: water ? 'atlas-water-polygon' : 'atlas-park-polygon' }));
+    for (const feature of waterAreas) {
+      layers.water.appendChild(el('path', { d: polygonsToPath(feature), fill: '#8dbfcc', stroke: '#609bad', 'stroke-width': .25, 'fill-rule': 'evenodd', class: 'atlas-water-polygon' }));
     }
     roadNodes.clear();
     for (const road of map.roads) {
@@ -85,7 +107,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       const path = el('path', { d, fill: 'none', stroke: major ? '#fff9e8' : '#f8f5e9', 'stroke-width': major ? 3.2 : 1.65, 'vector-effect': 'non-scaling-stroke', 'stroke-linecap': 'round', 'stroke-linejoin': 'round', 'data-road-id': road.id });
       layers.roads.appendChild(path); roadNodes.set(road.id, path);
     }
-    buildingSignature = '';
+    buildingSignature = ''; greenerySignature = '';
     const historicalIds = new Set((map.corridors || []).flatMap(corridor => corridor.roadIds || []));
     for (const road of map.roads.filter(r => historicalIds.has(r.id))) layers.traffic.appendChild(el('path', { d: linePath(road.points), fill: 'none', stroke: '#d59451', 'stroke-width': 4, opacity: .65, 'vector-effect': 'non-scaling-stroke' }));
     for (const junction of map.intersections || []) {
@@ -98,13 +120,14 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   }
 
   function refreshBuildings() {
-    if (destroyed || !snapshot || !enabled.buildings) return;
+    if (destroyed || !snapshot) return;
     const corners = [[-35,-35],[width+35,-35],[-35,height+35],[width+35,height+35]].map(p => camera.unproject(p));
     const bounds = [Math.min(...corners.map(p=>p[0])), Math.min(...corners.map(p=>p[1])), Math.max(...corners.map(p=>p[0])), Math.max(...corners.map(p=>p[1]))];
     // The affine world uses the complete seed bbox. Unclamped conversion is needed
     // when the camera's corners extend outside it.
     const [west,south,east,north] = map.bounds, worldWidth = map.viewBox[2], worldHeight = map.viewBox[3];
     buildingSource?.request([west+bounds[0]/worldWidth*(east-west), north-bounds[3]/worldHeight*(north-south), west+bounds[2]/worldWidth*(east-west), north-bounds[1]/worldHeight*(north-south)]);
+    refreshGreenery(bounds);
     const selectedBuildings = selectVisibleBuildings(allBuildings(), { viewBounds: bounds, pixelsPerWorldUnit: camera.getState().scale, maxCount: width < 600 ? 1200 : 2200 });
     const signature = `${snapshot.projection}|${selectedBuildings.map(b=>b.id).join(',')}`;
     if (signature !== buildingSignature) {
@@ -118,6 +141,23 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     layers.buildings.setAttribute('data-visible-count', renderedBuildingCount);
     layers.buildings.setAttribute('data-loading', String(Boolean(state?.pending)));
   }
+  function refreshGreenery(bounds) {
+    const scale = camera.getState().scale;
+    const parks = selectVisibleBuildings(greenAreas, { viewBounds: bounds, pixelsPerWorldUnit: scale, maxCount: 2600 });
+    const signature = `${snapshot.projection}|${scale.toFixed(2)}|${bounds.map(n=>n.toFixed(1)).join(',')}|${allBuildings().length}|${parks.map(p=>p.id).join(',')}`;
+    if (signature === greenerySignature) return;
+    greenerySignature = signature;
+    // Keep holes and all multipart geometry in four consolidated source-fill paths.
+    const colors = ['#b8d5a4','#c5dda9','#aaca99','#bdd7b2'];
+    const paths = colors.map(()=>[]);
+    for (const park of parks) { let hash=0; for (const c of park.id) hash=(hash*31+c.charCodeAt(0))>>>0; paths[hash%colors.length].push(greenPath(park)); }
+    layers.parks.replaceChildren(...paths.flatMap((parts,index)=>parts.length ? [el('path',{d:parts.join(' '),fill:colors[index],'fill-rule':'nonzero',stroke:'#91b584','stroke-width':.4,'vector-effect':'non-scaling-stroke','stroke-linejoin':'round'})] : []));
+    layers.vegetation.replaceChildren(createVegetation({ landscape: [...parks,...waterAreas], buildings: allBuildings(), roads: map.roads,
+      viewBounds: bounds, pixelsPerWorldUnit: scale, projection: snapshot.projection, maxCount: width < 600 ? 220 : 450 }));
+    layers.vegetation.setAttribute('display', enabled.vegetation ? '' : 'none');
+    layers.parks.setAttribute('display', enabled.vegetation ? '' : 'none');
+  }
+
   function scheduleBuildings() {
     clearTimeout(buildingTimer);
     if (!buildingSignature) refreshBuildings();
@@ -131,7 +171,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   function showJunction(id) {
     const junction = map.intersections?.find(j => j.id === id); if (!junction) return;
     $('.atlas-place-card').hidden = false;
-    $('.atlas-place-card').innerHTML = `<button type="button" data-act="close-card" aria-label="Закрыть">×</button><span class="atlas-eyebrow">УЗЕЛ ДОРОЖНОЙ СЕТИ</span><h3>${html(junction.roads.filter(r => !r.startsWith('osm_way_')).join(' / ') || 'Соединение улиц')}</h3><p>${junction.coordinates.map(n => n.toFixed(5)).join(', ')} · OpenStreetMap</p><p>Общая точка дорожных линий в данных. Это не измерение потока транспорта.</p>`;
+    $('.atlas-place-card').innerHTML = `<button type="button" data-act="close-card" aria-label="Закрыть">${iconMarkup('close',18)}</button><span class="atlas-eyebrow">УЗЕЛ ДОРОЖНОЙ СЕТИ</span><h3>${html(junction.roads.filter(r => !r.startsWith('osm_way_')).join(' / ') || 'Соединение улиц')}</h3><p>${junction.coordinates.map(n => n.toFixed(5)).join(', ')} · OpenStreetMap</p><p>Общая точка дорожных линий в данных. Это не измерение потока транспорта.</p>`;
   }
 
   const overlaps = (a,b) => a.x < b.x+b.w && a.x+a.w > b.x && a.y < b.y+b.h && a.y+a.h > b.y;
@@ -164,25 +204,26 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       .filter(({ point }) => point[0] > -80 && point[0] < width + 80 && point[1] > -90 && point[1] < height + 100)
       .sort((x, y) => x.point[1] - y.point[1]);
     const labelBoxes = [...overlayBoxes(), ...policyCards.map(card=>card.box)];
-    const modelBoxes = items.map(({feature,point:[x,y]})=>({id:feature.id,x:x-36,y:y-70,w:72,h:75}));
+    const modelBoxes = [];
     const sortedLabels = [...items].sort((x, y) => Number(y.feature.id === selected) - Number(x.feature.id === selected) || y.feature.importance - x.feature.importance);
     for (const { feature, point: [x, y] } of items) {
       const active = feature.id === selected;
       const size = Math.min(98, Math.max(34, camera.getState().zoom * 10)) * (active ? 1.2 : 1);
       const group = el('g', { transform: `translate(${x} ${y})`, 'data-feature-id': feature.id, class: `atlas-landmark ${active ? 'is-selected' : ''}`, role: 'button', tabindex: '0', 'aria-label': feature.label });
       group.appendChild(el('title', {}, feature.label));
-      if (feature.category === 'park_anchor') {
-        group.appendChild(el('circle', { cy: -6, r: active ? 15 : 10, fill: '#688e69', stroke: '#f5f7e8', 'stroke-width': 2 }));
-        group.appendChild(el('path', { d: 'M-5 -5L0 -15L5 -5ZM-6 -1L0 -11L6 -1Z', fill: '#e6efcc' }));
-      } else group.appendChild(createLandmarkSymbol(feature.id, { projection: snapshot?.projection || 'tilted', size, selected: active }));
+      if (feature.category === 'park_anchor') group.appendChild(createParkSymbol(size, snapshot?.projection));
+      else group.appendChild(createLandmarkSymbol(feature.id, { projection: snapshot?.projection || 'tilted', size, selected: active }));
       layers.landmarks.appendChild(group);
+      const bounds = group.getBBox?.();
+      modelBoxes.push({id:feature.id,x:x+(bounds?.x ?? -size*.65)-4,y:y+(bounds?.y ?? -size*1.1)-4,w:(bounds?.width ?? size*1.3)+8,h:(bounds?.height ?? size*1.35)+8});
     }
     for (const { feature, point: [x, y] } of sortedLabels) {
       const active = feature.id === selected;
       let text = feature.label;
       if (text.length > 28) text = text.slice(0, 27) + '…';
       const labelWidth = text.length*6+22, labelHeight = 26;
-      const candidates = [ {x:x-labelWidth/2,y:y+10}, {x:x+34,y:y-8}, {x:x-labelWidth-34,y:y-8}, {x:x-labelWidth/2,y:y-96} ];
+      const model = modelBoxes.find(b=>b.id===feature.id);
+      const candidates = [ {x:x-labelWidth/2,y:model.y+model.h+5}, {x:model.x+model.w+6,y:y-8}, {x:model.x-labelWidth-6,y:y-8}, {x:x-labelWidth/2,y:model.y-labelHeight-5} ];
       const box = candidates.map(p=>({...p,w:labelWidth,h:labelHeight})).find(b=>b.x>=7 && b.x+b.w<=width-7 && b.y>=5 && b.y+b.h<=height-42 && !labelBoxes.some(v=>overlaps(b,v)) && !modelBoxes.some(v=>v.id!==feature.id && overlaps(b,v)));
       if (!box) continue;
       if (!active && camera.getState().zoom < 3 && feature.importance < 5) continue;
@@ -254,7 +295,8 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       group.appendChild(el('title',{},choices.map(m=>`${policyNames[m.measureId]}: ${m.phase === 'active'?'введено':m.phase === 'queued'?'в плане':'реализуется'}`).join('; ')+' · Маркер района, не адрес строительства'));
       layers.effects.appendChild(group);
     }
-    if ($('.atlas-feedback').textContent !== state.feedback) $('.atlas-feedback').textContent = state.feedback;
+    const feedback = state.feedback.replace(/\bM\d+\b/g, id => policyNames[id] || id);
+    if ($('.atlas-feedback').textContent !== feedback) $('.atlas-feedback').textContent = feedback;
     if (state.status === 'complete' && state.reactions.length) {
       const negative = state.reactions.some(r => r.tone === 'negative');
       const positive = state.reactions.some(r => r.tone === 'positive');
@@ -283,7 +325,8 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   function focusCenter() { camera.reset(); camera.focus([map.center[0] - 150, map.center[1] - 110, 300, 220]); render(); }
   function focusFeature(id) {
     const feature = featureMap.get(id); if (!feature) return;
-    selected = id; selectedCorridor = null; highlightRoads(); camera.focus([feature.position[0] - 68, feature.position[1] - 54, 136, 108]);
+    selected = id; selectedCorridor = null; highlightRoads(); const radius = feature.category === 'park_anchor' ? 34 : 68;
+    camera.focus([feature.position[0] - radius, feature.position[1] - radius * .794, radius * 2, radius * 1.588]);
     renderInspector(); $('.atlas-sidebar-content').scrollTop = 0; render();
   }
   function renderInspector(force = false) {
@@ -297,26 +340,26 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       const placeDescriptions = { baiterek:'Золотая сфера над городом — знакомый ориентир левого берега.', akorda:'Президентская резиденция у набережной Есиля.', khan_shatyr:'Прозрачный шатёр на западном конце главной оси столицы.', astana_opera:'Театр оперы и балета рядом с парком влюблённых.', national_museum:'История и культура страны у площади Независимости.', nur_alem:'Сфера EXPO и пространство науки на юге города.' };
       const description = placeDescriptions[feature.id] || (feature.category === 'park_anchor' ? 'Зелёное место на карте города. Приблизи его, чтобы рассмотреть окрестности.' : 'Знакомое место Астаны. Приблизи карту и исследуй район вокруг.');
       $('.atlas-sidebar-content').innerHTML = `<div class="atlas-feature-hero"><svg viewBox="-70 -110 140 145" class="atlas-selected-model"></svg><span class="atlas-feature-kind">${html(kindNames[feature.category] || 'Объект города')}</span></div>
-      <div class="atlas-feature-info"><h2>${html(feature.label)}</h2><p class="atlas-place-description">${html(description)}</p><button type="button" class="atlas-primary" data-place="${feature.id}">Приблизить место <span>↗</span></button><details class="atlas-provenance"><summary>О месте и координатах</summary><p>${feature.category === 'park_anchor' ? 'Опорная точка парка из переданного набора. Площадь парка не восстанавливается по одной точке.' : feature.coordinateCorrection ? `Положение уточнено по ${feature.coordinateCorrection.osmType === 'node' ? 'именованной точке' : 'центру контура'} OpenStreetMap. Исходная точка сохранена; расхождение ${Math.round(feature.coordinateCorrection.differenceMeters)} м.` : 'Объект расположен по координатам из переданного набора. Миниатюра помогает узнать его на карте.'}</p><div class="atlas-coordinates"><span>Широта <b>${feature.coordinates[1].toFixed(5)}°</b></span><span>Долгота <b>${feature.coordinates[0].toFixed(5)}°</b></span></div>${source ? `<a class="atlas-source-link" href="${html(source)}" target="_blank" rel="noopener noreferrer">${html(feature.source || 'Источник координат')} ↗</a>` : ''}</details></div>
-      <div class="atlas-list-heading">Ещё в Астане <span>${features.length}</span></div><div class="atlas-place-list">${features.filter(f => f.id !== feature.id).map(f => `<button data-place="${f.id}" type="button"><i>${f.category === 'park_anchor' ? '♧' : '◈'}</i><span>${html(f.label)}<small>${html(kindNames[f.category] || 'Место города')}</small></span><b>↗</b></button>`).join('')}</div>`;
-      $('.atlas-selected-model').appendChild(createLandmarkSymbol(feature.id, { size: 100, projection: 'tilted', selected: false }));
+      <div class="atlas-feature-info"><h2>${html(feature.label)}</h2><p class="atlas-place-description">${html(description)}</p><button type="button" class="atlas-primary" data-place="${feature.id}">Приблизить место <span>${iconMarkup('arrow',18)}</span></button><details class="atlas-provenance"><summary>О месте и координатах</summary><p>${feature.category === 'park_anchor' ? 'Опорная точка парка из переданного набора. Площадь парка не восстанавливается по одной точке.' : feature.coordinateCorrection ? `Положение уточнено по ${feature.coordinateCorrection.osmType === 'node' ? 'именованной точке' : 'центру контура'} OpenStreetMap. Исходная точка сохранена; расхождение ${Math.round(feature.coordinateCorrection.differenceMeters)} м.` : 'Объект расположен по координатам из переданного набора. Миниатюра помогает узнать его на карте.'}</p><div class="atlas-coordinates"><span>Широта <b>${feature.coordinates[1].toFixed(5)}°</b></span><span>Долгота <b>${feature.coordinates[0].toFixed(5)}°</b></span></div>${source ? `<a class="atlas-source-link" href="${html(source)}" target="_blank" rel="noopener noreferrer">${html(feature.source || 'Источник координат')} ${iconMarkup('external',13)}</a>` : ''}</details></div>
+      <div class="atlas-list-heading">Ещё в Астане <span>${features.length}</span></div><div class="atlas-place-list">${features.filter(f => f.id !== feature.id).sort((a,b) => Number(b.category === 'park_anchor') - Number(a.category === 'park_anchor')).map(f => `<button data-place="${f.id}" type="button"><i>${iconMarkup(f.id === 'astana_airport' ? 'plane' : categoryIcon(f.category),18)}</i><span>${html(f.label)}<small>${html(kindNames[f.category] || 'Место города')}</small></span><b>${iconMarkup('arrow',16)}</b></button>`).join('')}</div>`;
+      $('.atlas-selected-model').appendChild(feature.category === 'park_anchor' ? createParkSymbol(115,'tilted') : createLandmarkSymbol(feature.id, { size: 100, projection: 'tilted', selected: false }));
     } else if (currentTab === 'roads') {
       $('.atlas-sidebar-content').innerHTML = `<div class="atlas-feature-info"><h2>${map.roads.length.toLocaleString('ru-RU')} сегментов</h2><p>Геометрия улиц — OpenStreetMap. Движущиеся машины — условная анимация.</p><div class="atlas-data-note">Историческая нагрузка<br><span>Нагрузка ниже — исторический показатель, не пробки сейчас. Подсвечивается вся сопоставленная улица; границы отрезка не подтверждены.</span></div></div><div class="atlas-corridor-list">${(map.corridors || []).map((corridor, index) => `<button type="button" data-corridor="${html(corridor.id)}" aria-pressed="${selectedCorridor === corridor.id}"><span class="atlas-rank">${String(index + 1).padStart(2, '0')}</span><span>${html(corridor.road || corridor.name)}<small>${html(corridor.from)} → ${html(corridor.to)}</small><i style="--load:${Math.min(1, corridor.importance_0_1 || corridor.importance || 0) * 100}%"></i></span><b>${Math.round((corridor.importance_0_1 || corridor.importance || 0) * 100)}</b></button>`).join('')}</div>`;
     } else {
-      $('.atlas-sidebar-content').innerHTML = `<div class="atlas-feature-info"><h2>Шесть районов.<br>Один город.</h2><p>Пять районов участвуют в расчёте сценария. Сарайшық доступен для просмотра контекста.</p><div class="atlas-data-note">${html(regionStatus)}</div></div><div class="atlas-district-list">${Object.entries(districtNames).map(([id, label], index) => `<button type="button" data-district-id="${id}" aria-pressed="${snapshot?.focusedRegion === id}"><span class="atlas-district-dot"></span><b>${label}<small>${id === 'saraishyk' ? 'Контекст · не участвует в оценке' : id === 'nura' ? 'Прогулка акима и решения' : 'Доступен для решений'}</small></b><i>↗</i></button>`).join('')}</div><div class="atlas-feature-info"><button type="button" class="atlas-primary" data-act="walk">Прогулка акима по Нуре ↗</button><p class="atlas-walk-note">${walkable ? 'Маршрут декоративный; движение не меняет решения, бюджет и результат.' : 'Для прогулки нужна актуальная граница Нуры. На точной карте она не заменяется выдуманным полигоном.'}</p></div>`;
+      $('.atlas-sidebar-content').innerHTML = `<div class="atlas-feature-info"><h2>Шесть районов.<br>Один город.</h2><p>Пять районов участвуют в расчёте сценария. Сарайшық доступен для просмотра контекста.</p><div class="atlas-data-note">${html(regionStatus)}</div></div><div class="atlas-district-list">${Object.entries(districtNames).map(([id, label], index) => `<button type="button" data-district-id="${id}" aria-pressed="${snapshot?.focusedRegion === id}"><span class="atlas-district-dot"></span><b>${label}<small>${id === 'saraishyk' ? 'Контекст · не участвует в оценке' : id === 'nura' ? 'Прогулка акима и решения' : 'Доступен для решений'}</small></b><i>${iconMarkup('arrow',18)}</i></button>`).join('')}</div><div class="atlas-feature-info"><button type="button" class="atlas-primary" data-act="walk">Прогулка акима по Нуре ${iconMarkup('route',18)}</button><p class="atlas-walk-note">${walkable ? 'Маршрут декоративный; движение не меняет решения, бюджет и результат.' : 'Для прогулки нужна актуальная граница Нуры. На точной карте она не заменяется выдуманным полигоном.'}</p></div>`;
     }
   }
 
   function sources() {
     $('.atlas-place-card').hidden = false;
-    $('.atlas-place-card').innerHTML = `<button type="button" data-act="close-card" aria-label="Закрыть">×</button><span class="atlas-eyebrow">О КАРТЕ</span><h3>География с источником</h3><p>${map.roads.length.toLocaleString('ru-RU')} дорожных сегментов · ${(map.buildingCount || (map.buildings || []).length).toLocaleString('ru-RU')} контуров зданий · ${map.landmarks.length} достопримечательностей · ${map.parkAnchors.length} опорных точек парков.</p><p>Координаты объектов — из набора пользователя; пять точек уточнены по именованным объектам OpenStreetMap. Дороги — OpenStreetMap; вода, озеленение и контуры — ${sourceName}. Высота домов и движение транспорта иллюстративны. Численность населения и работа транспорта здесь не измеряются.</p><p>Историческая нагрузка не является текущим трафиком. Шесть контуров районов получены из городского GIS; дата их действия не указана. Здания загружаются участками по всей рабочей территории; при отдалении мелкие контуры скрываются. Озеленение — выборка источника.</p><a href="https://gis.esaulet.kz/server/rest/services/dop_sloi_geoportal_otkr/MapServer" target="_blank" rel="noopener noreferrer">Муниципальный источник ↗</a>`;
+    $('.atlas-place-card').innerHTML = `<button type="button" data-act="close-card" aria-label="Закрыть">${iconMarkup('close',18)}</button><span class="atlas-eyebrow">О КАРТЕ</span><h3>География с источником</h3><p>${map.roads.length.toLocaleString('ru-RU')} дорожных сегментов · ${(map.buildingCount || (map.buildings || []).length).toLocaleString('ru-RU')} контуров зданий · ${map.landmarks.length} достопримечательностей · ${map.parkAnchors.length} опорных точек парков.</p><p>Координаты объектов — из набора пользователя; пять точек уточнены по именованным объектам OpenStreetMap. Дороги — OpenStreetMap; вода и контуры зданий — ${sourceName}; зелёные зоны — OpenStreetMap и городской геопортал. Высота домов и движение транспорта иллюстративны. Численность населения и работа транспорта здесь не измеряются.</p><p>Историческая нагрузка не является текущим трафиком. Шесть контуров районов получены из городского GIS; дата их действия не указана. Здания загружаются участками по всей рабочей территории; при отдалении мелкие контуры скрываются. Зелёные участки взяты из картографических источников. Деревья показаны условно внутри этих участков: это визуализация озеленения, не поштучный реестр посадок.</p><a href="https://gis.esaulet.kz/server/rest/services/dop_sloi_geoportal_otkr/MapServer" target="_blank" rel="noopener noreferrer">Муниципальный источник ${iconMarkup('external',13)}</a>`;
   }
 
   function setupWalkable() {
     const nura = worldRegions.find(r => r.regionId === 'nura'); if (!nura) return;
     const exclusions = [...allBuildings(), ...(map.landscape || []).filter(f => /water|river|hydro/.test(f.kind))];
     const candidates = [...map.parkAnchors, ...map.landmarks].filter(f => pointInRegion(f.position, nura)).map(f => f.position);
-    if (mayor) candidates.unshift(mayor);
+    if (walkable?.start) candidates.unshift(walkable.start);
     candidates.push(nura.labelAnchor);
     let start = null;
     for (const candidate of candidates) { for (let i = 0; i < 40; i++) { const p = [candidate[0] + Math.cos(i * 2.4) * i * .35, candidate[1] + Math.sin(i * 2.4) * i * .35]; if (pointInRegion(p, nura) && !exclusions.some(f => pointInRegion(p, f))) { start = p; break; } } if (start) break; }
@@ -325,7 +368,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     walkable = { start, contains: p => Math.abs(p[0] - start[0]) <= 20 && Math.abs(p[1] - start[1]) <= 20 && pointInRegion(p, nura) && !localExclusions.some(f => pointInRegion(p, f)) };
     const rings = [nura, ...localExclusions].flatMap(shape => shape.polygons.flat());
     walkable.canTraverse = (from, to) => walkable.contains(from) && walkable.contains(to) && !rings.some(ring => ring.some((p, i) => i > 0 && segmentsCross(from, to, ring[i - 1], p)));
-    mayor = [...start];
+    mayor = mayor && walkable.contains(mayor) ? mayor : [...start];
   }
   setupWalkable();
   function moveMayor(target, maximum) {
@@ -358,7 +401,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     if (button.dataset.act) action(button.dataset.act);
     if (button.dataset.place) { currentTab = 'places'; focusFeature(button.dataset.place); $('.atlas-search-results').hidden = true; }
     if (button.dataset.tab) { currentTab = button.dataset.tab; renderInspector(); }
-    if (button.dataset.layer) { const name = button.dataset.layer; enabled[name] = !enabled[name]; button.setAttribute('aria-pressed', String(enabled[name])); if (name === 'landmarks') renderPlaces(); else layers[name].setAttribute('display', enabled[name] ? '' : 'none'); if (name === 'buildings') { if (enabled.buildings) refreshBuildings(); else $('.atlas-building-status').hidden = true; } }
+    if (button.dataset.layer) { const name = button.dataset.layer; enabled[name] = !enabled[name]; button.setAttribute('aria-pressed', String(enabled[name])); if (name === 'landmarks') renderPlaces(); else layers[name].setAttribute('display', enabled[name] ? '' : 'none'); if (name === 'vegetation') { layers.parks.setAttribute('display', enabled[name] ? '' : 'none'); } if (name === 'buildings') { if (enabled.buildings) refreshBuildings(); else $('.atlas-building-status').hidden = true; } }
     if (button.dataset.districtId) { const id = button.dataset.districtId; onIntent({ type: 'FOCUS_REGION', regionId: id }); const region = worldRegions.find(r => r.regionId === id); if (region) { camera.focus(regionBounds(region)); render(); } renderInspector(); }
     if (button.dataset.corridor) {
       selectedCorridor = button.dataset.corridor; const corridor = map.corridors.find(c => c.id === selectedCorridor);
@@ -373,7 +416,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     const query = event.target.value.trim().toLocaleLowerCase('ru');
     const matches = query ? features.filter(f => f.label.toLocaleLowerCase('ru').includes(query)).slice(0, 8) : [];
     $('.atlas-search-results').hidden = !query;
-    $('.atlas-search-results').innerHTML = matches.length ? matches.map(f => `<button data-place="${f.id}" type="button">${html(f.label)} ↗</button>`).join('') : '<span>Ничего не найдено</span>';
+    $('.atlas-search-results').innerHTML = matches.length ? matches.map(f => `<button data-place="${f.id}" type="button">${html(f.label)} ${iconMarkup('arrow',16)}</button>`).join('') : '<span>Ничего не найдено</span>';
   });
   const point = event => { const box = stage.getBoundingClientRect(); return [event.clientX - box.left, event.clientY - box.top]; };
   listen(stage, 'pointerdown', event => { if (!visible() || event.button !== 0) return; const p = point(event); drag = { id: event.pointerId, start: p, last: p, moved: false, featureId: event.target.closest('[data-feature-id]')?.dataset.featureId, junctionId: event.target.closest('[data-junction-id]')?.dataset.junctionId }; stage.setPointerCapture?.(event.pointerId); stage.focus({ preventScroll: true }); });

@@ -29,8 +29,8 @@ test('map loader fetches every manifest layer in parallel with the supplied canc
     assert.equal(options.signal, controller.signal);
     return new Promise(resolve => pending.push(() => resolve({ ok: true, json: async () => files[path] })));
   } });
-  assert.equal(requested.length, 12);
-  assert.equal(new Set(requested).size, 12);
+  assert.equal(requested.length, Object.keys(ASTANA_MAP_FILES).length);
+  assert.deepEqual(new Set(requested), new Set(Object.values(ASTANA_MAP_FILES)));
   pending.forEach(resolve => resolve());
   const map = await promise;
   assert.equal(map.geographic, true);
@@ -40,7 +40,7 @@ test('map loader fetches every manifest layer in parallel with the supplied canc
   assert.equal(map.buildingCount, 1);
   assert.equal(typeof map.createBuildingSource, 'function');
   const source = map.createBuildingSource();
-  assert.equal(requested.length, 12, 'constructing the tile source must not fetch all tiles');
+  assert.equal(requested.length, Object.keys(ASTANA_MAP_FILES).length, 'constructing the tile source must not fetch all tiles');
   source.destroy();
 });
 
@@ -56,6 +56,33 @@ test('map loader rejects unavailable or invalid real layers instead of inventing
   files[ASTANA_MAP_FILES.landscape] = { type: 'FeatureCollection', features: [] };
   files[ASTANA_MAP_FILES.roads].features = [];
   await assert.rejects(loadAstanaMap({ fetchImpl }), /INVALID_MAP_DATA:roads/);
+});
+
+test('map loader replaces old greenery with sourced polygons while retaining water geometry', async () => {
+  const files = fixture();
+  const polygon = (id, kind, sourceId, sourceUrl) => ({ type: 'Feature', id,
+    properties: { kind, source: 'Survey source', sourceId, source_url: sourceUrl },
+    geometry: { type: 'Polygon', coordinates: [
+      [[71.4, 51.1], [71.5, 51.1], [71.5, 51.2], [71.4, 51.2], [71.4, 51.1]],
+      [[71.42, 51.12], [71.44, 51.12], [71.44, 51.14], [71.42, 51.14], [71.42, 51.12]],
+    ] } });
+  const water = polygon('river-bank', 'water', 'hydrology-survey', 'https://example.org/water');
+  const fresh = polygon('new-park', 'park', 'greenery-survey', 'https://example.org/greenery');
+  files[ASTANA_MAP_FILES.landscape].features = [water,
+    ...['park', 'green', 'forest', 'wood'].map(kind => polygon(`old-${kind}`, kind, 'old-survey', 'https://example.org/old'))];
+  files[ASTANA_MAP_FILES.greenery].features = [fresh];
+  const before = JSON.stringify(files);
+  const map = await loadAstanaMap({ fetchImpl: async path => ({ ok: true, json: async () => files[path] }) });
+  assert.deepEqual(map.landscape.map(feature => feature.id), ['river-bank', 'new-park']);
+  for (const [actual, original] of [[map.landscape[0], water], [map.landscape[1], fresh]]) {
+    assert.equal(actual.source, original.properties.source);
+    assert.equal(actual.sourceUrl, original.properties.source_url);
+    assert.deepEqual(actual.sourceIds, [original.properties.sourceId]);
+    assert.deepEqual(actual.polygons, [original.geometry.coordinates.map(ring => ring.map(map.projectLonLat))]);
+  }
+  assert.equal(map.greeneryCount, 1);
+  assert.equal(map.sourceStatus.greenery, 'provided');
+  assert.equal(JSON.stringify(files), before);
 });
 
 test('main app loads the actual sourced atlas through public server routes', { timeout: 15000 }, async t => {

@@ -42,6 +42,7 @@ export async function getCapabilities(rootDir = defaultRoot) {
   const atlasFiles = [
     '/scene/index.js', '/scene/atlas.js', '/scene/atlas.css', '/scene/styles.css',
     '/scene/load-map.js', '/scene/geodata.js', '/scene/camera.js', '/scene/building-tiles.js', '/scene/buildings.js',
+    '/scene/icons.js', '/scene/vegetation.js', '/scene/landmarks.js', '/scene/effects.js',
     ...Object.values(ASTANA_MAP_FILES),
     ...BUILDING_TILE_PATHS,
   ];

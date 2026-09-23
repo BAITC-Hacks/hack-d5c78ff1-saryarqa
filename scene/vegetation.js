@@ -2,7 +2,7 @@
 const NS = 'http://www.w3.org/2000/svg';
 const SPACING = 0.38; // In this atlas, about 13 m. Coordinates never depend on the camera.
 const MAX_RADIUS = 0.11;
-const MAX_FOOTPRINT = 0.94; // Minimum legible crown at the lowest tree LOD.
+const MAX_FOOTPRINT = 1.6; // Minimum legible crown at the lowest tree LOD.
 const INDEX_SIZE = 4;
 const SHAPE_CACHE = new WeakMap();
 const LANDSCAPE_CACHE = new WeakMap();
@@ -144,7 +144,7 @@ function roadsOf(input) {
 /**
  * Pure deterministic samples in source green-space polygons. Positions, IDs,
  * species and physical size are fixed by source ID and the global world grid.
- * Display crowns have a 1.55px readability floor, explicitly illustrative. Their
+ * Display crowns have a 2.6px readability floor, explicitly illustrative. Their
  * complete larger footprint must still clear every source boundary/obstacle.
  * LOD omits nested grid cells; it never moves a tree. New feature/array objects
  * invalidate the weak caches when source geometry or building tiles change.
@@ -160,7 +160,7 @@ export function selectVegetation({ landscape = EMPTY, buildings = EMPTY, roads =
   if (!limit) return [];
   const { parks, water } = landscapeOf(landscape);
   const blockedBuildings = buildingsOf(buildings), blockedRoads = roadsOf(roads);
-  const minimumRadius = 1.55 / pixelsPerWorldUnit;
+  const minimumRadius = 2.6 / pixelsPerWorldUnit;
   const stride = 2 ** Math.max(0, Math.ceil(Math.log2(2.8 * Math.max(MAX_RADIUS, minimumRadius) / SPACING)));
   const candidates = [], occupied = new Set();
   for (const park of parks) {

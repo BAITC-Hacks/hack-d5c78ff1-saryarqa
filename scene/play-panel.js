@@ -1,4 +1,5 @@
 import { MEASURES, DISTRICTS, BASELINE } from '../simulator.js';
+import { iconMarkup } from './icons.js';
 
 const EXAMPLE_PLAN = [
   { id: 'M7', district: 'Нура' },
@@ -8,7 +9,7 @@ const EXAMPLE_PLAN = [
   { id: 'M5', district: 'Сарыарка' },
 ];
 const measureNames = new Map(MEASURES.map((measure) => [measure.id, measure.name]));
-const directionMarks = { 'Транспорт': '≋', 'Экология': '✳', 'Социальная сфера': '+', 'Безопасность': '◇', 'Сервисы': '⌘' };
+const directionMarks = { 'Транспорт': 'train', 'Экология': 'leaf', 'Социальная сфера': 'health', 'Безопасность': 'shield', 'Сервисы': 'services' };
 const measureById = new Map(MEASURES.map((measure) => [measure.id, measure]));
 const indicatorNames = { T1: 'Разгрузка дорог', T2: 'Общественный транспорт', E1: 'Озеленение', E2: 'Качество воздуха', S1: 'Школы и детские сады', S2: 'Первичная медицина', B1: 'Безопасность улиц', B2: 'Безопасность дорог', C1: 'Коммунальные сети', C2: 'Обращения жителей' };
 const formatNumber = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 });
@@ -104,7 +105,8 @@ export function createPlayPanel({ root, session }) {
   for (const direction of [...new Set(MEASURES.map((measure) => measure.direction))]) {
     const group = element('section', 'atlas-play-group');
     const groupTitle = element('h3');
-    const groupMark = element('span', 'atlas-play-direction-mark', directionMarks[direction]);
+    const groupMark = element('span', 'atlas-play-direction-mark');
+    groupMark.innerHTML = iconMarkup(directionMarks[direction],18);
     groupMark.setAttribute('aria-hidden', 'true');
     groupTitle.append(groupMark, element('span', '', direction));
     group.append(groupTitle);
@@ -277,7 +279,8 @@ export function createPlayPanel({ root, session }) {
       const measure = measureById.get(decision?.id);
       slot.classList.toggle('is-filled', Boolean(measure));
       slot.classList.toggle('is-unassigned', Boolean(measure && measure.scope === 'district' && !decision.district));
-      slot.textContent = measure ? directionMarks[measure.direction] : String(index + 1).padStart(2, '0');
+      if (measure) slot.innerHTML = iconMarkup(directionMarks[measure.direction],22);
+      else slot.innerHTML = iconMarkup('plus',18);
       const description = measure ? `${measure.name} · ${decision.district || (measure.scope === 'city' ? 'Весь город' : 'Выбери район')}` : `Выбрать решение ${index + 1}`;
       slot.title = description;
       slot.setAttribute('aria-label', description);
@@ -287,7 +290,7 @@ export function createPlayPanel({ root, session }) {
       const decision = planById.get(id);
       const selected = Boolean(decision);
       row.card.classList.toggle('is-selected', selected);
-      row.add.textContent = selected ? '−' : '+';
+      row.add.innerHTML = iconMarkup(selected ? 'minus' : 'plus',18);
       row.add.disabled = !selected && plan.length >= 5;
       row.add.setAttribute('aria-pressed', String(selected));
       row.add.setAttribute('aria-label', `${selected ? 'Убрать' : 'Добавить'}: ${row.measure.name}`);
