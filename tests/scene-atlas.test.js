@@ -342,3 +342,33 @@ test('atlas reduced motion completion supports reentrant host updates and emits 
   assert.equal(scene.getDiagnostics().effects.progress, 1);
   assert.equal(harness.pendingFrames(), 0);
 });
+
+test('atlas reduced-motion keyboard tap immediately paints the moved mayor', t => {
+  const harness = atlasHarness(t);
+  const mapData = freezeDeep({ ...atlasData, regions: [{ regionId: 'nura', status: 'verified', labelAnchor: [500, 350], polygons: square(0, 0, 1000) }] });
+  const scene = harness.mount(harness.root, undefined, mapData);
+  scene.update({ snapshot: sceneSnapshot({ view: 'district', focusedRegion: 'nura' }), context: { reducedMotion: true } });
+  const stage = harness.root.querySelector('.atlas-stage');
+  const layer = harness.root.querySelector('.atlas-layer-mayor');
+  const beforePosition = scene.getDiagnostics().mayor;
+  const beforeTransform = layer.children[0].getAttribute('transform');
+  stage.dispatchEvent({ type: 'keydown', key: 'ArrowRight' });
+  stage.dispatchEvent({ type: 'keyup', key: 'ArrowRight' });
+  harness.frame(0);
+  assert.ok(scene.getDiagnostics().mayor[0] > beforePosition[0]);
+  assert.notEqual(layer.children[0].getAttribute('transform'), beforeTransform);
+  assert.equal(harness.pendingFrames(), 0);
+});
+
+test('atlas mayor cannot cross a source footprint thinner than a movement sample', t => {
+  const harness = atlasHarness(t);
+  const mapData = freezeDeep({ ...atlasData,
+    regions: [{ regionId: 'nura', status: 'verified', labelAnchor: [500, 350], polygons: square(0, 0, 1000) }],
+    buildings: [{ id: 'thin-building', polygons: [[[[465.005, 324], [465.01, 324], [465.01, 326], [465.005, 326], [465.005, 324]]]] }],
+  });
+  const scene = harness.mount(harness.root, undefined, mapData);
+  scene.update({ snapshot: sceneSnapshot({ view: 'district', focusedRegion: 'nura' }), context: { reducedMotion: true } });
+  assert.deepEqual(scene.getDiagnostics().mayor, [465, 325]);
+  harness.root.querySelector('.atlas-stage').dispatchEvent({ type: 'keydown', key: 'ArrowRight' });
+  assert.ok(scene.getDiagnostics().mayor[0] < 465.005, 'the whole travelled segment must be clear of footprints');
+});
