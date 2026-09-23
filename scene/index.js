@@ -2,6 +2,7 @@ import { createCamera, pointInRegion, regionBounds, polygonsToPath } from './cam
 import { createWorld, REGION_COLORS } from './world.js';
 import { createActors, ACTOR_CAPS } from './actors.js';
 import { createEffects } from './effects.js';
+import { createAtlasScene } from './atlas.js';
 
 const NS = 'http://www.w3.org/2000/svg';
 const mounted = new WeakMap();
@@ -15,8 +16,9 @@ const svg = (tag, attributes = {}, text) => {
 const escape = value => String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 
 /** Synchronous v1 renderer. The host owns policies, calculations and session state. */
-export function createScene({ root, assets, geography, onIntent = () => {} }) {
+export function createScene({ root, assets, geography, mapData, onIntent = () => {} }) {
   if (!root?.appendChild) throw new TypeError('createScene requires a DOM root.');
+  if (mapData) { mounted.get(root)?.destroy(); const atlas = createAtlasScene({ root, mapData, onIntent }); mounted.set(root, atlas); return atlas; }
   const world = createWorld(geography);
   mounted.get(root)?.destroy();
   const unique = `akim-map-${++sceneSequence}`;

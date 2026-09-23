@@ -102,7 +102,7 @@ function dimension(value) {
  * to fitting the whole viewBox. Resizing/projection changes retain that center.
  */
 export function createCamera({ viewBox = [0, 0, 1000, 1000], width = 1000,
-  height = 700, projection = 'top' } = {}) {
+  height = 700, projection = 'top', minZoom = MIN_ZOOM, maxZoom = MAX_ZOOM } = {}) {
   const world = readBounds(viewBox);
   if (!world || world.width <= 0 || world.height <= 0) {
     throw new TypeError('Camera viewBox must have finite coordinates and positive dimensions');
@@ -113,6 +113,9 @@ export function createCamera({ viewBox = [0, 0, 1000, 1000], width = 1000,
   let currentProjection = projection;
   let center = [world.x + world.width / 2, world.y + world.height / 2];
   let zoom = 1;
+  const minimumZoom = Number.isFinite(minZoom) && minZoom > 0 ? minZoom : MIN_ZOOM;
+  const maximumZoom = Number.isFinite(maxZoom) && maxZoom >= minimumZoom ? maxZoom : Math.max(MAX_ZOOM, minimumZoom);
+  const clampCameraZoom = value => Math.min(maximumZoom, Math.max(minimumZoom, value));
 
   function fitScale(bounds) {
     const [a, b, c, d] = PROJECTIONS[currentProjection];
@@ -149,7 +152,7 @@ export function createCamera({ viewBox = [0, 0, 1000, 1000], width = 1000,
     getState() {
       return { projection: currentProjection, width: viewportWidth, height: viewportHeight,
         viewBox: [world.x, world.y, world.width, world.height], center: [...center],
-        zoom, minZoom: MIN_ZOOM, maxZoom: MAX_ZOOM, scale: fitScale(world) * zoom };
+        zoom, minZoom: minimumZoom, maxZoom: maximumZoom, scale: fitScale(world) * zoom };
     },
     setViewport(nextWidth, nextHeight) {
       const w = dimension(nextWidth);
@@ -171,7 +174,7 @@ export function createCamera({ viewBox = [0, 0, 1000, 1000], width = 1000,
     zoomAt(factor, anchor = [viewportWidth / 2, viewportHeight / 2]) {
       if (!Number.isFinite(factor) || factor <= 0 || !isPoint(anchor)) return api;
       const before = unproject(anchor);
-      zoom = clampZoom(zoom * factor);
+      zoom = clampCameraZoom(zoom * factor);
       const after = unproject(anchor);
       center = [center[0] + before[0] - after[0], center[1] + before[1] - after[1]];
       return api;
@@ -185,7 +188,7 @@ export function createCamera({ viewBox = [0, 0, 1000, 1000], width = 1000,
       const target = readBounds(bounds);
       if (!target) return api;
       center = [target.x + target.width / 2, target.y + target.height / 2];
-      zoom = clampZoom(fitScale(target) / fitScale(world));
+      zoom = clampCameraZoom(fitScale(target) / fitScale(world));
       return api;
     },
   };
