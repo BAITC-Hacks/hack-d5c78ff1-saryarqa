@@ -1,119 +1,133 @@
-.akim-scene.akim-atlas { --atlas-ink: #23423c; --atlas-muted: #8a9385; border-radius: 0; border: 0; box-shadow: none; background: #e5e8d8; min-height: 700px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-.akim-scene .atlas-header { height: 76px; padding: 0 30px; display: flex; align-items: center; gap: 60px; color: #f1f3e4; background: #203d38; }
+.akim-scene.akim-atlas { --atlas-ink:#193a32; --atlas-muted:#617568; --paper:#f6f8f5; border-radius:0; border:0; box-shadow:none; background:#e3eadc; min-height:700px; color:#193a32; font-family:"Avenir Next", "Segoe UI", sans-serif; }
+.akim-scene .atlas-header { height:76px; padding:0 28px; display:flex; align-items:center; gap:40px; color:#f0f7ef; background:#193d33; border-bottom:1px solid #40604a; }
 .akim-scene .atlas-brand { display: flex; align-items: center; gap: 12px; min-width: 220px; }
 .akim-scene .atlas-brand > span { width: 39px; height: 39px; display: grid; place-items: center; border-radius: 10px; border: 1px solid #a6b7a759; font: 500 34px Georgia, serif; padding-bottom: 6px; color: #e4cf9c; }
-.akim-scene .atlas-brand strong { font-size: 17px; letter-spacing: .14em; line-height: 1.2; font-weight: 650; }
-.akim-scene .atlas-brand small { display: block; font-size: 8px; letter-spacing: .24em; color: #9db3a5; margin-top: 4px; }
-.akim-scene .atlas-breadcrumb { font-size: 11px; color: #94ada2; flex: 1; }
+.akim-scene .atlas-brand strong { font-size:24px; letter-spacing:-.06em; line-height:1.1; font-weight:650; }
+.akim-scene .atlas-brand small { display:block; font-size:11px; letter-spacing:.04em; color:#b6cfb9; margin-top:4px; font-weight:400; }
+.akim-scene .atlas-breadcrumb { font-size:13px; color:#afc5b7; flex:1; }
 .akim-scene .atlas-breadcrumb span { margin: 0 17px; color: #617e70; }
 .akim-scene .atlas-breadcrumb b { color: #dce7d5; font-weight: 400; }
-.akim-scene .atlas-header-end { display: flex; align-items: center; gap: 8px; font-size: 10px; color: #bbcbb8; }
+.akim-scene .atlas-header-end { display:flex; align-items:center; gap:10px; font-size:12px; color:#c9d9c5; }
 .akim-scene .atlas-live-dot { width: 5px; height: 5px; background: #b1c993; border-radius: 50%; box-shadow: 0 0 0 4px #b1c99312; }
 .akim-scene .atlas-header-end button { color: #d6dfcd; border-color: #6a887b; background: none; padding: 0; font-size: 18px; width: 28px; height: 28px; margin-left: 16px; border-radius: 50%; }
 .akim-scene .atlas-body { display: grid; grid-template-columns: 304px minmax(0,1fr); height: calc(100vh - 76px); min-height: 650px; max-height: 1200px; }
-.akim-scene .atlas-sidebar { background: #f7f7ed; position: relative; z-index: 3; display: flex; flex-direction: column; min-height: 0; border-right: 1px solid #cdd6c2; box-shadow: 12px 0 45px #334c3310; }
-.akim-scene .atlas-sidebar-head { padding: 27px 25px 18px; }
-.akim-scene .atlas-eyebrow { color: #8d987e; letter-spacing: .17em; font-size: 8px; font-weight: 650; }
-.akim-scene .atlas-sidebar h1 { font-weight: 480; font-size: 34px; letter-spacing: -.05em; line-height: 1.12; margin: 13px 0 13px; }
+.akim-scene .atlas-sidebar { background:#f6f8f3; position:relative; z-index:3; display:flex; flex-direction:column; min-height:0; border-right:1px solid #c4d0bd; box-shadow:7px 0 24px #22482e09; }
+.akim-scene .atlas-sidebar-head { padding:28px 24px 20px; }
+.akim-scene .atlas-eyebrow { color: #697d62; letter-spacing: .17em; font-size: 10px; font-weight: 650; }
+.akim-scene .atlas-sidebar h1 { font-weight:600; font-size:32px; letter-spacing:-.055em; line-height:1.15; margin:0 0 10px; }
 .akim-scene .atlas-sidebar h1 em { font: inherit; color: #899779; }
-.akim-scene .atlas-sidebar-head p { font-size: 10px; line-height: 1.8; color: #8c9583; margin: 0; }
-.akim-scene .atlas-search { display: flex; margin: 0 24px 20px; border: 1px solid #d7dece; background: #eeefe3; border-radius: 8px; align-items: center; height: 39px; gap: 9px; padding: 0 12px; color: #8a9a7c; }
+.akim-scene .atlas-sidebar-head p { font-size:13px; line-height:1.5; color:#687d6a; margin:0; }
+.akim-scene .atlas-search { display:flex; margin:0 24px 18px; border:1px solid #cbd7c5; background:#fff; border-radius:11px; align-items:center; height:44px; gap:10px; padding:0 12px; color:#6b8969; }
 .akim-scene .atlas-search > span { font-size: 23px; }
-.akim-scene .atlas-search input { font: inherit; font-size: 10px; width: 100%; min-width: 0; border: 0; background: none; outline: none; color: #325345; }
+.akim-scene .atlas-search input { font:inherit; font-size:12px; width:100%; min-width:0; border:0; background:none; outline:none; color:#294d39; }
 .akim-scene .atlas-search:focus-within { outline: 2px solid #9cb794; }
 .akim-scene .atlas-search-results { position: absolute; z-index: 9; top: 263px; left: 24px; right: 24px; padding: 6px; border: 1px solid #d2dbc8; border-radius: 10px; box-shadow: 0 12px 30px #22432c20; background: #fffef5; }
-.akim-scene .atlas-search-results button { display: block; width: 100%; font-size: 11px; text-align: left; border: 0; }
-.akim-scene .atlas-search-results > span { font-size: 11px; padding: 12px; display: block; }
-.akim-scene .atlas-tabs { display: flex; margin: 0 24px; border-bottom: 1px solid #d7dfcb; gap: 22px; }
-.akim-scene .atlas-tabs button { border-radius: 0; background: none; border: 0; border-bottom: 2px solid transparent; padding: 0 0 12px; font-size: 11px; color: #8f9b82; }
+.akim-scene .atlas-search-results button { display: block; width: 100%; font-size: 13px; text-align: left; border: 0; }
+.akim-scene .atlas-search-results > span { font-size: 13px; padding: 12px; display: block; }
+.akim-scene .atlas-tabs { display:flex; margin:0 24px; border-bottom:1px solid #d1dcca; gap:27px; }
+.akim-scene .atlas-tabs button { border-radius:0; background:none; border:0; border-bottom:3px solid transparent; padding:0 0 12px; font-size:13px; color:#718367; }
 .akim-scene .atlas-tabs button[aria-selected=true] { color: #294d3f; border-bottom-color: #456447; }
 .akim-scene .atlas-sidebar-content { overflow: auto; flex: 1; min-height: 0; scrollbar-width: thin; scrollbar-color: #c5d0b9 transparent; padding-bottom: 12px; }
-.akim-scene .atlas-feature-hero { margin: 19px 24px 0; height: 146px; background: radial-gradient(ellipse at 50% 80%,#ccd7bb5c,transparent 65%),linear-gradient(135deg,#e9eddf,#eff0e5); border: 1px solid #dfe4d3; border-radius: 10px; position: relative; overflow: hidden; }
-.akim-scene .atlas-selected-model { width: 100%; height: 146px; display: block; }
-.akim-scene .atlas-number { position: absolute; left: 15px; top: 11px; color: #adbaa0; font-size: 10px; letter-spacing: .08em; }
-.akim-scene .atlas-feature-kind { position: absolute; left: 14px; bottom: 10px; font-size: 8px; color: #8a9a7c; }
-.akim-scene .atlas-feature-info { padding: 20px 24px 0; }
-.akim-scene .atlas-feature-info h2 { font-size: 22px; font-weight: 520; letter-spacing: -.045em; line-height: 1.2; margin: 0 0 11px; }
-.akim-scene .atlas-feature-info p { font-size: 10px; color: #8d9782; line-height: 1.8; margin: 0 0 15px; }
+.akim-scene .atlas-feature-hero { margin:20px 24px 0; height:168px; background:radial-gradient(ellipse at 50% 85%,#c6d8b665,transparent 62%),#e7eedf; border:0; border-radius:12px; position:relative; overflow:hidden; }
+.akim-scene .atlas-selected-model { width:100%; height:168px; display:block; }
+.akim-scene .atlas-number { position: absolute; left: 15px; top: 11px; color: #adbaa0; font-size: 12px; letter-spacing: .08em; }
+.akim-scene .atlas-feature-kind { position:absolute; left:15px; bottom:12px; font-size:11px; color:#677e59; }
+.akim-scene .atlas-feature-info { padding:19px 24px 0; }
+.akim-scene .atlas-feature-info h2 { font-size:24px; font-weight:600; letter-spacing:-.035em; line-height:1.25; margin:0 0 10px; }
+.akim-scene .atlas-feature-info p { font-size:12px; color:#637a63; line-height:1.6; margin:0 0 16px; }
 .akim-scene .atlas-coordinates { display: grid; grid-template-columns: 1fr 1fr; padding: 13px 0; margin: 7px 0 12px; border-top: 1px solid #e1e5d5; border-bottom: 1px solid #e1e5d5; }
-.akim-scene .atlas-coordinates span { font-size: 7px; color: #9ca48f; letter-spacing: .06em; }
-.akim-scene .atlas-coordinates b { display: block; font-size: 11px; color: #647d61; letter-spacing: .01em; font-weight: 500; margin-top: 5px; }
-.akim-scene button.atlas-primary { display: flex; width: 100%; justify-content: space-between; align-items: center; background: #294c40; border-color: #294c40; color: #f2f4e5; padding: 12px 14px; font-size: 10px; border-radius: 7px; }
+.akim-scene .atlas-coordinates span { font-size: 10px; color: #9ca48f; letter-spacing: .06em; }
+.akim-scene .atlas-coordinates b { display: block; font-size: 13px; color: #647d61; letter-spacing: .01em; font-weight: 500; margin-top: 5px; }
+.akim-scene button.atlas-primary { display:flex; width:100%; justify-content:space-between; align-items:center; background:#20583e; border-color:#20583e; color:#f8fbef; padding:12px 14px; font-size:12px; border-radius:9px; font-weight:600; }
 .akim-scene button.atlas-primary:hover { background: #42664c; }
-.akim-scene .atlas-source-link { color: #8a9c7d; font-size: 8px; text-decoration: none; margin-top: 10px; display: inline-block; }
-.akim-scene .atlas-list-heading { padding: 28px 24px 11px; color: #9aa58c; font-size: 8px; letter-spacing: .12em; display: flex; justify-content: space-between; }
+.akim-scene .atlas-source-link { color: #526f5c; font-size: 10px; text-decoration: none; margin-top: 10px; display: inline-block; }
+.akim-scene .atlas-list-heading { padding:22px 24px 10px; color:#527045; font-size:12px; display:flex; justify-content:space-between; font-weight:600; }
 .akim-scene .atlas-place-list { padding: 0 14px; }
-.akim-scene .atlas-place-list button { display: flex; align-items: center; gap: 11px; width: 100%; padding: 10px; text-align: left; border: 0; background: none; border-radius: 7px; }
+.akim-scene .atlas-place-list button { display:flex; align-items:center; gap:12px; width:100%; padding:11px 10px; text-align:left; border:0; background:none; border-radius:8px; }
 .akim-scene .atlas-place-list button > i { display: grid; place-items: center; font-style: normal; width: 29px; height: 29px; border-radius: 7px; background: #e9eedf; color: #83996e; font-size: 16px; }
-.akim-scene .atlas-place-list button > span { flex: 1; font-size: 10px; line-height: 1.3; }
-.akim-scene .atlas-place-list small { color: #9ba68e; display: block; font-size: 8px; margin-top: 4px; }
-.akim-scene .atlas-place-list b { font-size: 10px; color: #a5b097; }
-.akim-scene .atlas-sidebar-bottom { padding: 14px 24px; border-top: 1px solid #dce2cf; background: #f0f2e6; display: flex; align-items: center; gap: 14px; }
+.akim-scene .atlas-place-list button > span { flex:1; font-size:12px; line-height:1.45; }
+.akim-scene .atlas-place-list small { color:#74886b; display:block; font-size:11px; margin-top:3px; }
+.akim-scene .atlas-place-list b { font-size: 12px; color: #a5b097; }
+.akim-scene .atlas-sidebar-bottom { padding:13px 24px; border-top:1px solid #d7e0ce; background:#edf2e7; display:flex; align-items:center; gap:14px; }
 .akim-scene .atlas-sidebar-bottom > span { font-size: 22px; color: #92a281; }
-.akim-scene .atlas-sidebar-bottom p { margin: 0; font-size: 8px; line-height: 1.7; color: #9aa58e; }
-.akim-scene .atlas-map-shell { position: relative; min-width: 0; overflow: hidden; background: #dce3d1; background-image: radial-gradient(#bac7ac50 .6px, transparent .6px); background-size: 9px 9px; }
+.akim-scene .atlas-sidebar-bottom p { margin:0; font-size:11px; line-height:1.6; color:#63785d; }
+.akim-scene .atlas-map-shell { position:relative; min-width:0; overflow:hidden; background:#e1e9d8; }
 .akim-scene .atlas-stage { position: absolute; inset: 0 0 40px; touch-action: none; outline: none; cursor: grab; }
 .akim-scene .atlas-stage:active { cursor: grabbing; }
 .akim-scene .atlas-stage:focus-visible { outline: 2px solid #c49f68; outline-offset: -4px; }
 .akim-scene .atlas-svg { display: block; width: 100%; height: 100%; }
-.akim-scene .atlas-map-top { position: absolute; z-index: 2; top: 23px; left: 25px; right: 25px; display: flex; justify-content: space-between; align-items: center; gap: 12px; pointer-events: none; }
-.akim-scene .atlas-map-title { display: flex; gap: 12px; align-items: center; font-size: 9px; color: #849276; letter-spacing: .03em; }
-.akim-scene .atlas-pill { color: #698261; font-size: 8px; letter-spacing: .13em; background: #f9fae9d9; border: 1px solid #c2ceaf; border-radius: 5px; padding: 6px 9px; }
-.akim-scene .atlas-projections { display: flex; gap: 4px; background: #f8f9e9ed; border: 1px solid #c7d0b5; border-radius: 9px; padding: 4px; pointer-events: auto; box-shadow: 0 3px 12px #53623b08; }
-.akim-scene .atlas-projections button { font-size: 10px; padding: 6px 12px; border: 0; border-radius: 5px; background: none; }
+.akim-scene .atlas-map-top { position:absolute; z-index:2; top:22px; left:24px; right:24px; display:flex; justify-content:space-between; align-items:center; gap:12px; pointer-events:none; }
+.akim-scene .atlas-map-title { display:flex; gap:12px; align-items:center; font-size:12px; color:#5f7a58; }
+.akim-scene .atlas-pill { color:#486c40; font-size:10px; letter-spacing:.1em; background:#f8fbf3ed; border:1px solid #c0cfb4; border-radius:6px; padding:7px 9px; }
+.akim-scene .atlas-projections { display:flex; gap:4px; background:#fffffff2; border:1px solid #bfccb4; border-radius:10px; padding:4px; pointer-events:auto; box-shadow:0 3px 9px #264d3210; }
+.akim-scene .atlas-projections button { font-size:12px; padding:7px 12px; border:0; border-radius:6px; background:none; }
 .akim-scene .atlas-projections button[aria-pressed=true] { background: #315441; color: #edf2da; }
 .akim-scene .atlas-landmark, .akim-scene .atlas-map-label { cursor: pointer; }
 .akim-scene .atlas-landmark:focus-visible { outline: none; filter: drop-shadow(0 0 5px #e5b153); }
 .akim-scene .atlas-map-label { filter: drop-shadow(0 2px 3px #344e2920); }
 .akim-scene .atlas-layer-vehicles, .akim-scene .atlas-layer-mayor, .akim-scene .atlas-layer-effects { pointer-events: none; }
-.akim-scene .atlas-layer-tools { position: absolute; left: 23px; top: 85px; display: flex; gap: 5px; z-index: 2; }
-.akim-scene .atlas-layer-tools button { color: #6e8261; background: #fcfceeeb; border: 1px solid #c9d4b8; font-size: 14px; border-radius: 6px; padding: 6px 9px; box-shadow: 0 3px 7px #6372470a; }
-.akim-scene .atlas-layer-tools span { font-size: 9px; margin-left: 4px; }
+.akim-scene .atlas-layer-tools { position:absolute; left:24px; top:80px; display:flex; gap:5px; z-index:2; }
+.akim-scene .atlas-layer-tools button { color:#5e7b52; background:#fbfdf7f0; border:1px solid #b8cbb0; font-size:16px; border-radius:8px; padding:8px 10px; box-shadow:0 4px 9px #405c2910; }
+.akim-scene .atlas-layer-tools span { font-size:12px; margin-left:5px; }
 .akim-scene .atlas-layer-tools button[aria-pressed=true] { background: #e9efdd; color: #526f48; border-color: #a6b992; }
 .akim-scene .atlas-camera-tools { position: absolute; z-index: 2; bottom: 117px; right: 25px; display: grid; gap: 5px; }
-.akim-scene .atlas-camera-tools button { width: 38px; height: 38px; padding: 0; display: grid; place-items: center; font-size: 22px; font-weight: 300; border-color: #c2cfac; background: #fbfcedeb; border-radius: 7px; color: #6b815b; box-shadow: 0 3px 8px #455b2912; }
+.akim-scene .atlas-camera-tools button { width:40px; height:40px; padding:0; display:grid; place-items:center; font-size:24px; font-weight:400; border-color:#b6c8a8; background:#fffef5f5; border-radius:9px; color:#496b40; box-shadow:0 4px 10px #35551e15; }
 .akim-scene .atlas-compass { position: absolute; bottom: 310px; right: 36px; display: grid; font-size: 24px; line-height: 1; color: #6d865e; pointer-events: none; }
-.akim-scene .atlas-compass span { font-size: 8px; justify-self: center; margin-bottom: 5px; }
-.akim-scene .atlas-scale { position: absolute; bottom: 93px; left: 26px; font-size: 8px; color: #788768; pointer-events: none; display: flex; gap: 10px; align-items: center; }
+.akim-scene .atlas-compass span { font-size: 10px; justify-self: center; margin-bottom: 5px; }
+.akim-scene .atlas-scale { position: absolute; bottom: 93px; left: 26px; font-size: 10px; color: #788768; pointer-events: none; display: flex; gap: 10px; align-items: center; }
 .akim-scene .atlas-scale i { display: block; width: 90px; border: 1px solid #8a9d74; border-top: 0; height: 5px; }
-.akim-scene .atlas-map-credit { position: absolute; bottom: 53px; left: 25px; max-width: calc(100% - 95px); color: #819171; font-size: 8px; background: #eef2e1b8; border-radius: 3px; padding: 3px 6px; }
-.akim-scene .atlas-map-credit button { font-size: 8px; color: #637e58; padding: 0 0 0 6px; border: 0; background: none; }
-.akim-scene .atlas-status-bar { position: absolute; bottom: 0; left: 0; right: 0; height: 40px; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 0 25px; background: #f1f4e5e0; border-top: 1px solid #c7d4b4; color: #839673; font-size: 8px; backdrop-filter: blur(8px); }
-.akim-scene .atlas-mode-status { color: #648458; font-size: 7px; font-weight: 650; letter-spacing: .11em; }
-.akim-scene .atlas-status-help { flex: 1; text-align: center; color: #8f9e7e; }
-.akim-scene .atlas-place-card { position: absolute; bottom: 120px; left: 25px; width: min(340px,calc(100% - 110px)); z-index: 4; padding: 22px; background: #fffff2f5; border: 1px solid #d3dbc1; border-radius: 12px; box-shadow: 0 16px 60px #28463025; }
+.akim-scene .atlas-map-credit { position:absolute; bottom:53px; left:24px; max-width:calc(100% - 96px); color:#536c49; font-size:10px; background:#f7faeef0; border-radius:4px; padding:4px 7px; }
+.akim-scene .atlas-map-credit button { font-size:10px; color:#365e39; padding:0 0 0 6px; border:0; background:none; }
+.akim-scene .atlas-status-bar { position:absolute; bottom:0; left:0; right:0; height:40px; display:flex; justify-content:space-between; align-items:center; gap:12px; padding:0 24px; background:#f2f7e9ed; border-top:1px solid #bdcdb0; color:#5b7d4e; font-size:10px; backdrop-filter:blur(8px); }
+.akim-scene .atlas-mode-status { color:#406a39; font-size:11px; font-weight:600; }
+.akim-scene .atlas-status-help { flex:1; text-align:center; color:#68815b; font-size:10px; }
+.akim-scene .atlas-place-card { position:absolute; top:134px; left:24px; width:min(350px,calc(100% - 92px)); max-height:calc(100% - 225px); overflow:auto; z-index:4; padding:24px; background:#fffffbfa; border:1px solid #c4d3ba; border-radius:14px; box-shadow:0 18px 50px #224c3030; }
 .akim-scene .atlas-place-card > button { position: absolute; top: 6px; right: 8px; border: 0; background: none; font-size: 20px; padding: 4px; }
-.akim-scene .atlas-place-card h3 { font-weight: 500; font-size: 21px; letter-spacing: -.04em; margin: 10px 0; }
-.akim-scene .atlas-place-card p { font-size: 10px; line-height: 1.8; color: #7c8a6d; }
-.akim-scene .atlas-place-card a { font-size: 10px; color: #507244; }
+.akim-scene .atlas-place-card h3 { font-weight:600; font-size:23px; letter-spacing:-.035em; margin:10px 0; }
+.akim-scene .atlas-place-card p { font-size:12px; line-height:1.65; color:#5d7653; }
+.akim-scene .atlas-place-card a { font-size: 12px; color: #507244; }
 .akim-scene .atlas-playback { display: none; padding: 10px 25px 10px 329px; background: #f3f5e8; border-top: 1px solid #d3dec4; }
 .akim-scene.has-plan .atlas-playback { display: block; }
-.akim-scene .atlas-feedback { font-size: 11px; color: #587549; }
+.akim-scene .atlas-feedback { font-size: 13px; color: #587549; }
 .akim-scene .atlas-playback > div { height: 4px; border-radius: 4px; overflow: hidden; background: #dde5cf; margin-top: 8px; }
 .akim-scene .atlas-playback > div > i { display: block; height: 100%; background: #9ab185; }
-.akim-scene .atlas-playback small { font-size: 8px; color: #8ea27e; }
-.akim-scene .atlas-data-note { padding: 12px; background: #eef0e0; border: 1px solid #dfe4cc; border-radius: 6px; color: #8d966f; font-size: 9px; line-height: 1.65; margin-bottom: 18px; }
-.akim-scene .atlas-data-note span { font-size: 9px; display: block; margin-top: 5px; }
+.akim-scene .atlas-playback small { font-size: 10px; color: #8ea27e; }
+.akim-scene .atlas-data-note { padding:13px; background:#eaf0e0; border:0; border-radius:8px; color:#617348; font-size:11px; line-height:1.6; margin-bottom:18px; }
+.akim-scene .atlas-data-note span { font-size: 11px; display: block; margin-top: 5px; }
 .akim-scene .atlas-corridor-list { padding: 0 14px; }
 .akim-scene .atlas-corridor-list button { display: flex; width: 100%; align-items: flex-start; gap: 9px; border: 0; background: none; text-align: left; padding: 13px 10px; }
-.akim-scene .atlas-corridor-list button > span:nth-child(2) { flex: 1; font-size: 10px; }
-.akim-scene .atlas-rank { color: #b3bd9d; font-size: 9px; }
-.akim-scene .atlas-corridor-list small { font-size: 8px; display: block; margin-top: 4px; line-height: 1.6; color: #9aa78a; }
-.akim-scene .atlas-corridor-list b { color: #ba9969; font-size: 11px; font-weight: 500; }
+.akim-scene .atlas-corridor-list button > span:nth-child(2) { flex: 1; font-size: 12px; }
+.akim-scene .atlas-rank { color: #b3bd9d; font-size: 11px; }
+.akim-scene .atlas-corridor-list small { font-size: 10px; display: block; margin-top: 4px; line-height: 1.6; color: #6f816e; }
+.akim-scene .atlas-corridor-list b { color: #ba9969; font-size: 13px; font-weight: 500; }
 .akim-scene .atlas-corridor-list i { display: block; height: 3px; background: linear-gradient(to right,#c9a477 var(--load),#e7ebd8 var(--load)); margin-top: 9px; border-radius: 2px; }
 .akim-scene .atlas-corridor-list button[aria-pressed=true] { background: #e7edda; color: #3f6744; }
 .akim-scene .atlas-district-list { padding: 0 16px; }
-.akim-scene .atlas-district-list button { display: flex; gap: 12px; align-items: center; width: 100%; border: 0; background: none; padding: 13px 8px; text-align: left; }
-.akim-scene .atlas-district-list button > span { color: #a5b196; font-size: 9px; }
-.akim-scene .atlas-district-list b { flex: 1; font-size: 12px; font-weight: 500; }
-.akim-scene .atlas-district-list small { display: block; margin-top: 5px; color: #92a17f; font-size: 8px; font-weight: 400; }
+.akim-scene .atlas-district-list button { display:flex; gap:12px; align-items:center; width:100%; border:0; background:none; padding:14px 8px; text-align:left; border-radius:9px; }
+.akim-scene .atlas-district-list button > span { color: #a5b196; font-size: 11px; }
+.akim-scene .atlas-district-list b { flex:1; font-size:14px; font-weight:600; }
+.akim-scene .atlas-district-list small { display:block; margin-top:4px; color:#627f54; font-size:11px; font-weight:400; }
 .akim-scene .atlas-district-list i { color: #94a482; font-style: normal; }
 .akim-scene .atlas-district-list button[aria-pressed=true] { background: #e8efdb; color: #335d3f; }
 @media (max-width: 1100px) { .akim-scene .atlas-body { grid-template-columns: 270px minmax(0,1fr); } .akim-scene .atlas-header { gap: 30px; padding-inline: 24px; } .akim-scene .atlas-brand { min-width: 190px; } .akim-scene .atlas-breadcrumb { display: none; } .akim-scene .atlas-header-end { margin-left: auto; } .akim-scene .atlas-status-help { display: none; } .akim-scene .atlas-playback { padding-left: 294px; } }
-@media (max-width: 768px) { .akim-scene .atlas-header { height: 64px; padding: 0 18px; } .akim-scene .atlas-brand { min-width: 0; } .akim-scene .atlas-header-end { font-size: 8px; } .akim-scene .atlas-header-end button { margin-left: 2px; } .akim-scene .atlas-body { height: auto; max-height: none; display: flex; flex-direction: column-reverse; } .akim-scene .atlas-map-shell { height: 65vh; min-height: 480px; } .akim-scene .atlas-sidebar { border-right: 0; display: block; } .akim-scene .atlas-sidebar-head { padding-top: 22px; } .akim-scene .atlas-sidebar h1 { font-size: 28px; } .akim-scene .atlas-sidebar h1 br { display: none; } .akim-scene .atlas-sidebar h1 em::before { content: ' '; } .akim-scene .atlas-sidebar-head p { display: none; } .akim-scene .atlas-feature-hero { float: left; width: 150px; margin-right: 18px; } .akim-scene .atlas-list-heading { clear: both; } .akim-scene .atlas-sidebar-content { overflow: visible; } .akim-scene .atlas-search-results { top: 145px; } .akim-scene .atlas-playback { padding: 12px 24px; } }
-@media (max-width: 430px) { .akim-scene .atlas-header { padding: 0 12px; gap: 12px; } .akim-scene .atlas-brand strong { font-size: 14px; } .akim-scene .atlas-brand > span { width: 34px; height: 34px; font-size: 29px; } .akim-scene .atlas-header-end { font-size: 7px; gap: 5px; } .akim-scene .atlas-header-end button { display: none; } .akim-scene .atlas-map-top { top: 16px; left: 14px; right: 14px; } .akim-scene .atlas-map-title > span:last-child { display: none; } .akim-scene .atlas-layer-tools { left: 14px; top: 67px; } .akim-scene .atlas-layer-tools button { padding: 5px 8px; } .akim-scene .atlas-camera-tools { right: 14px; bottom: 107px; } .akim-scene .atlas-compass { right: 25px; bottom: 292px; } .akim-scene .atlas-map-credit { left: 14px; font-size: 7px; } .akim-scene .atlas-status-bar { padding: 0 14px; font-size: 7px; } .akim-scene .atlas-map-shell { height: 63vh; min-height: 470px; } .akim-scene .atlas-feature-hero { float: none; width: auto; } .akim-scene .atlas-place-card { left: 12px; padding: 15px; width: calc(100% - 72px); } }
+@media (max-width: 768px) { .akim-scene .atlas-header { height: 64px; padding: 0 18px; } .akim-scene .atlas-brand { min-width: 0; } .akim-scene .atlas-header-end { font-size: 10px; } .akim-scene .atlas-header-end button { margin-left: 2px; } .akim-scene .atlas-body { height: auto; max-height: none; display: flex; flex-direction: column-reverse; } .akim-scene .atlas-map-shell { height: 65vh; min-height: 480px; } .akim-scene .atlas-sidebar { border-right: 0; display: block; } .akim-scene .atlas-sidebar-head { padding-top: 22px; } .akim-scene .atlas-sidebar h1 { font-size: 28px; } .akim-scene .atlas-sidebar h1 br { display: none; } .akim-scene .atlas-sidebar h1 em::before { content: ' '; } .akim-scene .atlas-sidebar-head p { display: none; } .akim-scene .atlas-feature-hero { float: left; width: 150px; margin-right: 18px; } .akim-scene .atlas-list-heading { clear: both; } .akim-scene .atlas-sidebar-content { overflow: visible; } .akim-scene .atlas-search-results { top: 145px; } .akim-scene .atlas-playback { padding: 12px 24px; } }
+@media (max-width: 430px) { .akim-scene .atlas-header { padding: 0 12px; gap: 12px; } .akim-scene .atlas-brand strong { font-size: 14px; } .akim-scene .atlas-brand > span { width: 34px; height: 34px; font-size: 29px; } .akim-scene .atlas-header-end { font-size: 10px; gap: 5px; } .akim-scene .atlas-header-end button { display: none; } .akim-scene .atlas-map-top { top: 16px; left: 14px; right: 14px; } .akim-scene .atlas-map-title > span:last-child { display: none; } .akim-scene .atlas-layer-tools { left: 14px; top: 67px; } .akim-scene .atlas-layer-tools button { padding: 5px 8px; } .akim-scene .atlas-camera-tools { right: 14px; bottom: 107px; } .akim-scene .atlas-compass { right: 25px; bottom: 292px; } .akim-scene .atlas-map-credit { left: 14px; font-size: 10px; } .akim-scene .atlas-status-bar { padding: 0 14px; font-size: 10px; } .akim-scene .atlas-map-shell { height: 63vh; min-height: 470px; } .akim-scene .atlas-feature-hero { float: none; width: auto; } .akim-scene .atlas-place-card { left: 12px; padding: 15px; width: calc(100% - 72px); } }
 
 .akim-scene .atlas-game-hud { position:absolute; right:24px; top:85px; }
 .akim-scene .atlas-map-credit a { color:inherit; }
 .akim-scene .atlas-layer-intersections { cursor:help; }
 @media(max-width:768px) { .akim-scene .atlas-game-hud.atlas-play-panel { position:relative; top:auto; right:auto; width:auto; max-width:none; padding:12px; } .akim-scene .atlas-map-shell:has(.atlas-game-hud) { overflow:visible; height:auto; min-height:0; padding-top:max(63vh,470px); } .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-stage { bottom:auto; height:max(63vh,470px); } .akim-scene .atlas-game-hud .atlas-play-content { max-height:60vh; } .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-status-bar { top:calc(max(63vh,470px) - 40px); bottom:auto; } .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-camera-tools { top:200px; bottom:auto; } .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-compass { top:165px; bottom:auto; } .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-scale { top:calc(max(63vh,470px) - 90px); bottom:auto; } .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-map-credit { top:calc(max(63vh,470px) - 62px); bottom:auto; } }
+
+.akim-scene .atlas-search-wrap { position:relative; z-index:6; }
+.akim-scene .atlas-search-wrap .atlas-search-results { top:calc(100% - 13px); }
+.akim-scene .atlas-provenance { margin-top:14px; font-size:11px; color:#617958; }
+.akim-scene .atlas-provenance summary { cursor:pointer; padding:3px 0; }
+.akim-scene .atlas-provenance[open] summary { margin-bottom:12px; }
+.akim-scene .atlas-feature-info .atlas-provenance p { font-size:11px; }
+.akim-scene .atlas-district-dot { width:8px; height:8px; background:#b8c9a5; border-radius:50%; }
+.akim-scene [aria-pressed=true] .atlas-district-dot { background:#498649; box-shadow:0 0 0 4px #dae9cc; }
+.akim-scene .atlas-compass { transform-origin:50% 60%; }
+.akim-scene .atlas-projections button:focus-visible, .akim-scene .atlas-layer-tools button:focus-visible { outline:3px solid #bc924a; outline-offset:3px; }
+@media(max-width:1100px) { .akim-scene .atlas-map-title>span:last-child { display:none; } .akim-scene .atlas-header-end { font-size:11px; } }
+@media(max-width:768px) { .akim-scene .atlas-sidebar-head { padding:22px 24px 16px; } .akim-scene .atlas-feature-hero { height:154px; } .akim-scene .atlas-selected-model { height:154px; } .akim-scene .atlas-feature-info h2 { font-size:24px; } .akim-scene .atlas-header-end { font-size:11px; } .akim-scene .atlas-place-card { top:118px; max-height:300px; bottom:auto; } }
+@media(max-width:430px) { .akim-scene .atlas-brand strong { font-size:21px; } .akim-scene .atlas-brand small { font-size:10px; } .akim-scene .atlas-header-end { font-size:10px; } .akim-scene .atlas-header-end>button { display:grid; } .akim-scene .atlas-layer-tools { gap:4px; } .akim-scene .atlas-layer-tools span { font-size:11px; } .akim-scene .atlas-layer-tools button { padding:6px 8px; } .akim-scene .atlas-sidebar h1 { font-size:28px; } .akim-scene .atlas-map-credit { font-size:9px; line-height:1.3; } }

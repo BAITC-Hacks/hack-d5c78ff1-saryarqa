@@ -89,3 +89,19 @@ external asset exports.
 
 Run `npm start`, then open `/scene/dev.html` for the map-first game or `/` for the
 main application. Only the lead merges the review branch into integration.
+
+## UI/UX refinement
+
+After the first pushed real-map version (`0051641`), the user requested a design
+pass. The frontend-design skill was installed from the official anthropics/skills
+repository and read. The revised interface uses a stronger forest/river palette,
+larger sentence-case typography, contextual place descriptions and optional
+coordinate/source disclosure. The plan HUD has a clear remaining-budget block
+and five interactive decision slots; native controls and shared session remain.
+
+Map labels avoid overlay controls; observed HUD resizing refreshes placement.
+Close views show existing OSM road names. District selection updates map outlines,
+landmark picks clear stale road highlights, search is anchored to its input,
+source cards stay inside the map area, Escape dismisses popovers, and the north
+compass follows the selected projection. The same 105-test suite and browser
+plan/result checks were repeated; screenshots in evidence reflect the refined UI.
