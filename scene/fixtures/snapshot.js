@@ -6,7 +6,7 @@ export const cityData = { schemaVersion: 1, sources: [], observations: [
 export function createSnapshot() {
   return { contractVersion: 1, revision: 0, planRevision: 0, mode: 'game', projection: 'tilted', view: 'overview',
     focusedRegion: null, plan: [], validation: {}, preview: { measures: [], issues: [], score: null }, result: null,
-    presentation: null, playback: { status: 'idle', speed: 1 }, personalBest: null };
+    presentation: null, playback: { status: 'idle', speed: 1, runId: 0 }, personalBest: null };
 }
 export function demoPreview() {
   return [{ id: 'M7', scope: 'district', targets: ['Нура'], cost: 0, lag: 2, factor: 1, effects: {} },

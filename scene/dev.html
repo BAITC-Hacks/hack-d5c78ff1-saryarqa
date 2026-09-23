@@ -3,6 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Аким · лаборатория городской сцены</title>
+  <link rel="icon" href="data:,">
   <link rel="stylesheet" href="./styles.css">
   <style>
     body { margin: 0; background: #f4f3e9; color: #234a3d; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
@@ -34,11 +35,11 @@
     <div class="dev-controls" aria-label="Тестовые сценарии">
       <button id="preview" type="button">Показать тестовый план</button><button id="clear" type="button">Убрать план</button>
       <button id="play" type="button">Воспроизвести</button><button id="pause" type="button">Пауза</button><button id="skip" type="button">Пропустить</button><button id="replay" type="button">Повторить</button>
-      <label>Скорость <select id="speed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option><option value="8">8×</option></select></label>
+      <label>Скорость <select id="speed"><option value="1">1×</option><option value="2">2×</option><option value="4">4×</option></select></label>
       <label><input id="reduced" type="checkbox">Без анимации</label><label><input id="hidden" type="checkbox">Скрыть / Calculator</label>
       <button id="remount" type="button">Пересоздать сцену</button>
     </div>
-    <p class="dev-note">Это тестовый стенд, не основной калькулятор. Геометрия условная, изменения показателей в демонстрации вымышлены. Счёт и бюджет здесь не рассчитываются. Стартовые SVG взяты из общей базы; финальные данные и изображения ожидаются от команды 03.</p>
+    <p class="dev-note">Тестовый стенд сцены: условная геометрия, не реальные границы Астаны. План, бюджет и счёт вычисляет общая сессия и движок калькулятора. «Тестовый план» выбирает две меры без итогового балла; «Воспроизвести» загружает допустимый пример организаторов. Ассеты и карта принадлежат отдельной команде.</p>
     <p class="dev-note" id="dev-status" role="status"></p>
     <footer class="dev-footer"><span>САРЫАРКА · HACKALEM</span><span>Маленькая сцена. Большая ответственность.</span></footer>
   </main>
