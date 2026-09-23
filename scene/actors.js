@@ -119,6 +119,8 @@ function matchingObservation(cityData, metric, regionId) {
  * Units are world coordinates; headings are degrees for SVG rotation.
  * `walkable.contains` describes the decorative Nura navigation mask. The mayor
  * stops at obstacles (there is deliberately no pathfinding or building physics).
+ * Optional `walkable.canTraverse(from, to)` also rejects intersections between
+ * movement samples, including obstacles thinner than the movement step.
  * The host owns requestAnimationFrame and calls step only while visible.
  */
 export function createActors({ geography = {}, walkable = {} } = {}) {
@@ -211,7 +213,9 @@ export function createActors({ geography = {}, walkable = {} } = {}) {
     for (let index = 1; index <= steps; index += 1) {
       const amount = travel * index / steps;
       const candidate = [from[0] + dx * amount, from[1] + dy * amount];
-      if (!contains(candidate)) { blocked = true; break; }
+      const segmentAllowed = typeof walkable.canTraverse !== 'function'
+        || Boolean(walkable.canTraverse(mayor.position, candidate));
+      if (!contains(candidate) || !segmentAllowed) { blocked = true; break; }
       mayor.position = candidate;
     }
     if (distance(from, mayor.position) > 1e-8) mayor.heading = heading(from, mayor.position);
@@ -273,7 +277,8 @@ export function createActors({ geography = {}, walkable = {} } = {}) {
         scope: detailed() ? 'nura' : 'city', reducedMotion,
         representativeSamples: true, liveTraffic: false,
         navigation: { kind: 'illustrative-walkable-mask', district: 'nura',
-          available: Boolean(mayor) && !destroyed, obstacleBehavior: 'stop', maximumMovementStep },
+          available: Boolean(mayor) && !destroyed, obstacleBehavior: 'stop', maximumMovementStep,
+          segmentGuard: typeof walkable.canTraverse === 'function' },
         mappings: mappings.map(({ paths: selectedPaths, ...mapping }) => ({
           ...mapping,
           renderedCount: destroyed ? 0 : actors.filter((actor) => actor.kind === mapping.kind
