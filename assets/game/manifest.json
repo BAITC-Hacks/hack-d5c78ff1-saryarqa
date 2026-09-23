@@ -1,0 +1,840 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "measure.M1",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M1"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M2",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M2"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M3",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M3"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M4",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M4"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M5",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M5"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M6",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M6"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M7",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M7"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M8",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M8"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M9",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M9"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M10",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M10"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M11",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M11"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M12",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M12"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M13",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M13"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "measure.M14",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "starter-original",
+      "views": {
+        "shared": {
+          "path": "assets/game/measure-icons.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ],
+          "symbolId": "M14"
+        }
+      },
+      "note": "Original monochrome icon/marker. Interactive label remains HTML."
+    },
+    {
+      "id": "building.home",
+      "kind": "world-sprite",
+      "status": "placeholder",
+      "sourceId": "starter-original",
+      "views": {
+        "tilted": {
+          "path": "assets/game/miniature-kit.svg",
+          "width": 96,
+          "height": 96,
+          "anchor": [
+            48,
+            82
+          ],
+          "symbolId": "home"
+        }
+      },
+      "note": "Starter still; top view, directions and scene anchor integration remain untested. Bus is a side-view placeholder, not a paired projection export."
+    },
+    {
+      "id": "building.apartment",
+      "kind": "world-sprite",
+      "status": "placeholder",
+      "sourceId": "starter-original",
+      "views": {
+        "tilted": {
+          "path": "assets/game/miniature-kit.svg",
+          "width": 96,
+          "height": 96,
+          "anchor": [
+            48,
+            84
+          ],
+          "symbolId": "apartment"
+        }
+      },
+      "note": "Starter still; top view, directions and scene anchor integration remain untested. Bus is a side-view placeholder, not a paired projection export."
+    },
+    {
+      "id": "building.civic",
+      "kind": "world-sprite",
+      "status": "placeholder",
+      "sourceId": "starter-original",
+      "views": {
+        "tilted": {
+          "path": "assets/game/miniature-kit.svg",
+          "width": 96,
+          "height": 96,
+          "anchor": [
+            48,
+            83
+          ],
+          "symbolId": "civic"
+        }
+      },
+      "note": "Starter still; top view, directions and scene anchor integration remain untested. Bus is a side-view placeholder, not a paired projection export."
+    },
+    {
+      "id": "terrain.tree",
+      "kind": "world-sprite",
+      "status": "placeholder",
+      "sourceId": "starter-original",
+      "views": {
+        "tilted": {
+          "path": "assets/game/miniature-kit.svg",
+          "width": 96,
+          "height": 96,
+          "anchor": [
+            48,
+            80
+          ],
+          "symbolId": "tree"
+        }
+      },
+      "note": "Starter still; top view, directions and scene anchor integration remain untested. Bus is a side-view placeholder, not a paired projection export."
+    },
+    {
+      "id": "furniture.street-light",
+      "kind": "world-sprite",
+      "status": "placeholder",
+      "sourceId": "starter-original",
+      "views": {
+        "tilted": {
+          "path": "assets/game/miniature-kit.svg",
+          "width": 96,
+          "height": 96,
+          "anchor": [
+            43,
+            82
+          ],
+          "symbolId": "street-light"
+        }
+      },
+      "note": "Starter still; top view, directions and scene anchor integration remain untested. Bus is a side-view placeholder, not a paired projection export."
+    },
+    {
+      "id": "vehicle.bus",
+      "kind": "world-sprite",
+      "status": "placeholder",
+      "sourceId": "starter-original",
+      "views": {
+        "tilted": {
+          "path": "assets/game/miniature-kit.svg",
+          "width": 96,
+          "height": 96,
+          "anchor": [
+            48,
+            75
+          ],
+          "symbolId": "bus"
+        }
+      },
+      "note": "Starter still; top view, directions and scene anchor integration remain untested. Bus is a side-view placeholder, not a paired projection export."
+    },
+    {
+      "id": "terrain.park",
+      "kind": "world-sprite",
+      "status": "placeholder",
+      "sourceId": "starter-original",
+      "views": {
+        "tilted": {
+          "path": "assets/game/miniature-kit.svg",
+          "width": 96,
+          "height": 96,
+          "anchor": [
+            48,
+            72
+          ],
+          "symbolId": "park"
+        }
+      },
+      "note": "Starter still; top view, directions and scene anchor integration remain untested. Bus is a side-view placeholder, not a paired projection export."
+    },
+    {
+      "id": "category.transport",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/category.transport.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "category.ecology",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/category.ecology.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "category.social",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/category.social.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "category.safety",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/category.safety.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "category.services",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/category.services.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.T1",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.T1.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.T2",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.T2.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.S1",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.S1.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.S2",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.S2.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.B1",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.B1.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.B2",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.B2.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.C1",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.C1.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "indicator.C2",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.C2.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export; provenance and final style approval pending."
+    },
+    {
+      "id": "terrain.grass",
+      "kind": "terrain",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "top": {
+          "path": "assets/game/reviewed/ground-grass-top.svg",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128,
+            128
+          ]
+        },
+        "tilted": {
+          "path": "assets/game/reviewed/ground-grass-tilted.svg",
+          "width": 320,
+          "height": 218,
+          "anchor": [
+            160,
+            82
+          ]
+        }
+      },
+      "note": "Static source canvas retained. Grass top is intentionally opaque; road/tilted canvases have unpainted surroundings. Alignment, angle and source reuse need review."
+    },
+    {
+      "id": "road.straight",
+      "kind": "terrain",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "top": {
+          "path": "assets/game/reviewed/road-straight-top.svg",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128,
+            128
+          ]
+        },
+        "tilted": {
+          "path": "assets/game/reviewed/road-straight-tilted.svg",
+          "width": 320,
+          "height": 218,
+          "anchor": [
+            172,
+            79
+          ]
+        }
+      },
+      "note": "Static source canvas retained. Grass top is intentionally opaque; road/tilted canvases have unpainted surroundings. Alignment, angle and source reuse need review."
+    },
+    {
+      "id": "indicator.E1",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.E1.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export. E1 is greening. Authorship/reuse and final style approval pending."
+    },
+    {
+      "id": "indicator.E2",
+      "kind": "ui-icon",
+      "status": "placeholder",
+      "sourceId": "local-export-unconfirmed",
+      "views": {
+        "shared": {
+          "path": "assets/game/reviewed/indicator.E2.svg",
+          "width": 32,
+          "height": 32,
+          "anchor": [
+            16,
+            16
+          ]
+        }
+      },
+      "note": "Existing local SVG export. E2 is air quality. Authorship/reuse and final style approval pending."
+    },
+    {
+      "id": "unit.mayor",
+      "kind": "unit",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "unit.citizen.01",
+      "kind": "unit",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "unit.citizen.02",
+      "kind": "unit",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "unit.citizen.03",
+      "kind": "unit",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "unit.worker",
+      "kind": "unit",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "unit.emergency",
+      "kind": "unit",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "vehicle.car",
+      "kind": "vehicle",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "vehicle.lrt",
+      "kind": "vehicle",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "vehicle.service",
+      "kind": "vehicle",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "building.school",
+      "kind": "building",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "building.clinic",
+      "kind": "building",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "road.corner",
+      "kind": "road",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "road.junction",
+      "kind": "road",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    },
+    {
+      "id": "road.crosswalk",
+      "kind": "road",
+      "status": "missing",
+      "sourceId": "not-supplied",
+      "views": {},
+      "note": "No reviewed standalone export with provenance and required view/state metadata. Composite previews are not runtime sprites."
+    }
+  ]
+}

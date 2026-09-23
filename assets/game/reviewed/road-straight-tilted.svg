@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 218" width="320" height="218">
+  <title>Paper-cut straight road tile — tilted view</title>
+  <defs>
+    <clipPath id="surface"><path d="M34 63 180 21 310 80 164 122Z"/></clipPath>
+    <pattern id="fiber" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="m5 7 3-1m15 14 3 1" stroke="#d9d4c9" stroke-width="1" opacity=".2"/>
+    </pattern>
+  </defs>
+  <path d="M34 63 180 21 310 80 164 122Z" fill="#e8dcc3"/>
+  <path d="M34 63 164 122v13L34 76zm130 59 146-42v13l-146 42Z" fill="#b8ad96"/>
+  <path d="M34 78 180 36 310 95 164 137Z" fill="#56676a"/>
+  <g clip-path="url(#surface)">
+    <path d="M34 63 180 21 310 80 164 122Z" fill="url(#fiber)"/>
+  </g>
+  <path d="M49 78 180 40 296 93 164 131Z" fill="none" stroke="#c3ae7e" stroke-width="2" opacity=".7"/>
+  <path d="m66 85 23-7m25-7 25-7m25-7 16-5 9 4m21 10 23 10m22 10 23 10" fill="none" stroke="#f5eacb" stroke-width="4" stroke-linecap="round"/>
+</svg>
