@@ -14,7 +14,7 @@ export const getRegion = (id) => REGIONS.find((region) => region.regionId === id
 export const regionIdForDistrict = (district) => REGIONS.find((region) => region.simulationDistrict === district)?.regionId ?? null;
 
 /** @typedef {{ id: string, district: string|null }} Decision */
-/** @typedef {{ status: 'idle'|'playing'|'paused'|'complete', speed: number }} Playback */
+/** @typedef {{ status: 'idle'|'playing'|'paused'|'complete', speed: number, runId: number }} Playback */
 /**
  * Scene module: createScene({root, assets, geography, onIntent}) -> {update, destroy}.
  * update({snapshot, context:{cityData, reducedMotion, visible}}) is idempotent.
