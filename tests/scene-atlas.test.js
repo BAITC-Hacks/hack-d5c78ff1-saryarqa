@@ -1,6 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createScene } from '../scene/index.js';
+import { readFileSync } from 'node:fs';
+import { createGeoData } from '../scene/geodata.js';
+import { pointInRegion } from '../scene/camera.js';
 
 function freezeDeep(value) {
   if (value && typeof value === 'object') {
@@ -371,4 +374,53 @@ test('atlas mayor cannot cross a source footprint thinner than a movement sample
   assert.deepEqual(scene.getDiagnostics().mayor, [465, 325]);
   harness.root.querySelector('.atlas-stage').dispatchEvent({ type: 'keydown', key: 'ArrowRight' });
   assert.ok(scene.getDiagnostics().mayor[0] < 465.005, 'the whole travelled segment must be clear of footprints');
+});
+
+test('atlas six-source gate accepts the complete set without admitting historical extras', t => {
+  const harness = atlasHarness(t);
+  const regions = ['esil', 'almaty', 'saryarka', 'baikonur', 'nura', 'saraishyk'].map(regionId => ({
+    regionId, status: 'unverified', sourceIds: ['astana-municipal-six-districts'],
+    labelAnchor: [500, 350], polygons: square(0, 0, 1000),
+  }));
+  for (const invalid of [regions.slice(0, 5), regions.map(r => r.regionId === 'nura' ? { ...r, status: 'historical' } : r)]) {
+    const scene = harness.mount(harness.root, undefined, { ...atlasData, regions: invalid });
+    scene.update({ snapshot: sceneSnapshot(), context: { reducedMotion: true } });
+    assert.equal(scene.getDiagnostics().data.regions, 0);
+    assert.equal(scene.getDiagnostics().mayor, null);
+    scene.destroy();
+  }
+  const extras = [...atlasData.regions, { ...regions[1], sourceIds: ['unrelated-source'] }];
+  const scene = harness.mount(harness.root, undefined, { ...atlasData, regions: [...extras, ...regions] });
+  scene.update({ snapshot: sceneSnapshot(), context: { reducedMotion: true } });
+  assert.equal(scene.getDiagnostics().data.regions, 6);
+  assert.equal(harness.root.querySelectorAll('[data-district="esil"]').length, 1);
+  assert.ok(scene.getDiagnostics().mayor);
+});
+
+test('bundled Astana geography adapts all six attributed districts and gives Nura a clear walkable start', t => {
+  const files = { seed: 'astana-ai.json', landmarks: 'landmarks.geojson', parks: 'parks.geojson', roads: 'roads.geojson',
+    intersections: 'intersections.geojson', landscape: 'landscape-render.geojson', buildings: 'buildings-render.geojson',
+    trafficCorridors: 'traffic_corridors.json', majorRoads: 'major_roads.json', districts: 'districts-current.geojson' };
+  const input = Object.fromEntries(Object.entries(files).map(([key, filename]) =>
+    [key, JSON.parse(readFileSync(new URL(`../scene/data/astana/${filename}`, import.meta.url), 'utf8'))]));
+  const mapData = createGeoData(input);
+  assert.deepEqual(mapData.regions.map(r => r.regionId).sort(), ['almaty', 'baikonur', 'esil', 'nura', 'saraishyk', 'saryarka']);
+  assert.ok(mapData.regions.every(r => r.status === 'unverified' && r.sourceIds.includes('astana-municipal-six-districts')));
+  const harness = atlasHarness(t), scene = harness.mount(harness.root, undefined, mapData);
+  scene.update({ snapshot: sceneSnapshot({ view: 'district', focusedRegion: 'nura' }), context: { reducedMotion: true } });
+  assert.equal(scene.getDiagnostics().data.regions, 6);
+  const nura = mapData.regions.find(r => r.regionId === 'nura');
+  const exclusions = [...mapData.buildings, ...mapData.landscape.filter(f => /water|river|hydro/.test(f.kind))];
+  const stage = harness.root.querySelector('.atlas-stage');
+  const start = scene.getDiagnostics().mayor;
+  assert.ok(start, 'real Nura geography must support the advertised walking mode');
+  let moved = false;
+  for (const key of ['ArrowRight', 'ArrowDown', 'ArrowLeft', 'ArrowUp']) {
+    stage.dispatchEvent({ type: 'keydown', key }); stage.dispatchEvent({ type: 'keyup', key });
+    const position = scene.getDiagnostics().mayor;
+    assert.ok(pointInRegion(position, nura));
+    assert.equal(exclusions.some(f => pointInRegion(position, f)), false);
+    moved ||= position.some((value, axis) => value !== start[axis]);
+  }
+  assert.equal(moved, true);
 });
