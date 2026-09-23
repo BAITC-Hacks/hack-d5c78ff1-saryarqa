@@ -4,6 +4,7 @@ import { createGeoData } from './geodata.js';
 export const ASTANA_MAP_FILES = Object.freeze({
   seed: '/scene/data/astana/astana-ai.json',
   landmarks: '/scene/data/astana/landmarks.geojson',
+  landmarkPositions: '/scene/data/astana/landmark-positions.json',
   parks: '/scene/data/astana/parks.geojson',
   roads: '/scene/data/astana/roads.geojson',
   intersections: '/scene/data/astana/intersections.geojson',
@@ -20,7 +21,9 @@ export async function loadAstanaMap({ fetchImpl = fetch, signal } = {}) {
     const response = await fetchImpl(path, { signal });
     if (!response.ok) throw new Error(`MAP_RESOURCE_UNAVAILABLE:${path}`);
     const data = await response.json();
-    if (key === 'trafficCorridors' || key === 'majorRoads') {
+    if (key === 'landmarkPositions') {
+      if (data?.schemaVersion !== 1 || !Array.isArray(data.positions)) throw new Error('INVALID_MAP_DATA:landmarkPositions');
+    } else if (key === 'trafficCorridors' || key === 'majorRoads') {
       if (!Array.isArray(data)) throw new Error(`INVALID_MAP_DATA:${key}`);
     } else if (key !== 'seed' && (data?.type !== 'FeatureCollection' || !Array.isArray(data.features))) {
       throw new Error(`INVALID_MAP_DATA:${key}`);

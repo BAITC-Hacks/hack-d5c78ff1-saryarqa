@@ -9,11 +9,13 @@ not by dropping entire roads or rivers with an outlying vertex.
 | File | Features | Content |
 | --- | ---: | --- |
 | `roads.geojson` | 1,802 | OSM motorway/trunk/primary/secondary way geometry |
-| `intersections.geojson` | 150 | Ranked shared OSM nodes between differently named major roads |
+| `intersections.geojson` | 150 | Ranked nodes shared by major-road ways (some ways lack names) |
 | `landscape.geojson` | 3,129 | 1,129 municipal water polygons + 2,000 sampled central green-space polygons |
 | `buildings.geojson` | 2,000 | Largest source footprints from central bbox `[71.38,51.08,71.49,51.17]` |
 | `roads-municipal.geojson` | 1,913 | Alternative municipal road axes |
 | `districts.geojson` | 8 | **Outdated four-district parts: not current six-district geography** |
+| `districts-current.geojson` | 6 | Six named district contours from Hosted/raiony; effective date unknown |
+| `landmark-positions.json` | 5 | OSM identity-checked display positions; original seed coordinates retained |
 | `landmarks.geojson` | 17 | User-supplied sourced anchor points |
 | `parks.geojson` | 5 | User-supplied park anchor points, not polygons |
 
@@ -34,7 +36,7 @@ not traffic measurements. Intersections carry `osm_node_id`, `roads`,
 retrieval timestamp, copyright URL and ODbL attribution are in `metadata`.
 
 Municipal metadata records retrieval time, source service/layer, original CRS,
-query bbox, selection caps and unknown publication date/reuse terms. The district
+query bbox, selection caps and unknown publication date/reuse terms. The historical `districts.geojson`
 layer names only Алматы, Сарыарка, Байконур, Есиль. Нура and Сарайшық are absent.
 Do not convert this file into current six-district polygons or infer missing
 districts from road attributes. Bounded OSM administrative queries timed out.
@@ -49,3 +51,15 @@ python3 scene/data/astana/build_geography.py districts water roads-municipal gre
 The first command replays the checked-in raw OSM response. Add `--fetch` to refresh
 it from Overpass. The second command refreshes public municipal layers. Changing
 source services may change counts; verify metadata and geometry again afterward.
+
+The renderer loads `districts-current.geojson` from the separate Hosted/raiony
+FeatureServer. Its six identities match the game contract; its effective date is
+not verified. The old four-district layer is retained for provenance, never
+rendered as current. Full metadata and reproducible query parameters are stored
+in the current collection and `districts-current-source.json`.
+
+`landmark-positions.json` refines five display anchors using identified OSM ways
+or a named node. It retains the original coordinates and source, OSM identity,
+version, timestamp, method, displacement and SHA256 of each checked-in XML under
+`landmark-osm-source/`. Twelve other supplied landmark positions remain unverified.
+The 150 road nodes are connectivity candidates, not surveyed traffic junctions.

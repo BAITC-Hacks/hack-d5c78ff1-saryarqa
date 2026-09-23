@@ -1,5 +1,5 @@
 import { createScene } from './index.js';
-import { createGeoData } from './geodata.js';
+import { loadAstanaMap } from './load-map.js';
 import { createPlayPanel } from './play-panel.js';
 import { createGameSession } from '../game/session.js';
 import { geography as fixtureGeography } from './fixtures/geography.js';
@@ -15,11 +15,6 @@ const session = createGameSession({ storage });
 session.dispatch({ type: 'SET_PROJECTION', projection: 'tilted' });
 let scene, panel, mapData, unsubscribe;
 const intents = [];
-async function load(name) {
-  const response = await fetch(new URL(`./data/astana/${name}`, import.meta.url));
-  if (!response.ok) throw new Error(`${name}: ${response.status}`);
-  return response.json();
-}
 function onIntent(intent) { intents.push(structuredClone(intent)); session.dispatch(intent); }
 function render(snapshot = session.getSnapshot()) { scene?.update({ snapshot, context }); }
 function diagnostics() { $('dev-status').textContent = JSON.stringify({ snapshot: session.getSnapshot(), scene: scene?.getDiagnostics() }, null, 2); }
@@ -30,11 +25,7 @@ function mount() {
   if (mapData) { const hud = document.createElement('div'); hud.className = 'atlas-game-hud'; root.querySelector('.atlas-map-shell').appendChild(hud); panel = createPlayPanel({ root: hud, session }); }
 }
 try {
-  if (!fixture) {
-    const names = ['astana-ai.json','landmarks.geojson','parks.geojson','roads.geojson','intersections.geojson','landscape-render.geojson','buildings-render.geojson','traffic_corridors.json','major_roads.json','districts-current.geojson'];
-    const [seed, landmarks, parks, roads, intersections, landscape, buildings, trafficCorridors, majorRoads, districts] = await Promise.all(names.map(load));
-    mapData = createGeoData({ seed, landmarks, parks, roads, intersections, landscape, buildings, trafficCorridors, majorRoads, districts });
-  }
+  if (!fixture) mapData = await loadAstanaMap();
   mount(); unsubscribe = session.subscribe(render);
   $('reduced').checked = context.reducedMotion;
   $('reduced').onchange = event => { context.reducedMotion = event.target.checked; render(); };

@@ -109,7 +109,7 @@ function interiorAnchor(polygons, viewBox) {
  * source lines/polygons retain their true outer vertices, including outside the
  * viewport, to avoid inventing clipped outlines or connecting separated parts.
  */
-export function createGeoData({ seed, landmarks, parks, roads, intersections, landscape, trafficCorridors, majorRoads, districts, buildings } = {}) {
+export function createGeoData({ seed, landmarks, parks, roads, intersections, landscape, trafficCorridors, majorRoads, districts, buildings, landmarkPositions } = {}) {
   const bounds = seed?.working_bbox?.value;
   if (!Array.isArray(bounds) || bounds.length !== 4 || !bounds.every(Number.isFinite)
     || !lonLat(bounds.slice(0, 2)) || !lonLat(bounds.slice(2)) || bounds[0] >= bounds[2] || bounds[1] >= bounds[3]) {
@@ -150,9 +150,12 @@ export function createGeoData({ seed, landmarks, parks, roads, intersections, la
   }
   function anchorCollection(collection, layer, category) {
     return take(collection, layer, (feature, id) => {
-      const coordinate = feature.geometry?.coordinates;
-      if (feature.geometry?.type !== 'Point' || !inside(coordinate)) return null;
+      const original = feature.geometry?.coordinates;
+      if (feature.geometry?.type !== 'Point' || !inside(original)) return null;
+      const correction = layer === 'landmarks' && landmarkPositions?.schemaVersion === 1 ? list(landmarkPositions.positions).find(item => item.id === id && inside(item.coordinates) && /^https:\/\/www\.openstreetmap\.org\/(way|node)\/\d+$/.test(item.sourceUrl) && item.originalCoordinates?.length === 2 && item.originalCoordinates.every((n, i) => n === original[i])) : null;
+      const coordinate = correction?.coordinates || original;
       const p = properties(feature), source = provenance(feature, collection);
+      if (correction) { source.source = correction.source; source.sourceUrl = correction.sourceUrl; source.originalCoordinates = original.slice(0,2); source.coordinateCorrection = structuredClone(correction); }
       return { id, label: text(p.name) || text(p.label) || id, category: text(p.category) || category,
         importance: number(p.importance), position: project(coordinate), coordinates: coordinate.slice(0, 2), ...source };
     });

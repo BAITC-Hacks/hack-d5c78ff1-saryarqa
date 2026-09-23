@@ -128,7 +128,7 @@ test('capabilities report expected regular resources and update when present', a
   });
 });
 
-test('atlas exposes only its ten data files with GeoJSON MIME and HEAD support', async () => {
+test('atlas exposes only its declared data files with GeoJSON MIME and HEAD support', async () => {
   await withServer(async ({ put, hit }) => {
     for (const path of Object.values(ASTANA_MAP_FILES)) {
       await put(path.slice(1), '{}');

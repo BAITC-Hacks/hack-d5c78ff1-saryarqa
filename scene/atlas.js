@@ -45,7 +45,9 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   const listeners = [];
   // Accept the six attributed source polygons without claiming their effective date is verified.
   const sourcedSix = Object.keys(districtNames).every(id => map.regions?.some(r => r.regionId === id && r.status !== 'historical' && r.sourceIds?.includes('astana-municipal-six-districts')));
-  const worldRegions = (map.regions || []).filter(r => r.regionId && (r.status === 'verified' || sourcedSix));
+  const worldRegions = (map.regions || []).filter(r => r.regionId && (r.status === 'verified' || (sourcedSix && r.status !== 'historical' && Object.hasOwn(districtNames, r.regionId) && r.sourceIds?.includes('astana-municipal-six-districts'))));
+  const policyNames = {M1:'Автобусы',M2:'Светофоры',M3:'ЛРТ',M4:'Парк',M5:'Топливо',M6:'Озеленение',M7:'Школа',M8:'Медицина',M9:'Спорт',M10:'Освещение',M11:'Переходы',M12:'Обращения',M13:'Сети',M14:'Службы'};
+  const policyAnchors = new Map(worldRegions.map(region => [region.regionId, features.filter(f => pointInRegion(f.position, region)).sort((a,b) => distance(a.position,map.center)-distance(b.position,map.center))[0]?.position || region.labelAnchor]));
   const roadNodes = new Map();
   let snapshot = null, context = {}, destroyed = false, frame = null, lastTime = null, frames = 0, totalRenderMs = 0;
   let width = 1000, height = 700, selected = 'baiterek', currentTab = 'places', drag = null, lastProjection = null, currentView = null;
@@ -185,9 +187,13 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
     const counts = new Map();
     for (const marker of state.markers) {
       const region = worldRegions.find(r => r.regionId === marker.regionId); if (!region) continue;
-      const [x, y] = camera.project(region.labelAnchor), offset = counts.get(marker.regionId) || 0; counts.set(marker.regionId, offset + 1);
-      const g = el('g', { transform: `translate(${x + offset * 30} ${y})`, class: `akim-scene-marker akim-scene-marker-${marker.phase}` });
-      g.appendChild(el('circle', { r: 14 })); g.appendChild(el('text', { y: 4, 'text-anchor': 'middle' }, marker.measureId)); layers.effects.appendChild(g);
+      const [x, y] = camera.project(policyAnchors.get(region.regionId)), offset = counts.get(marker.regionId) || 0; counts.set(marker.regionId, offset + 1);
+      const g = el('g', { transform: `translate(${x + offset * 69} ${y})`, class: `akim-scene-marker akim-scene-marker-${marker.phase}` });
+      g.appendChild(el('title', {}, `${districtNames[marker.regionId]} · ${policyNames[marker.measureId]} · условный маркер района, не адрес строительства`));
+      g.appendChild(el('rect', { x:-31,y:-27,width:62,height:41,rx:8,fill:marker.phase === 'active' ? '#e4eed2' : '#fff3da',stroke:marker.phase === 'active' ? '#648a58' : '#b99766','stroke-width':1 }));
+      g.appendChild(el('text', { y:-10,'text-anchor':'middle','font-size':9,'font-weight':700,fill:'#395939' }, policyNames[marker.measureId]));
+      g.appendChild(el('text', { y:2,'text-anchor':'middle','font-size':7,fill:'#7d8869' }, marker.phase === 'active' ? 'ВВЕДЕНО ✓' : marker.phase === 'queued' ? 'В ПЛАНЕ' : 'СТРОИТСЯ'));
+      g.appendChild(el('rect', { x:-23,y:7,width:46*marker.progress,height:2,rx:1,fill:'#789965' })); layers.effects.appendChild(g);
     }
     if ($('.atlas-feedback').textContent !== state.feedback) $('.atlas-feedback').textContent = state.feedback;
     if (state.status === 'complete' && state.reactions.length) {
@@ -229,7 +235,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
       const feature = featureMap.get(selected) || features[0];
       const source = safeLink(feature.sourceUrl);
       $('.atlas-sidebar-content').innerHTML = `<div class="atlas-feature-hero"><svg viewBox="-70 -110 140 145" class="atlas-selected-model"></svg><span class="atlas-number">${String(features.indexOf(feature) + 1).padStart(2, '0')}</span><span class="atlas-feature-kind">${html(kindNames[feature.category] || 'Объект города')}</span></div>
-      <div class="atlas-feature-info"><h2>${html(feature.label)}</h2><p>${feature.category === 'park_anchor' ? 'Опорная точка парка из переданного набора. Площадь парка не восстанавливается по одной точке.' : 'Объект расположен по координатам из переданного набора. Миниатюра помогает узнать его на карте.'}</p><div class="atlas-coordinates"><span>ШИРОТА <b>${feature.coordinates[1].toFixed(5)}°</b></span><span>ДОЛГОТА <b>${feature.coordinates[0].toFixed(5)}°</b></span></div><button type="button" class="atlas-primary" data-place="${feature.id}">Приблизить место <span>↗</span></button>${source ? `<a class="atlas-source-link" href="${html(source)}" target="_blank" rel="noopener noreferrer">${html(feature.source || 'Источник координат')} ↗</a>` : ''}</div>
+      <div class="atlas-feature-info"><h2>${html(feature.label)}</h2><p>${feature.category === 'park_anchor' ? 'Опорная точка парка из переданного набора. Площадь парка не восстанавливается по одной точке.' : feature.coordinateCorrection ? `Положение уточнено по ${feature.coordinateCorrection.osmType === 'node' ? 'именованной точке' : 'центру контура'} OpenStreetMap. Исходная точка сохранена; расхождение ${Math.round(feature.coordinateCorrection.differenceMeters)} м.` : 'Объект расположен по координатам из переданного набора. Миниатюра помогает узнать его на карте.'}</p><div class="atlas-coordinates"><span>ШИРОТА <b>${feature.coordinates[1].toFixed(5)}°</b></span><span>ДОЛГОТА <b>${feature.coordinates[0].toFixed(5)}°</b></span></div><button type="button" class="atlas-primary" data-place="${feature.id}">Приблизить место <span>↗</span></button>${source ? `<a class="atlas-source-link" href="${html(source)}" target="_blank" rel="noopener noreferrer">${html(feature.source || 'Источник координат')} ↗</a>` : ''}</div>
       <div class="atlas-list-heading">ДРУГИЕ МЕСТА <span>${features.length}</span></div><div class="atlas-place-list">${features.filter(f => f.id !== feature.id).map(f => `<button data-place="${f.id}" type="button"><i>${f.category === 'park_anchor' ? '♧' : '◈'}</i><span>${html(f.label)}<small>${html(kindNames[f.category] || 'Место города')}</small></span><b>↗</b></button>`).join('')}</div>`;
       $('.atlas-selected-model').appendChild(createLandmarkSymbol(feature.id, { size: 100, projection: 'tilted', selected: false }));
     } else if (currentTab === 'roads') {
@@ -241,7 +247,7 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
 
   function sources() {
     $('.atlas-place-card').hidden = false;
-    $('.atlas-place-card').innerHTML = `<button type="button" data-act="close-card" aria-label="Закрыть">×</button><span class="atlas-eyebrow">О КАРТЕ</span><h3>География с источником</h3><p>${map.roads.length.toLocaleString('ru-RU')} дорожных сегментов · ${(map.buildings || []).length.toLocaleString('ru-RU')} выбранных контуров зданий · ${map.landmarks.length} достопримечательностей · ${map.parkAnchors.length} опорных точек парков.</p><p>Координаты объектов — из набора пользователя. Дороги — OpenStreetMap; вода, озеленение и контуры — ${sourceName}. Высота домов и движение транспорта иллюстративны. Численность населения и работа транспорта здесь не измеряются.</p><p>Историческая нагрузка не является текущим трафиком. Шесть контуров районов получены из городского GIS; дата их действия не указана. Здания — выборка 2 000 контуров центра, озеленение — выборка источника.</p><a href="https://gis.esaulet.kz/server/rest/services/dop_sloi_geoportal_otkr/MapServer" target="_blank" rel="noopener noreferrer">Муниципальный источник ↗</a>`;
+    $('.atlas-place-card').innerHTML = `<button type="button" data-act="close-card" aria-label="Закрыть">×</button><span class="atlas-eyebrow">О КАРТЕ</span><h3>География с источником</h3><p>${map.roads.length.toLocaleString('ru-RU')} дорожных сегментов · ${(map.buildings || []).length.toLocaleString('ru-RU')} выбранных контуров зданий · ${map.landmarks.length} достопримечательностей · ${map.parkAnchors.length} опорных точек парков.</p><p>Координаты объектов — из набора пользователя; пять точек уточнены по именованным объектам OpenStreetMap. Дороги — OpenStreetMap; вода, озеленение и контуры — ${sourceName}. Высота домов и движение транспорта иллюстративны. Численность населения и работа транспорта здесь не измеряются.</p><p>Историческая нагрузка не является текущим трафиком. Шесть контуров районов получены из городского GIS; дата их действия не указана. Здания — выборка 2 000 контуров центра, озеленение — выборка источника.</p><a href="https://gis.esaulet.kz/server/rest/services/dop_sloi_geoportal_otkr/MapServer" target="_blank" rel="noopener noreferrer">Муниципальный источник ↗</a>`;
   }
 
   function setupWalkable() {

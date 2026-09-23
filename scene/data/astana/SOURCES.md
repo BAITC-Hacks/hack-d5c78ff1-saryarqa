@@ -56,3 +56,11 @@ Do NOT present those scores as current/live traffic.
 ## Why no full POI database?
 The simulator does not need thousands of shops, cafes, salons, etc. The AI should see a
 compact city graph: major roads + ranked intersections + a small landmark set + game zones.
+
+## Implemented render sources
+The checked-in snapshots and selection limits are documented in INTEGRATION.md.
+Roads: © OpenStreetMap contributors, ODbL, snapshot timestamp recorded in GeoJSON metadata.
+Six district contours: https://gis.esaulet.kz/server/rest/services/Hosted/raiony/FeatureServer/0
+Retrieved 2026-09-23; effective boundary date and reuse terms are not stated.
+Water, green-space and building samples: municipal MapServer layers, original responses and metadata retained.
+Five corrected landmark anchors: landmark-positions.json and landmark-osm-source/ contain exact public OSM identities, responses and methods.

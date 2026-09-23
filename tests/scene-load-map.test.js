@@ -10,6 +10,7 @@ const fixture = () => {
   files[ASTANA_MAP_FILES.seed] = { working_bbox: { value: [71.2, 51, 71.8, 51.4] }, center: { lon: 71.45, lat: 51.15 } };
   files[ASTANA_MAP_FILES.trafficCorridors] = [];
   files[ASTANA_MAP_FILES.majorRoads] = [];
+  files[ASTANA_MAP_FILES.landmarkPositions] = { schemaVersion:1, positions:[] };
   files[ASTANA_MAP_FILES.roads].features.push({ type: 'Feature', id: 'road-1',
     properties: { name: 'Тестовая улица', highway: 'primary' },
     geometry: { type: 'LineString', coordinates: [[71.4, 51.1], [71.5, 51.2]] } });
@@ -26,8 +27,8 @@ test('map loader fetches every manifest layer in parallel with the supplied canc
     assert.equal(options.signal, controller.signal);
     return new Promise(resolve => pending.push(() => resolve({ ok: true, json: async () => files[path] })));
   } });
-  assert.equal(requested.length, 10);
-  assert.equal(new Set(requested).size, 10);
+  assert.equal(requested.length, 11);
+  assert.equal(new Set(requested).size, 11);
   pending.forEach(resolve => resolve());
   const map = await promise;
   assert.equal(map.geographic, true);
@@ -67,6 +68,10 @@ test('main app loads the actual sourced atlas through public server routes', asy
   assert.ok(result.mapData.buildings.length > 100);
   assert.ok(result.mapData.landscape.length > 0);
   assert.equal(result.mapData.landmarks.length, 17);
+  const tower = result.mapData.landmarks.find(item => item.id === 'baiterek');
+  assert.deepEqual(tower.originalCoordinates, [71.4256, 51.1283]);
+  assert.ok(tower.coordinates[0] > 71.4304 && tower.coordinates[0] < 71.4305);
+  assert.equal(tower.sourceUrl, 'https://www.openstreetmap.org/way/230401645');
   assert.equal(result.mapData.parkAnchors.length, 5);
   assert.equal(result.mapData.corridors.length, 16);
   assert.deepEqual(result.mapData.regions.map(region => region.regionId).sort(), ['almaty', 'baikonur', 'esil', 'nura', 'saraishyk', 'saryarka']);
