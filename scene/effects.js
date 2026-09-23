@@ -86,11 +86,12 @@ function selectReactions(presentation) {
 /**
  * Parent owns requestAnimationFrame and playback controls. This controller has no
  * timer, listener, engine dependency or numeric score/quarterly-score calculation.
- * onComplete receives the matching planRevision, once per completed run/replay.
+ * onComplete receives the matching planRevision and optional runId, once per run.
  */
 export function createEffects({ onComplete = () => {} } = {}) {
   let destroyed = false;
   let planRevision = null;
+  let runId;
   let requestedStatus = 'idle';
   let status = 'idle';
   let quarter = 0;
@@ -108,7 +109,7 @@ export function createEffects({ onComplete = () => {} } = {}) {
     // Set the latch before calling the shell: dispatch can synchronously update or
     // destroy this controller, or replace the plan. Do not mutate after callback.
     completionDelivered = true;
-    onComplete(planRevision);
+    onComplete(planRevision, runId);
   }
 
   function getState() {
@@ -153,6 +154,7 @@ export function createEffects({ onComplete = () => {} } = {}) {
       progress: quarter / EFFECT_LIMITS.horizon,
       quarter,
       status,
+      runId,
       feedback,
     };
   }
@@ -160,18 +162,24 @@ export function createEffects({ onComplete = () => {} } = {}) {
   function update({ snapshot, reducedMotion = false, visible: isVisible = true } = {}) {
     if (destroyed) return getState();
     const nextRevision = snapshot?.planRevision ?? null;
+    const nextRunId = snapshot?.playback?.runId;
     const nextRequestedStatus = STATUSES.has(snapshot?.playback?.status) ? snapshot.playback.status : 'idle';
     const presentation = snapshot?.presentation;
     const nextConfirmed = snapshot?.contractVersion === 1 && snapshot?.result?.valid === true
       && presentation?.planRevision === nextRevision;
     const changedPlan = planRevision !== nextRevision;
-    const replay = !changedPlan && requestedStatus === 'complete' && nextRequestedStatus === 'playing';
+    const changedRun = runId !== nextRunId;
+    // Old contract fixtures have no run identity; preserve their status-based
+    // replay detection. Identified runs restart even while already playing.
+    const replay = changedRun || (runId === undefined && nextRunId === undefined
+      && requestedStatus === 'complete' && nextRequestedStatus === 'playing');
     if (changedPlan || replay || !nextConfirmed || !confirmed) {
       quarter = 0;
       completionDelivered = false;
       status = 'idle';
     }
     planRevision = nextRevision;
+    runId = nextRunId;
     requestedStatus = nextRequestedStatus;
     confirmed = Boolean(nextConfirmed);
     visible = isVisible !== false;

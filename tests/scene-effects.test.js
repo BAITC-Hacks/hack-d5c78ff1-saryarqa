@@ -153,6 +153,61 @@ test('a new plan cancels old presentation; stale metadata cannot emit completion
   assert.deepEqual(completed, []);
 });
 
+test('runId restarts an already playing replay and completion identifies only the current run', () => {
+  const completed = [];
+  const effects = createEffects({ onComplete: (planRevision, runId) => completed.push({ planRevision, runId }) });
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 1, runId: 1 } }) });
+  effects.step(12);
+  assert.equal(effects.getState().quarter, 6);
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 1, runId: 2 } }) });
+  assert.equal(effects.getState().quarter, 0);
+  assert.equal(effects.getState().runId, 2);
+  effects.step(4);
+  assert.deepEqual(completed, []);
+  effects.step(12);
+  effects.step(100);
+  assert.deepEqual(completed, [{ planRevision: 4, runId: 2 }]);
+  effects.update({ snapshot: snapshot({ playback: { status: 'complete', speed: 1, runId: 2 } }) });
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 1, runId: 3 } }) });
+  assert.equal(effects.getState().quarter, 0);
+  effects.step(16);
+  assert.deepEqual(completed, [{ planRevision: 4, runId: 2 }, { planRevision: 4, runId: 3 }]);
+});
+
+test('same runId preserves progress through pause, resume and speed changes', () => {
+  const effects = createEffects();
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 1, runId: 8 } }) });
+  effects.step(4);
+  effects.update({ snapshot: snapshot({ playback: { status: 'paused', speed: 1, runId: 8 } }) });
+  assert.equal(effects.step(100).quarter, 2);
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 2, runId: 8 } }) });
+  assert.equal(effects.step(2).quarter, 4);
+});
+
+test('synchronous completion may start another run without stale completion state overwriting it', () => {
+  const completed = [];
+  const effects = createEffects({ onComplete: (planRevision, runId) => {
+    completed.push({ planRevision, runId });
+    if (runId === 1) effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 1, runId: 2 } }) });
+  } });
+  effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 1, runId: 1 } }) });
+  const state = effects.step(16);
+  assert.equal(state.status, 'playing');
+  assert.equal(state.quarter, 0);
+  assert.equal(state.runId, 2);
+  effects.step(16);
+  assert.deepEqual(completed, [{ planRevision: 4, runId: 1 }, { planRevision: 4, runId: 2 }]);
+});
+
+test('reduced motion emits each replay runId once, including consecutive complete snapshots', () => {
+  const completed = [];
+  const effects = createEffects({ onComplete: (planRevision, runId) => completed.push({ planRevision, runId }) });
+  for (const runId of [4, 4, 5, 5]) {
+    effects.update({ snapshot: snapshot({ playback: { status: 'playing', speed: 1, runId } }), reducedMotion: true });
+  }
+  assert.deepEqual(completed, [{ planRevision: 4, runId: 4 }, { planRevision: 4, runId: 5 }]);
+});
+
 test('synchronous completion callbacks may update to complete without recursive completion', () => {
   let calls = 0;
   const effects = createEffects({ onComplete: (revision) => {
