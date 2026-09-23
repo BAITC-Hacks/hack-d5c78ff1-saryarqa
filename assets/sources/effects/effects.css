@@ -1,0 +1,16 @@
+/* Apply district classes to the real SVG/GeoJSON geometry, never to a drawn substitute. */
+.effect-district-hover { stroke: #3CC6F2; stroke-width: 3; stroke-linejoin: round; fill-opacity: .08; vector-effect: non-scaling-stroke; }
+.effect-district-selected { stroke: #139DEE; stroke-width: 5; stroke-linejoin: round; fill-opacity: .12; vector-effect: non-scaling-stroke; }
+.effect-district-unscored { fill: #8A9AA9; fill-opacity: .24; stroke: #10243B; stroke-width: 1.5; stroke-dasharray: 5 4; vector-effect: non-scaling-stroke; }
+.effect-placement-pulse, .effect-positive, .effect-negative, .effect-critical, .effect-cheer, .effect-finish { transform-box: fill-box; transform-origin: center; }
+.effect-placement-pulse { animation: effect-pulse 1s ease-out 2; }
+.effect-connection-path { stroke-dasharray: 9 5; animation: effect-path 1.2s linear 2; }
+.effect-positive, .effect-negative, .effect-critical { animation: effect-pop .28s ease-out 1; }
+.effect-cheer { animation: effect-pop .35s ease-out 1; }
+.effect-finish { animation: effect-pop .45s ease-out 1; }
+@keyframes effect-pulse { 0% { transform: scale(.85); opacity: .6; } 65% { transform: scale(1.12); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+@keyframes effect-path { to { stroke-dashoffset: -28; } }
+@keyframes effect-pop { 0% { transform: scale(.8); opacity: .4; } 100% { transform: scale(1); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) {
+  .effect-placement-pulse, .effect-connection-path, .effect-positive, .effect-negative, .effect-critical, .effect-cheer, .effect-finish { animation: none !important; transform: none !important; opacity: 1 !important; }
+}

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" data-anchor-x="64" data-anchor-y="112">
+  <title>Office Civic — tilted view</title>
+  <g><path d="M25 42 66 22l40 20-40 20z" fill="#FFF8EA"/>
+<path d="M25 42 66 62v49L25 91z" fill="#F5B64D"/>
+<path d="M66 62 106 42v49l-40 20z" fill="#DC893A"/>
+<path d="M43 57 64 67v32L43 89z" fill="#00AEB6"/>
+<path d="m77 66 20-10v26L77 92z" fill="#4A5D67"/></g>
+</svg>

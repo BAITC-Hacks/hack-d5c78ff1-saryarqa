@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Bridge — top-down</title>
+  <desc>Editable miniature game asset. Anchor: centre of top surface. No geographic claim.</desc>
+  <rect x="0" y="0" width="256" height="256" fill="#299cc0"/><path d="M24 41q25-6 49 0m110 164q26-6 49 0" fill="none" stroke="#a1e2e2" stroke-width="4" stroke-linecap="round"/><path d="M71 0h114v256H71z" fill="#227b96" opacity=".38"/><path d="M76 0h104v256H76z" fill="#d9c7a5"/><path d="M88 0h80v256H88z" fill="#56676a"/><path d="M77 0v256M179 0v256" stroke="#f7e8c6" stroke-width="6"/><path d="M128 8v40m0 30v40m0 30v40m0 30v30" stroke="#fff3d8" stroke-width="4"/><path d="M72 26h8m96 0h8M72 90h8m96 0h8M72 154h8m96 0h8M72 218h8m96 0h8" stroke="#715e4e" stroke-width="8"/>
+</svg>

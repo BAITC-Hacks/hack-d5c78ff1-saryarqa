@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" role="img" aria-label="M07 modular school and kindergarten world marker">
+  <title>M07 modular school and kindergarten world marker</title>
+  <path d="M32 3C17 3 5 15 5 30c0 19 20 39 27 47 7-8 27-28 27-47C59 15 47 3 32 3Z" fill="#E46D58" stroke="#203743" stroke-width="2"/>
+  <circle cx="32" cy="29" r="22" fill="#FFF8E9"/>
+  <g transform="translate(14 11) scale(.56)"><path d="M10 24 32 10l22 14v32H10Z" fill="#FFF8E9" stroke="#203743" stroke-width="3" stroke-linejoin="round"/><path d="M25 56V39h14v17M17 29h7m16 0h7" stroke="#203743" stroke-width="3" stroke-linecap="round"/><path d="M27 17h10" stroke="#E46D58" stroke-width="4" stroke-linecap="round"/></g>
+</svg>
