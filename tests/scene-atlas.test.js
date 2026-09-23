@@ -239,6 +239,14 @@ test('atlas identical updates keep one frame, listeners and continuously advanci
   assert.equal(JSON.stringify(source), before);
 });
 
+test('atlas playback keeps elapsed time when map rendering delays a frame', t => {
+  const harness = atlasHarness(t), scene = harness.mount(harness.root);
+  scene.update({ snapshot: sceneSnapshot() });
+  harness.frame(0);
+  harness.frame(500);
+  assert.equal(scene.getDiagnostics().effects.quarter, 0.25);
+});
+
 test('atlas calculator mode cancels drag capture and cannot pan until shown again', t => {
   const harness = atlasHarness(t), scene = harness.mount(harness.root);
   scene.update({ snapshot: sceneSnapshot() });

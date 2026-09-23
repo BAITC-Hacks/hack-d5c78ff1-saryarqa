@@ -381,9 +381,10 @@ export function createAtlasScene({ root, mapData, onIntent = () => {} }) {
   function resize() { const rect = stage.getBoundingClientRect(); if (!rect.width || !rect.height) return; width = rect.width; height = rect.height; surface.setAttribute('viewBox', `0 0 ${width} ${height}`); camera.setViewport(width, height); render(); }
   function stop() { if (frame !== null) cancelAnimationFrame(frame); frame = null; lastTime = null; }
   function schedule() { if (visible() && (!context.reducedMotion || pressed.size) && frame === null) frame = requestAnimationFrame(tick); }
-  function tick(time) { frame = null; if (!visible()) return; if (lastTime === null) lastTime = time; const dt = Math.min(.1, (time - lastTime) / 1000); if (dt >= 1 / 30) { lastTime = time; if (!context.reducedMotion) movingSeconds += dt;
+  function tick(time) { frame = null; if (!visible()) return; if (lastTime === null) lastTime = time; const elapsed = (time - lastTime) / 1000; const dt = Math.min(.1, elapsed); if (elapsed >= 1 / 30) { lastTime = time; if (!context.reducedMotion) movingSeconds += dt;
     if (detail() && mayor) { const dx = Number(pressed.has('ArrowRight') || pressed.has('d')) - Number(pressed.has('ArrowLeft') || pressed.has('a')); const dy = Number(pressed.has('ArrowDown') || pressed.has('s')) - Number(pressed.has('ArrowUp') || pressed.has('w')); if (dx || dy) moveMayor([mayor[0] + dx, mayor[1] + dy], dt * 1.5); else if (destination && !context.reducedMotion) moveMayor(destination, dt * 1.5); }
-    effects.step(dt); if (!destroyed) motion(); } schedule(); }
+    // Keep playback on wall time; only actor movement is capped to avoid jumps.
+    effects.step(elapsed); if (!destroyed) motion(); } schedule(); }
 
   function action(command) {
     if (command === 'top' || command === 'tilted') onIntent({ type: 'SET_PROJECTION', projection: command });
