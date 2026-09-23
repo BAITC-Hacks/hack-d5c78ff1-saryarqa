@@ -8,6 +8,7 @@ const SHAPE_CACHE = new WeakMap();
 const LANDSCAPE_CACHE = new WeakMap();
 const BLOCKER_CACHE = new WeakMap();
 const ROAD_CACHE = new WeakMap();
+const RING_CACHE = new WeakMap();
 const EMPTY = Object.freeze([]);
 const GREEN_KINDS = new Set(['park', 'forest', 'wood']);
 const finitePoint = p => Array.isArray(p) && Number.isFinite(p[0]) && Number.isFinite(p[1]);
@@ -28,16 +29,37 @@ function segmentDistanceSquared(p, a, b) {
 }
 
 function insideRing(p, ring) {
+  let prepared = RING_CACHE.get(ring);
+  if (!prepared) {
+    const rows = new Map(), long = [], edges = [];
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const a = ring[i], b = ring[j];
+      if (a[1] === b[1]) continue; // Horizontal edges do not cross a horizontal ray.
+      const edge = [a, b]; edges.push(edge);
+      if (ring.length <= 24) continue;
+      const min = Math.floor(Math.min(a[1], b[1])), max = Math.floor(Math.max(a[1], b[1]));
+      if (max - min > 256) { long.push(edge); continue; }
+      for (let row = min; row <= max; row++) {
+        if (!rows.has(row)) rows.set(row, []);
+        rows.get(row).push(edge);
+      }
+    }
+    prepared = { rows, long, edges, short: ring.length <= 24 }; RING_CACHE.set(ring, prepared);
+  }
   let inside = false;
-  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
-    const a = ring[i], b = ring[j];
-    if (segmentDistanceSquared(p, a, b) < 1e-18) return true;
+  const edges = prepared.short ? prepared.edges : [...(prepared.rows.get(Math.floor(p[1])) || EMPTY), ...prepared.long];
+  for (const [a, b] of edges) {
     if ((a[1] > p[1]) !== (b[1] > p[1]) && p[0] < (b[0] - a[0]) * (p[1] - a[1]) / (b[1] - a[1]) + a[0]) inside = !inside;
   }
   return inside;
 }
 const insideShape = (p, shape) => shape.polygons.some(polygon => insideRing(p, polygon[0]) && !polygon.slice(1).some(ring => insideRing(p, ring)));
-const nearBoundary = (p, shape, clearance) => shape.segments.some(([a, b]) => segmentDistanceSquared(p, a, b) <= clearance * clearance);
+function nearBoundary(p, shape, clearance) {
+  if (shape.segments.length <= 24) return shape.segments.some(([a, b]) => segmentDistanceSquared(p, a, b) <= clearance * clearance);
+  if (!shape.edgesAt) shape.edgesAt = spatialIndex(shape.segments.map(([a, b]) => ({ a, b,
+    bounds: [Math.min(a[0], b[0]), Math.min(a[1], b[1]), Math.max(a[0], b[0]), Math.max(a[1], b[1])] })), MAX_FOOTPRINT, 1);
+  return shape.edgesAt(p).some(({ a, b }) => segmentDistanceSquared(p, a, b) <= clearance * clearance);
+}
 
 function shapeOf(feature) {
   if (!feature || typeof feature !== 'object') return null;
@@ -64,12 +86,12 @@ function shapeOf(feature) {
   SHAPE_CACHE.set(feature, shape); return shape;
 }
 
-function spatialIndex(records, padding) {
+function spatialIndex(records, padding, cellSize = INDEX_SIZE) {
   const cells = new Map(), large = [];
   for (const record of records) {
     const bounds = expanded(record.bounds, padding);
-    const minX = Math.floor(bounds[0] / INDEX_SIZE), maxX = Math.floor(bounds[2] / INDEX_SIZE);
-    const minY = Math.floor(bounds[1] / INDEX_SIZE), maxY = Math.floor(bounds[3] / INDEX_SIZE);
+    const minX = Math.floor(bounds[0] / cellSize), maxX = Math.floor(bounds[2] / cellSize);
+    const minY = Math.floor(bounds[1] / cellSize), maxY = Math.floor(bounds[3] / cellSize);
     if ((maxX - minX + 1) * (maxY - minY + 1) > 256) { large.push(record); continue; }
     for (let x = minX; x <= maxX; x++) for (let y = minY; y <= maxY; y++) {
       const key = `${x}:${y}`;
@@ -77,7 +99,7 @@ function spatialIndex(records, padding) {
       cells.get(key).push(record);
     }
   }
-  return p => [...(cells.get(`${Math.floor(p[0] / INDEX_SIZE)}:${Math.floor(p[1] / INDEX_SIZE)}`) || EMPTY), ...large];
+  return p => [...(cells.get(`${Math.floor(p[0] / cellSize)}:${Math.floor(p[1] / cellSize)}`) || EMPTY), ...large];
 }
 
 function landscapeOf(input) {

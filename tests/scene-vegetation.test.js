@@ -48,6 +48,20 @@ test('road segments block trees by actual distance, including both sides of spat
   for (const tree of trees) assert.ok(Math.abs(tree.position[1] - 4) > 0.26 + tree.radius * 1.9);
 });
 
+test('indexed complex source rings preserve the same containment and boundary clearance as simple outlines', () => {
+  const densify = outline => outline.slice(0, -1).flatMap((a, index) => {
+    const b = outline[index + 1];
+    return Array.from({ length: 32 }, (_, step) => [a[0] + (b[0] - a[0]) * step / 32, a[1] + (b[1] - a[1]) * step / 32]);
+  }).concat([outline[0]]);
+  const source = [shape('park-complex', 'park', ring(0, 0, 20, 20), ring(4, 4, 8, 8)),
+    shape('water-complex', 'water', ring(10, 0, 12, 20))];
+  const dense = source.map(feature => ({ ...feature, polygons: feature.polygons.map(polygon => polygon.map(densify)) }));
+  for (const pixelsPerWorldUnit of [4, 20]) {
+    assert.deepEqual(selectVegetation({ ...options, landscape: source, pixelsPerWorldUnit }),
+      selectVegetation({ ...options, landscape: dense, pixelsPerWorldUnit }));
+  }
+});
+
 test('pan and projection preserve each source tree position; higher LOD never moves matching trees', () => {
   const baseline = selectVegetation({ ...options, pixelsPerWorldUnit: 6, projection: 'top', maxCount: 450 });
   const panned = selectVegetation({ ...options, viewBounds: [2, 2, 22, 22], pixelsPerWorldUnit: 6, projection: 'tilted' });
