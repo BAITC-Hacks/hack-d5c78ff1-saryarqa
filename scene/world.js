@@ -1,17 +1,7 @@
-import { pointInRegion, regionBounds } from './camera.js';
+import { pointInRegion, regionBounds, segmentsCross } from './camera.js';
 
 export const REGION_IDS = ['esil', 'almaty', 'saryarka', 'baikonur', 'nura', 'saraishyk'];
 export const REGION_COLORS = ['#a5c5b5', '#ddbf99', '#c6ce9c', '#b3c7ce', '#87b6a6', '#d4d0c6'];
-
-function crosses(a, b, c, d) {
-  const cross = (p, q, r) => (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]);
-  const within = (p, q, r) => r[0] >= Math.min(p[0], q[0]) - 1e-10 && r[0] <= Math.max(p[0], q[0]) + 1e-10 &&
-    r[1] >= Math.min(p[1], q[1]) - 1e-10 && r[1] <= Math.max(p[1], q[1]) + 1e-10;
-  const values = [cross(a, b, c), cross(a, b, d), cross(c, d, a), cross(c, d, b)];
-  if (values[0] * values[1] < 0 && values[2] * values[3] < 0) return true;
-  return Math.abs(values[0]) < 1e-10 && within(a, b, c) || Math.abs(values[1]) < 1e-10 && within(a, b, d) ||
-    Math.abs(values[2]) < 1e-10 && within(c, d, a) || Math.abs(values[3]) < 1e-10 && within(c, d, b);
-}
 
 // A deliberately illustrative play area, never a surveyed pedestrian network.
 export function createWorld(geography) {
@@ -79,7 +69,7 @@ export function createWorld(geography) {
   const boundaries = [...nura.polygons.flat(), ...obstacles.map(([x, y, w, h]) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h], [x, y]])];
   // Exact segment tests prevent crossing even a hole thinner than a movement step.
   const canTraverse = (from, to) => contains(from) && contains(to) && !boundaries.some(ring =>
-    ring.some((point, index) => index > 0 && crosses(from, to, ring[index - 1], point)));
+    ring.some((point, index) => index > 0 && segmentsCross(from, to, ring[index - 1], point)));
   return { regions, pieces, walkable: { start, bounds: playBounds, contains, canTraverse }, playBounds,
     detailedRegion: nura, sourceStatus: geography.status,
     paths: geography.paths || [] };

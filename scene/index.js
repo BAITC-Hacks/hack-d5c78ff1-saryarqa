@@ -58,7 +58,7 @@ export function createScene({ root, assets, geography, mapData, onIntent = () =>
   }
   const camera = createCamera({ viewBox: geography.viewBox, width: 900, height: 600, projection: 'top' });
   const actors = createActors({ geography, walkable: world.walkable });
-  const effects = createEffects({ onComplete: planRevision => { if (!destroyed) onIntent({ type: 'PLAYBACK_COMPLETE', planRevision }); } });
+  const effects = createEffects({ onComplete: (planRevision, runId) => { if (!destroyed) onIntent({ type: 'PLAYBACK_COMPLETE', planRevision, ...(runId === undefined ? {} : { runId }) }); } });
   const manifest = new Map((assets?.assets || []).map(asset => [asset.id, asset]));
   const missing = new Set();
   const checkedFiles = new Map();
