@@ -111,7 +111,7 @@
 .akim-scene .atlas-play-panel .atlas-play-tradeoffs .atlas-play-critical { margin-top: 12px; color: #6b7b5e; }
 .akim-scene .atlas-play-panel .atlas-play-best { margin: 14px 0 0; border: 1px solid #e7d6af; border-radius: 9px; background: #f5edda; padding: 10px; color: #8b692f; font-size: 12px; font-weight: 550; }
 .akim-scene .atlas-play-panel .atlas-play-disclaimer { margin: 14px 0 0; font-size: 10px; line-height: 1.5; color: #7c8970; }
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .akim-scene .atlas-play-panel { width: 100%; max-width: none; }
   .akim-scene .atlas-play-panel .atlas-play-content { max-height: 68vh; padding: 20px; border-radius: 16px; }
   .akim-scene .atlas-play-panel .atlas-play-metrics { padding: 16px 18px; }
