@@ -1,4 +1,5 @@
 import { REGIONS } from './contracts.js';
+import { loadAstanaMap } from '../scene/load-map.js';
 
 const EMPTY_CITY = Object.freeze({ schemaVersion: 1, sources: [], observations: [] });
 
@@ -10,6 +11,18 @@ export async function loadScenePackage({ fetchImpl = fetch, loadModule = () => i
     return response.json();
   };
   const capabilities = await json('/api/capabilities');
+  if (capabilities.scene && capabilities.atlas) {
+    const [mapData, cityData] = await Promise.all([
+      loadAstanaMap({ fetchImpl, signal }),
+      capabilities.cityData ? json('/data/city/context.json') : EMPTY_CITY,
+    ]);
+    if (cityData?.schemaVersion !== 1 || !Array.isArray(cityData.observations) || !Array.isArray(cityData.sources)) throw new Error('INVALID_CONTEXT');
+    const style = await fetchImpl('/scene/styles.css', { signal, method: 'HEAD' });
+    if (!style.ok) throw new Error('SCENE_STYLE_UNAVAILABLE');
+    const module = await loadModule();
+    if (typeof module.createScene !== 'function') throw new Error('INVALID_SCENE_INTERFACE');
+    return { ready: true, mapData, cityData, createScene: module.createScene };
+  }
   if (!capabilities.scene || !capabilities.assets || !capabilities.geography) {
     const cityData = capabilities.cityData ? await json('/data/city/context.json') : EMPTY_CITY;
     return { ready: false, reason: 'awaiting-resources', cityData: cityData?.schemaVersion === 1 && Array.isArray(cityData.observations) ? cityData : EMPTY_CITY };
@@ -77,7 +90,7 @@ export function createSceneAdapter({ root, session, onStatus = () => {}, fetchIm
         css.rel = 'stylesheet'; css.href = '/scene/styles.css';
         documentRef.head.append(css);
       }
-      scene = result.createScene({ root, assets: result.assets, geography: result.geography, onIntent: (action) => {
+      scene = result.createScene({ root, assets: result.assets, geography: result.geography, mapData: result.mapData, onIntent: (action) => {
         if (!disposed && id === loadingId && ['FOCUS_REGION', 'SET_VIEW', 'SET_PROJECTION', 'PLAYBACK_COMPLETE'].includes(action?.type)) session.dispatch(action);
       } });
       if (!scene || typeof scene.update !== 'function' || typeof scene.destroy !== 'function') throw new Error('INVALID_SCENE_INSTANCE');

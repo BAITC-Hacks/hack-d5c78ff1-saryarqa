@@ -1,0 +1,457 @@
+{
+  "schema_version": "0.1.0",
+  "city": "Astana",
+  "generated_for": "Akim Simulator MVP",
+  "working_bbox": {
+    "format": "[west,south,east,north]",
+    "value": [
+      71.220936,
+      50.999912,
+      71.728067,
+      51.301212
+    ]
+  },
+  "center": {
+    "lat": 51.1282,
+    "lon": 71.4304
+  },
+  "rules_for_ai": [
+    "Never invent coordinates or object IDs.",
+    "Select only IDs present in this dataset or IDs returned by the backend.",
+    "Do not treat historical_load_score as live traffic.",
+    "Exact road geometry and intersection coordinates must come from generated GeoJSON, not from the language model.",
+    "If an action needs a location, return an existing zone/intersection/object ID; the backend resolves it to geometry."
+  ],
+  "landmarks": [
+    {
+      "id": "baiterek",
+      "name": "Бәйтерек",
+      "category": "landmark",
+      "importance": 5,
+      "lat": 51.1283,
+      "lon": 71.4256
+    },
+    {
+      "id": "akorda",
+      "name": "Ақорда",
+      "category": "government",
+      "importance": 5,
+      "lat": 51.1258,
+      "lon": 71.44647
+    },
+    {
+      "id": "khan_shatyr",
+      "name": "Хан Шатыр",
+      "category": "landmark",
+      "importance": 5,
+      "lat": 51.13251,
+      "lon": 71.40387
+    },
+    {
+      "id": "national_museum",
+      "name": "Национальный музей Республики Казахстан",
+      "category": "culture",
+      "importance": 4,
+      "lat": 51.1184,
+      "lon": 71.467
+    },
+    {
+      "id": "astana_opera",
+      "name": "Astana Opera",
+      "category": "culture",
+      "importance": 4,
+      "lat": 51.1341,
+      "lon": 71.4085
+    },
+    {
+      "id": "palace_peace",
+      "name": "Дворец мира и согласия",
+      "category": "culture",
+      "importance": 4,
+      "lat": 51.1231,
+      "lon": 71.4614
+    },
+    {
+      "id": "hazret_sultan",
+      "name": "Мечеть Хазрет Султан",
+      "category": "religion",
+      "importance": 4,
+      "lat": 51.126,
+      "lon": 71.4697
+    },
+    {
+      "id": "grand_mosque",
+      "name": "Главная мечеть Астаны",
+      "category": "religion",
+      "importance": 4,
+      "lat": 51.0731,
+      "lon": 71.4059
+    },
+    {
+      "id": "nazarbayev_university",
+      "name": "Nazarbayev University",
+      "category": "university",
+      "importance": 4,
+      "lat": 51.09,
+      "lon": 71.39944
+    },
+    {
+      "id": "astana_arena",
+      "name": "Astana Arena",
+      "category": "sport",
+      "importance": 4,
+      "lat": 51.10819,
+      "lon": 71.40261
+    },
+    {
+      "id": "barys_arena",
+      "name": "Барыс Арена",
+      "category": "sport",
+      "importance": 3,
+      "lat": 51.10925,
+      "lon": 71.39463
+    },
+    {
+      "id": "nur_alem",
+      "name": "Нұр Әлем / EXPO",
+      "category": "landmark",
+      "importance": 5,
+      "lat": 51.08937,
+      "lon": 71.41613
+    },
+    {
+      "id": "nurly_zhol_station",
+      "name": "Вокзал Нұрлы жол",
+      "category": "transport",
+      "importance": 5,
+      "lat": 51.11236,
+      "lon": 71.53172
+    },
+    {
+      "id": "astana_1_station",
+      "name": "Вокзал Астана-1",
+      "category": "transport",
+      "importance": 4,
+      "lat": 51.1959,
+      "lon": 71.40999
+    },
+    {
+      "id": "astana_airport",
+      "name": "Международный аэропорт Астаны",
+      "category": "transport",
+      "importance": 5,
+      "lat": 51.02589,
+      "lon": 71.46629
+    },
+    {
+      "id": "abu_dhabi_plaza",
+      "name": "Abu Dhabi Plaza",
+      "category": "business",
+      "importance": 3,
+      "lat": 51.12259,
+      "lon": 71.4279
+    },
+    {
+      "id": "shabyt",
+      "name": "Қазақ ұлттық өнер университеті / Шабыт",
+      "category": "university",
+      "importance": 3,
+      "lat": 51.1228,
+      "lon": 71.4732
+    }
+  ],
+  "parks": [
+    {
+      "id": "botanical_garden",
+      "name": "Ботанический сад",
+      "importance": 5,
+      "lat": 51.10617,
+      "lon": 71.41657
+    },
+    {
+      "id": "presidential_park",
+      "name": "Президентский парк",
+      "importance": 4,
+      "lat": 51.12493,
+      "lon": 71.45969
+    },
+    {
+      "id": "lovers_park",
+      "name": "Парк влюблённых",
+      "importance": 4,
+      "lat": 51.13149,
+      "lon": 71.40921
+    },
+    {
+      "id": "zhetysu_park",
+      "name": "Парк Жетісу",
+      "importance": 3,
+      "lat": 51.13599,
+      "lon": 71.43845
+    },
+    {
+      "id": "triathlon_park",
+      "name": "Триатлон парк",
+      "importance": 3,
+      "lat": 51.13604,
+      "lon": 71.45
+    }
+  ],
+  "major_roads": [
+    {
+      "id": "turan",
+      "name": "Тұран даңғылы",
+      "importance": 5
+    },
+    {
+      "id": "kabanbay_batyr",
+      "name": "Қабанбай Батыр даңғылы",
+      "importance": 5
+    },
+    {
+      "id": "mangilik_el",
+      "name": "Мәңгілік Ел даңғылы",
+      "importance": 5
+    },
+    {
+      "id": "syganak",
+      "name": "Сығанақ көшесі",
+      "importance": 5
+    },
+    {
+      "id": "uly_dala",
+      "name": "Ұлы Дала даңғылы",
+      "importance": 5
+    },
+    {
+      "id": "korgalzhyn",
+      "name": "Қорғалжын тас жолы",
+      "importance": 5
+    },
+    {
+      "id": "alash",
+      "name": "Алаш тас жолы",
+      "importance": 5
+    },
+    {
+      "id": "respublika",
+      "name": "Республика даңғылы",
+      "importance": 5
+    },
+    {
+      "id": "bogenbay_batyr",
+      "name": "Бөгенбай батыр даңғылы",
+      "importance": 5
+    },
+    {
+      "id": "saryarka",
+      "name": "Сарыарқа даңғылы",
+      "importance": 5
+    },
+    {
+      "id": "tauelsizdik",
+      "name": "Тәуелсіздік даңғылы",
+      "importance": 4
+    },
+    {
+      "id": "zhenis",
+      "name": "Жеңіс даңғылы",
+      "importance": 4
+    },
+    {
+      "id": "tilendiev",
+      "name": "Н. Тілендиев даңғылы",
+      "importance": 4
+    },
+    {
+      "id": "konaev",
+      "name": "Дінмұхамед Қонаев көшесі",
+      "importance": 4
+    },
+    {
+      "id": "dostyk",
+      "name": "Достық көшесі",
+      "importance": 4
+    },
+    {
+      "id": "koshkarbayev",
+      "name": "Рақымжан Қошқарбаев даңғылы",
+      "importance": 4
+    },
+    {
+      "id": "abylai_khan",
+      "name": "Абылай хан даңғылы",
+      "importance": 4
+    },
+    {
+      "id": "momyshuly",
+      "name": "Бауыржан Момышұлы даңғылы",
+      "importance": 4
+    },
+    {
+      "id": "al_farabi",
+      "name": "Әл-Фараби даңғылы",
+      "importance": 4
+    },
+    {
+      "id": "kenesary",
+      "name": "Кенесары көшесі",
+      "importance": 3
+    },
+    {
+      "id": "beibitshilik",
+      "name": "Бейбітшілік көшесі",
+      "importance": 3
+    },
+    {
+      "id": "zheltoksan",
+      "name": "Желтоқсан көшесі",
+      "importance": 3
+    },
+    {
+      "id": "shevchenko",
+      "name": "Тарас Шевченко көшесі",
+      "importance": 3
+    },
+    {
+      "id": "auezov",
+      "name": "Мұхтар Әуезов көшесі",
+      "importance": 3
+    },
+    {
+      "id": "tashenov",
+      "name": "Жұмабек Тәшенов көшесі",
+      "importance": 3
+    }
+  ],
+  "traffic_corridors": [
+    {
+      "id": "corridor_01",
+      "road": "Бөгенбай батыр даңғылы",
+      "from": "Желтоқсан",
+      "to": "Бейбітшілік",
+      "importance_0_1": 0.9936,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_02",
+      "road": "Сарыарқа даңғылы",
+      "from": "Парк «Нұр-Сұлтан»",
+      "to": "Тарас Шевченко",
+      "importance_0_1": 0.987,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_03",
+      "road": "Бөгенбай батыр даңғылы",
+      "from": "Мұхтар Әуезов",
+      "to": "Республика даңғылы",
+      "importance_0_1": 0.9526,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_04",
+      "road": "Тұран даңғылы",
+      "from": "Қорғалжын тас жолы",
+      "to": "Парк «Нұр-Сұлтан»",
+      "importance_0_1": 0.8924,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_05",
+      "road": "Республика даңғылы",
+      "from": "Қабанбай батыр даңғылы",
+      "to": "Амангелді Иманов",
+      "importance_0_1": 0.8862,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_06",
+      "road": "Мәңгілік Ел даңғылы",
+      "from": "Ұлы Дала даңғылы",
+      "to": "Қонаев",
+      "importance_0_1": 0.8682,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_07",
+      "road": "Қабанбай батыр даңғылы",
+      "from": "Парк «Нұр-Сұлтан»",
+      "to": "Жұмабек Тәшенов",
+      "importance_0_1": 0.8671,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_08",
+      "road": "Бөгенбай батыр даңғылы",
+      "from": "Сарыарқа даңғылы",
+      "to": "Бекетай",
+      "importance_0_1": 0.8662,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_09",
+      "road": "Бөгенбай батыр даңғылы",
+      "from": "Ж. Аймауытов",
+      "to": "Генерал Сабыр Рақымов",
+      "importance_0_1": 0.8346,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_10",
+      "road": "Н. Тілендиев даңғылы",
+      "from": "Шабал Бейсеков",
+      "to": "Мәскеу",
+      "importance_0_1": 0.821,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_11",
+      "road": "Алаш тас жолы",
+      "from": "Шоқан Уәлиханов",
+      "to": "Ақжол",
+      "importance_0_1": 0.8199,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_12",
+      "road": "Сарыарқа даңғылы",
+      "from": "Тарас Шевченко",
+      "to": "Кенесары",
+      "importance_0_1": 0.7716,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_13",
+      "road": "Бөгенбай батыр даңғылы",
+      "from": "Сарыарқа даңғылы",
+      "to": "Жеңіс даңғылы",
+      "importance_0_1": 0.7662,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_14",
+      "road": "Бөгенбай батыр даңғылы",
+      "from": "Мәскеу",
+      "to": "Бекетай",
+      "importance_0_1": 0.7246,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_15",
+      "road": "Республика даңғылы",
+      "from": "Амангелді Иманов",
+      "to": "Кенесары",
+      "importance_0_1": 0.7148,
+      "data_kind": "historical_seed"
+    },
+    {
+      "id": "corridor_16",
+      "road": "Тәуелсіздік даңғылы",
+      "from": "Гейдар Әлиев",
+      "to": "Жұмабек Тәшенов",
+      "importance_0_1": 0.705,
+      "data_kind": "historical_seed"
+    }
+  ]
+}

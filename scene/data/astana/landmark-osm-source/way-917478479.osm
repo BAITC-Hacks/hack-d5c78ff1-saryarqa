@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (2942785 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node id="2486018362" visible="true" version="4" changeset="49717647" timestamp="2017-06-21T11:12:15Z" user="dansit" uid="1459583" lat="51.1347822" lon="71.4098922"/>
+ <node id="2486018383" visible="true" version="4" changeset="49717647" timestamp="2017-06-21T11:12:16Z" user="dansit" uid="1459583" lat="51.1351935" lon="71.4110513"/>
+ <node id="2486018419" visible="true" version="4" changeset="49717647" timestamp="2017-06-21T11:12:16Z" user="dansit" uid="1459583" lat="51.1353390" lon="71.4101148"/>
+ <node id="2616720925" visible="true" version="4" changeset="49717647" timestamp="2017-06-21T11:12:16Z" user="dansit" uid="1459583" lat="51.1346350" lon="71.4108280"/>
+ <node id="4928623645" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1352069" lon="71.4109657"/>
+ <node id="4928623646" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1354901" lon="71.4110795"/>
+ <node id="4928623647" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1354291" lon="71.4114645"/>
+ <node id="4928623648" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1358004" lon="71.4116137"/>
+ <node id="4928623649" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1358215" lon="71.4114802"/>
+ <node id="4928623650" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1360707" lon="71.4115803"/>
+ <node id="4928623651" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1361269" lon="71.4112250"/>
+ <node id="4928623652" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1361723" lon="71.4112433"/>
+ <node id="4928623653" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1362576" lon="71.4107039"/>
+ <node id="4928623654" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1362145" lon="71.4106866"/>
+ <node id="4928623655" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1362674" lon="71.4103525"/>
+ <node id="4928623656" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1360240" lon="71.4102547"/>
+ <node id="4928623657" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1360537" lon="71.4100671"/>
+ <node id="4928623658" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1356713" lon="71.4099134"/>
+ <node id="4928623659" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1356084" lon="71.4103109"/>
+ <node id="4928623660" visible="true" version="1" changeset="49717647" timestamp="2017-06-21T11:12:12Z" user="dansit" uid="1459583" lat="51.1353261" lon="71.4101975"/>
+ <node id="13340040665" visible="true" version="1" changeset="175268800" timestamp="2025-11-29T10:07:23Z" user="MNbrn" uid="6319160" lat="51.1346692" lon="71.4106104">
+  <tag k="artist_name" v="М.Мансурова;Т.Ермекова"/>
+  <tag k="artwork_type" v="statue"/>
+  <tag k="name" v="Жетігенші"/>
+  <tag k="tourism" v="artwork"/>
+ </node>
+ <node id="13340040666" visible="true" version="1" changeset="175268800" timestamp="2025-11-29T10:07:23Z" user="MNbrn" uid="6319160" lat="51.1347534" lon="71.4100755">
+  <tag k="artwork_type" v="statue"/>
+  <tag k="name" v="Қобызшы"/>
+  <tag k="tourism" v="artwork"/>
+ </node>
+ <node id="13340040667" visible="true" version="1" changeset="175268800" timestamp="2025-11-29T10:07:23Z" user="MNbrn" uid="6319160" lat="51.1347113" lon="71.4103429">
+  <tag k="entrance" v="main"/>
+ </node>
+ <way id="917478479" visible="true" version="3" changeset="175268800" timestamp="2025-11-29T10:07:23Z" user="MNbrn" uid="6319160">
+  <nd ref="4928623655"/>
+  <nd ref="4928623656"/>
+  <nd ref="4928623657"/>
+  <nd ref="4928623658"/>
+  <nd ref="4928623659"/>
+  <nd ref="4928623660"/>
+  <nd ref="2486018419"/>
+  <nd ref="2486018362"/>
+  <nd ref="13340040666"/>
+  <nd ref="13340040667"/>
+  <nd ref="13340040665"/>
+  <nd ref="2616720925"/>
+  <nd ref="2486018383"/>
+  <nd ref="4928623645"/>
+  <nd ref="4928623646"/>
+  <nd ref="4928623647"/>
+  <nd ref="4928623648"/>
+  <nd ref="4928623649"/>
+  <nd ref="4928623650"/>
+  <nd ref="4928623651"/>
+  <nd ref="4928623652"/>
+  <nd ref="4928623653"/>
+  <nd ref="4928623654"/>
+  <nd ref="4928623655"/>
+  <tag k="addr:city" v="Астана"/>
+  <tag k="addr:housenumber" v="1"/>
+  <tag k="addr:street" v="Қонаев көшесі"/>
+  <tag k="amenity" v="theatre"/>
+  <tag k="building" v="civic"/>
+  <tag k="name" v="Астана Опера"/>
+  <tag k="name:en" v="Astana Opera"/>
+  <tag k="name:ru" v="Астана Опера"/>
+  <tag k="website" v="https://astanaopera.kz/"/>
+  <tag k="wikidata" v="Q21371563"/>
+  <tag k="wikimedia_commons" v="Category:Astana Opera"/>
+  <tag k="wikipedia" v="en:Astana Opera"/>
+ </way>
+</osm>

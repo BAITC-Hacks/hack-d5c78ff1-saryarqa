@@ -1,0 +1,127 @@
+[
+  {
+    "id": "turan",
+    "name": "Тұран даңғылы",
+    "importance": 5
+  },
+  {
+    "id": "kabanbay_batyr",
+    "name": "Қабанбай Батыр даңғылы",
+    "importance": 5
+  },
+  {
+    "id": "mangilik_el",
+    "name": "Мәңгілік Ел даңғылы",
+    "importance": 5
+  },
+  {
+    "id": "syganak",
+    "name": "Сығанақ көшесі",
+    "importance": 5
+  },
+  {
+    "id": "uly_dala",
+    "name": "Ұлы Дала даңғылы",
+    "importance": 5
+  },
+  {
+    "id": "korgalzhyn",
+    "name": "Қорғалжын тас жолы",
+    "importance": 5
+  },
+  {
+    "id": "alash",
+    "name": "Алаш тас жолы",
+    "importance": 5
+  },
+  {
+    "id": "respublika",
+    "name": "Республика даңғылы",
+    "importance": 5
+  },
+  {
+    "id": "bogenbay_batyr",
+    "name": "Бөгенбай батыр даңғылы",
+    "importance": 5
+  },
+  {
+    "id": "saryarka",
+    "name": "Сарыарқа даңғылы",
+    "importance": 5
+  },
+  {
+    "id": "tauelsizdik",
+    "name": "Тәуелсіздік даңғылы",
+    "importance": 4
+  },
+  {
+    "id": "zhenis",
+    "name": "Жеңіс даңғылы",
+    "importance": 4
+  },
+  {
+    "id": "tilendiev",
+    "name": "Н. Тілендиев даңғылы",
+    "importance": 4
+  },
+  {
+    "id": "konaev",
+    "name": "Дінмұхамед Қонаев көшесі",
+    "importance": 4
+  },
+  {
+    "id": "dostyk",
+    "name": "Достық көшесі",
+    "importance": 4
+  },
+  {
+    "id": "koshkarbayev",
+    "name": "Рақымжан Қошқарбаев даңғылы",
+    "importance": 4
+  },
+  {
+    "id": "abylai_khan",
+    "name": "Абылай хан даңғылы",
+    "importance": 4
+  },
+  {
+    "id": "momyshuly",
+    "name": "Бауыржан Момышұлы даңғылы",
+    "importance": 4
+  },
+  {
+    "id": "al_farabi",
+    "name": "Әл-Фараби даңғылы",
+    "importance": 4
+  },
+  {
+    "id": "kenesary",
+    "name": "Кенесары көшесі",
+    "importance": 3
+  },
+  {
+    "id": "beibitshilik",
+    "name": "Бейбітшілік көшесі",
+    "importance": 3
+  },
+  {
+    "id": "zheltoksan",
+    "name": "Желтоқсан көшесі",
+    "importance": 3
+  },
+  {
+    "id": "shevchenko",
+    "name": "Тарас Шевченко көшесі",
+    "importance": 3
+  },
+  {
+    "id": "auezov",
+    "name": "Мұхтар Әуезов көшесі",
+    "importance": 3
+  },
+  {
+    "id": "tashenov",
+    "name": "Жұмабек Тәшенов көшесі",
+    "importance": 3
+  }
+]

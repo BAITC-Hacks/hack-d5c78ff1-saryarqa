@@ -4,6 +4,7 @@ import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import analyze from './api/analyze.js';
 import { getCapabilities, isSafeFile } from './api/capabilities.js';
+import { ASTANA_MAP_FILES, BUILDING_TILE_PATHS } from './scene/load-map.js';
 
 const defaultRoot = dirname(fileURLToPath(import.meta.url));
 const MAX_BODY_BYTES = 4096;
@@ -19,6 +20,7 @@ const mime = new Map([
   ['.css', 'text/css; charset=utf-8'],
   ['.js', 'text/javascript; charset=utf-8'],
   ['.json', 'application/json; charset=utf-8'],
+  ['.geojson', 'application/geo+json; charset=utf-8'],
   ['.svg', 'image/svg+xml'],
   ['.png', 'image/png'],
   ['.webp', 'image/webp'],
@@ -34,6 +36,7 @@ const mime = new Map([
 ]);
 const sceneTypes = new Set(['.js', '.css', '.svg', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.avif']);
 const assetTypes = new Set(['.svg', '.png', '.webp', '.json', '.mp3', '.ogg', '.wav', '.m4a', '.aac']);
+const atlasDataPaths = new Set([...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS]);
 
 function send(res, status, body, contentType = 'text/plain; charset=utf-8', headers = {}) {
   res.writeHead(status, {
@@ -65,6 +68,7 @@ function staticEntry({ pathname, parts }) {
   if (fixed) return { parts: fixed, type: mime.get(extname(fixed[0])) };
   if (parts.length < 2) return null;
   const extension = extname(parts.at(-1)).toLowerCase();
+  if (atlasDataPaths.has(pathname)) return { parts, type: mime.get(extension) };
   if (parts[0] === 'game' && parts.length === 2 && extension === '.js') return { parts, type: mime.get(extension) };
   if (parts[0] === 'scene' && (sceneTypes.has(extension) || pathname === '/scene/dev.html')) return { parts, type: mime.get(extension) };
   if (parts[0] === 'assets' && parts[1] === 'game' && parts.length >= 3 && assetTypes.has(extension)) return { parts, type: mime.get(extension) };

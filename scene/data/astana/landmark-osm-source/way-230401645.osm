@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (2942782 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node id="2389116257" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282615" lon="71.4303427"/>
+ <node id="2389116259" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282198" lon="71.4304056"/>
+ <node id="2389116263" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282182" lon="71.4304970"/>
+ <node id="2389116265" visible="true" version="6" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282551" lon="71.4305648"/>
+ <node id="2389116268" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283583" lon="71.4304117"/>
+ <node id="2389116269" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283188" lon="71.4303452"/>
+ <node id="2389116270" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283150" lon="71.4305660"/>
+ <node id="2389116271" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283567" lon="71.4305031"/>
+ <node id="2680323685" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282823" lon="71.4305743"/>
+ <node id="2680323690" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282983" lon="71.4305482"/>
+ <node id="2680323692" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282338" lon="71.4305364"/>
+ <node id="2680323693" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283398" lon="71.4305411"/>
+ <node id="2680323695" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282537" lon="71.4305321"/>
+ <node id="2680323696" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283201" lon="71.4305350"/>
+ <node id="2680323697" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282377" lon="71.4305051"/>
+ <node id="2680323699" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283370" lon="71.4305094"/>
+ <node id="2680323700" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282294" lon="71.4304704"/>
+ <node id="2680323702" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283465" lon="71.4304755"/>
+ <node id="2680323703" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282133" lon="71.4304511"/>
+ <node id="2680323704" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283632" lon="71.4304576"/>
+ <node id="2680323706" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282300" lon="71.4304333"/>
+ <node id="2680323707" visible="true" version="5" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283472" lon="71.4304384"/>
+ <node id="2680323709" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282395" lon="71.4303993"/>
+ <node id="2680323710" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283389" lon="71.4304036"/>
+ <node id="2680323712" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282564" lon="71.4303737"/>
+ <node id="2680323714" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283228" lon="71.4303766"/>
+ <node id="2680323715" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282367" lon="71.4303676"/>
+ <node id="2680323716" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283427" lon="71.4303722"/>
+ <node id="2680323718" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282782" lon="71.4303605"/>
+ <node id="2680323719" visible="true" version="4" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282903" lon="71.4303349"/>
+ <node id="14084367281" visible="true" version="1" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1282731" lon="71.4305449">
+  <tag k="entrance" v="main"/>
+ </node>
+ <node id="14084367282" visible="true" version="1" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657" lat="51.1283015" lon="71.4303615">
+  <tag k="entrance" v="exit"/>
+ </node>
+ <way id="230401645" visible="true" version="33" changeset="187200384" timestamp="2026-08-09T20:44:02Z" user="Aianov" uid="20180657">
+  <nd ref="2680323704"/>
+  <nd ref="2680323702"/>
+  <nd ref="2389116271"/>
+  <nd ref="2680323699"/>
+  <nd ref="2680323693"/>
+  <nd ref="2680323696"/>
+  <nd ref="2389116270"/>
+  <nd ref="2680323690"/>
+  <nd ref="2680323685"/>
+  <nd ref="14084367281"/>
+  <nd ref="2389116265"/>
+  <nd ref="2680323695"/>
+  <nd ref="2680323692"/>
+  <nd ref="2680323697"/>
+  <nd ref="2389116263"/>
+  <nd ref="2680323700"/>
+  <nd ref="2680323703"/>
+  <nd ref="2680323706"/>
+  <nd ref="2389116259"/>
+  <nd ref="2680323709"/>
+  <nd ref="2680323715"/>
+  <nd ref="2680323712"/>
+  <nd ref="2389116257"/>
+  <nd ref="2680323718"/>
+  <nd ref="2680323719"/>
+  <nd ref="14084367282"/>
+  <nd ref="2389116269"/>
+  <nd ref="2680323714"/>
+  <nd ref="2680323716"/>
+  <nd ref="2680323710"/>
+  <nd ref="2389116268"/>
+  <nd ref="2680323707"/>
+  <nd ref="2680323704"/>
+  <tag k="access" v="yes"/>
+  <tag k="addr:city" v="Астана"/>
+  <tag k="addr:country" v="KZ"/>
+  <tag k="addr:housenumber" v="14"/>
+  <tag k="addr:street" v="Нұржол желек жолы"/>
+  <tag k="building" v="yes"/>
+  <tag k="building:levels" v="27"/>
+  <tag k="historic" v="monument"/>
+  <tag k="layer" v="1"/>
+  <tag k="name" v="Бәйтерек"/>
+  <tag k="name:de" v="Bajterek-Turm"/>
+  <tag k="name:en" v="Bayterek"/>
+  <tag k="name:ja" v="バイテレック・タワー・タワー"/>
+  <tag k="name:kk" v="Бәйтерек"/>
+  <tag k="name:ml" v="ബൈറ്റെറെക് ടവർ"/>
+  <tag k="name:ru" v="Байтерек"/>
+  <tag k="wikidata" v="Q804210"/>
+  <tag k="wikipedia" v="kk:Бәйтерек (монумент)"/>
+  <tag k="wikipedia:ru" v="ru:Байтерек (монумент)"/>
+ </way>
+</osm>
