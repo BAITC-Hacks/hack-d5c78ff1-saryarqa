@@ -1,0 +1,230 @@
+{
+  "browser": "153.0.4234.48",
+  "head": "1ee0698c4e18788a30ab30bee560a8740bcd3989",
+  "results": [
+    {
+      "width": 320,
+      "scrollWidth": 320,
+      "title": "Аким на 5 часов — симулятор решений",
+      "buttons": 19,
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-two",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-grid",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-building building-six",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-two",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "width": 375,
+      "scrollWidth": 375,
+      "title": "Аким на 5 часов — симулятор решений",
+      "buttons": 19,
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-two",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-grid",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-building building-six",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-two",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "width": 430,
+      "scrollWidth": 430,
+      "title": "Аким на 5 часов — симулятор решений",
+      "buttons": 19,
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-two",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-grid",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-building building-six",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-two",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768,
+      "title": "Аким на 5 часов — симулятор решений",
+      "buttons": 19,
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-two",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-grid",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-building building-six",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-two",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1024,
+      "title": "Аким на 5 часов — симулятор решений",
+      "buttons": 19,
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-two",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-grid",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-building building-six",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-two",
+          "text": ""
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440,
+      "title": "Аким на 5 часов — симулятор решений",
+      "buttons": 19,
+      "overflow": [
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-orbit orbit-two",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-grid",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-building building-six",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-one",
+          "text": ""
+        },
+        {
+          "tag": "DIV",
+          "cls": "scene-road road-two",
+          "text": ""
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

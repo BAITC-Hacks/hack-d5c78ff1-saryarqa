@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 218" width="320" height="218">
+  <title>Tree 01 — tilted 2.5D</title>
+  <desc>Editable miniature game asset. Anchor: bottom centre for tilted view; centre for top view. No geographic claim.</desc>
+  <path d="M156 102h9l8 74h-22z" fill="#805b3f"/><path d="M160 35q-39 0-44 37-35 7-31 36 8 30 40 26 12 19 35 16 25 1 36-17 35 2 40-28-2-30-32-34-6-36-44-36Z" fill="#317b5b"/><path d="M149 42q-37 3-32 35-29 10-24 34 6 22 32 17 14 18 36 13 19 0 31-17 31 1 33-22-2-21-29-25-4-32-47-35Z" fill="#8fc869"/><circle cx="119" cy="91" r="5" fill="#b5d783"/><circle cx="177" cy="61" r="5" fill="#b5d783"/>
+</svg>

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" role="img" aria-label="M10 street lighting and cameras world marker"><title>M10 street lighting and cameras world marker</title><path d="M32 3C17 3 5 15 5 30c0 19 20 39 27 47 7-8 27-28 27-47C59 15 47 3 32 3Z" fill="#F3C659" stroke="#203743" stroke-width="2"/><circle cx="32" cy="30" r="23" fill="#FFF8E9"/><g transform="translate(14 12) scale(.56)">
+      <path d="M23 55V17q0-8 9-8h10" fill="none" stroke="#203743" stroke-width="4" stroke-linecap="round"/>
+      <path d="M40 8h13v7q-1 6-7 6h-7Z" fill="#F3C659" stroke="#203743" stroke-width="3"/>
+      <path d="m27 30 24 6-4 10-23-6Z" fill="#FFF8E9" stroke="#203743" stroke-width="3" stroke-linejoin="round"/>
+      <circle cx="44" cy="40" r="2" fill="#4D9CB9"/>
+      <path d="M18 56h11" stroke="#203743" stroke-width="4" stroke-linecap="round"/></g></svg>

@@ -1,0 +1,162 @@
+[
+  {
+    "id": "corridor_01",
+    "road": "Бөгенбай батыр даңғылы",
+    "from": "Желтоқсан",
+    "to": "Бейбітшілік",
+    "historical_load_score": 99.365,
+    "importance_0_1": 0.9936,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_02",
+    "road": "Сарыарқа даңғылы",
+    "from": "Парк «Нұр-Сұлтан»",
+    "to": "Тарас Шевченко",
+    "historical_load_score": 98.705,
+    "importance_0_1": 0.987,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_03",
+    "road": "Бөгенбай батыр даңғылы",
+    "from": "Мұхтар Әуезов",
+    "to": "Республика даңғылы",
+    "historical_load_score": 95.258,
+    "importance_0_1": 0.9526,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_04",
+    "road": "Тұран даңғылы",
+    "from": "Қорғалжын тас жолы",
+    "to": "Парк «Нұр-Сұлтан»",
+    "historical_load_score": 89.242,
+    "importance_0_1": 0.8924,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_05",
+    "road": "Республика даңғылы",
+    "from": "Қабанбай батыр даңғылы",
+    "to": "Амангелді Иманов",
+    "historical_load_score": 88.619,
+    "importance_0_1": 0.8862,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_06",
+    "road": "Мәңгілік Ел даңғылы",
+    "from": "Ұлы Дала даңғылы",
+    "to": "Қонаев",
+    "historical_load_score": 86.819,
+    "importance_0_1": 0.8682,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_07",
+    "road": "Қабанбай батыр даңғылы",
+    "from": "Парк «Нұр-Сұлтан»",
+    "to": "Жұмабек Тәшенов",
+    "historical_load_score": 86.71,
+    "importance_0_1": 0.8671,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_08",
+    "road": "Бөгенбай батыр даңғылы",
+    "from": "Сарыарқа даңғылы",
+    "to": "Бекетай",
+    "historical_load_score": 86.625,
+    "importance_0_1": 0.8662,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_09",
+    "road": "Бөгенбай батыр даңғылы",
+    "from": "Ж. Аймауытов",
+    "to": "Генерал Сабыр Рақымов",
+    "historical_load_score": 83.459,
+    "importance_0_1": 0.8346,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_10",
+    "road": "Н. Тілендиев даңғылы",
+    "from": "Шабал Бейсеков",
+    "to": "Мәскеу",
+    "historical_load_score": 82.103,
+    "importance_0_1": 0.821,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_11",
+    "road": "Алаш тас жолы",
+    "from": "Шоқан Уәлиханов",
+    "to": "Ақжол",
+    "historical_load_score": 81.99,
+    "importance_0_1": 0.8199,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_12",
+    "road": "Сарыарқа даңғылы",
+    "from": "Тарас Шевченко",
+    "to": "Кенесары",
+    "historical_load_score": 77.162,
+    "importance_0_1": 0.7716,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_13",
+    "road": "Бөгенбай батыр даңғылы",
+    "from": "Сарыарқа даңғылы",
+    "to": "Жеңіс даңғылы",
+    "historical_load_score": 76.621,
+    "importance_0_1": 0.7662,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_14",
+    "road": "Бөгенбай батыр даңғылы",
+    "from": "Мәскеу",
+    "to": "Бекетай",
+    "historical_load_score": 72.455,
+    "importance_0_1": 0.7246,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_15",
+    "road": "Республика даңғылы",
+    "from": "Амангелді Иманов",
+    "to": "Кенесары",
+    "historical_load_score": 71.48,
+    "importance_0_1": 0.7148,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  },
+  {
+    "id": "corridor_16",
+    "road": "Тәуелсіздік даңғылы",
+    "from": "Гейдар Әлиев",
+    "to": "Жұмабек Тәшенов",
+    "historical_load_score": 70.498,
+    "importance_0_1": 0.705,
+    "period_note": "Published historical study; use as initial importance seed, NOT as current/live traffic.",
+    "source_url": "https://bulletin-geography.kaznu.kz/index.php/1-geo/article/view/1202"
+  }
+]

@@ -1,0 +1,77 @@
+@import './walk-controls.css';
+.akim-scene.akim-atlas { box-sizing:border-box; --atlas-cream:#f8f4e8; --atlas-forest:#284c3c; --atlas-ochre:#c39b52; width:100%; min-width:0; color:var(--atlas-forest); background:#e7ecdc; border:1px solid #cdd5bb; border-radius:20px; overflow:hidden; font-family:inherit; }
+.akim-scene .atlas-map-shell { position:relative; height:clamp(480px,65vh,680px); min-width:0; overflow:hidden; isolation:isolate; }
+.akim-scene .atlas-stage { position:absolute; inset:0; touch-action:none; outline:none; background:radial-gradient(ellipse at 50% 40%,#f0f2df,#e1e7d4); }
+.akim-scene .atlas-stage:focus-visible { box-shadow:inset 0 0 0 3px var(--atlas-ochre); }
+.akim-scene .atlas-svg { display:block; width:100%; height:100%; }
+.akim-scene .atlas-toolbar { position:absolute; z-index:4; top:14px; left:14px; right:14px; display:flex; gap:6px; align-items:center; pointer-events:none; }
+.akim-scene .atlas-toolbar > * { pointer-events:auto; }
+.akim-scene .atlas-toolbar button,.akim-scene .atlas-toolbar summary,.akim-scene .atlas-camera-tools button { font:inherit; font-size:12px; font-weight:650; color:var(--atlas-forest); background:var(--atlas-cream); border:1px solid #bdc9af; border-radius:10px; padding:10px 12px; cursor:pointer; box-shadow:0 3px 10px #29452d0d; }
+.akim-scene button:focus-visible,.akim-scene summary:focus-visible { outline:3px solid var(--atlas-ochre); outline-offset:2px; }
+.akim-scene .atlas-projections { display:flex; gap:2px; padding:3px; background:var(--atlas-cream); border:1px solid #bdc9af; border-radius:12px; }
+.akim-scene .atlas-projections button { border:0; box-shadow:none; padding:8px 10px; border-radius:8px; }
+.akim-scene .atlas-projections button[aria-pressed=true],.akim-scene .atlas-walk[aria-pressed=true] { background:var(--atlas-forest); color:#fff9e8; }
+.akim-scene .atlas-walk:disabled { opacity:.5; cursor:default; }
+.akim-scene .atlas-layer-menu { position:relative; margin-left:auto; }
+.akim-scene .atlas-layer-menu summary { list-style:none; }
+.akim-scene .atlas-layer-menu summary::-webkit-details-marker { display:none; }
+.akim-scene .atlas-layer-tools { position:absolute; right:0; top:46px; display:grid; gap:4px; padding:6px; background:var(--atlas-cream); border:1px solid #bdc9af; border-radius:12px; min-width:130px; box-shadow:0 6px 20px #24402b18; }
+.akim-scene .atlas-layer-tools button { text-align:left; border:0; }
+.akim-scene .atlas-layer-tools button[aria-pressed=true] { background:#e1e8d3; }
+.akim-scene .atlas-toolbar .atlas-info { width:36px; padding:10px 0; font-family:Georgia,serif; font-size:14px; }
+.akim-scene .atlas-camera-tools { position:absolute; right:14px; bottom:65px; z-index:3; display:grid; gap:5px; }
+.akim-scene .atlas-camera-tools button { width:39px; height:39px; padding:0; font-size:22px; }
+.akim-scene .atlas-status-bar { position:absolute; inset:auto 0 0; z-index:2; display:flex; justify-content:space-between; gap:12px; padding:10px 14px; background:#f8f4e8e8; border-top:1px solid #cdd5bb; font-size:10px; pointer-events:none; }
+.akim-scene .atlas-mode-status { font-weight:750; }
+.akim-scene .atlas-status-help { color:#6b795e; }
+.akim-scene .atlas-map-credit { position:absolute; left:14px; bottom:39px; max-width:calc(100% - 77px); font-size:8px; color:#66755b; background:#f4f4e5dc; padding:3px 5px; border-radius:5px; }
+.akim-scene .atlas-map-credit a { color:inherit; }
+.akim-scene .atlas-scale { position:absolute; left:14px; bottom:65px; display:flex; align-items:center; gap:8px; color:#526a48; font-size:9px; pointer-events:none; }
+.akim-scene .atlas-scale i { width:60px; height:5px; border:1px solid #72865f; border-top:0; }
+.akim-scene .atlas-landmark,.akim-scene .atlas-map-label { cursor:pointer; }
+.akim-scene .atlas-landmark:focus-visible { outline:none; filter:drop-shadow(0 0 5px #c39b52); }
+.akim-scene .atlas-map-label { filter:drop-shadow(0 2px 3px #344e291a); }
+.akim-scene .atlas-layer-vehicles,.akim-scene .atlas-layer-mayor,.akim-scene .atlas-layer-effects,.akim-scene .atlas-layer-decoration,.akim-scene .atlas-layer-citizens { pointer-events:none; }
+.akim-scene .atlas-place-card { position:absolute; left:14px; bottom:95px; z-index:5; width:min(310px,calc(100% - 82px)); box-sizing:border-box; max-height:60%; overflow:auto; padding:16px; background:#fffaf0f7; border:1px solid #c7d0b9; border-radius:14px; box-shadow:0 12px 32px #263e2920; }
+.akim-scene .atlas-place-card[hidden] { display:none; }
+.akim-scene .atlas-place-card > button[data-act=close-card] { position:absolute; right:6px; top:5px; font-size:20px; padding:3px 8px; border:0; background:transparent; color:#56714b; cursor:pointer; }
+.akim-scene .atlas-place-card h3 { font-size:18px; line-height:1.2; margin:6px 15px 10px 0; }
+.akim-scene .atlas-place-card p { font-size:11px; line-height:1.5; color:#66745c; }
+.akim-scene .atlas-place-card a { color:#56714b; font-size:11px; margin-left:8px; }
+.akim-scene .atlas-place-card button[data-place] { background:#e9edda; border:1px solid #b7c8a3; color:#365634; border-radius:7px; padding:7px 10px; cursor:pointer; font:inherit; font-size:11px; }
+.akim-scene .atlas-eyebrow { font-size:9px; color:#7d886c; }
+.akim-scene .atlas-playback { display:none; padding:10px 14px; background:#f8f4e8; border-top:1px solid #cdd5bb; }
+.akim-scene.has-plan .atlas-playback { display:block; }
+.akim-scene .atlas-feedback { font-size:11px; }
+.akim-scene .atlas-playback > div { height:3px; background:#dee5cd; border-radius:3px; overflow:hidden; margin-top:7px; }
+.akim-scene .atlas-playback > div > i { display:block; height:100%; background:var(--atlas-ochre); }
+.akim-scene .atlas-game-hud { position:absolute; z-index:3; right:65px; top:70px; }
+@media(max-width:600px) {
+ .akim-scene.akim-atlas { border-radius:15px; }
+ .akim-scene .atlas-map-shell { height:420px; }
+ .akim-scene .atlas-toolbar { top:9px; left:9px; right:9px; gap:4px; flex-wrap:wrap; }
+ .akim-scene .atlas-toolbar button,.akim-scene .atlas-toolbar summary { font-size:10px; padding:9px 8px; }
+ .akim-scene .atlas-projections button { padding:7px; }
+ .akim-scene .atlas-toolbar .atlas-info { width:30px; padding:8px 0; }
+ .akim-scene .atlas-layer-tools { top:39px; }
+ .akim-scene .atlas-camera-tools { right:10px; }
+ .akim-scene .atlas-game-hud.atlas-play-panel { position:relative; inset:auto; width:auto; max-width:none; padding:10px; }
+ .akim-scene .atlas-map-shell:has(.atlas-game-hud) { height:auto; padding-top:420px; overflow:visible; }
+ .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-stage { height:420px; bottom:auto; }
+ .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-status-bar { top:388px; bottom:auto; }
+ .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-map-credit { top:363px; bottom:auto; }
+ .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-scale { top:335px; bottom:auto; }
+ .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-camera-tools { top:220px; bottom:auto; }
+ .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-place-card { top:90px; bottom:auto; max-height:250px; }
+}
+
+.akim-scene .atlas-building-status{position:absolute;z-index:5;left:16px;bottom:66px;border:1px solid #d1ddd1;border-radius:12px;padding:7px 12px;color:#496b61;font-size:11px;background:#ffffffdf;max-width:calc(100% - 82px)}
+.akim-scene .atlas-building-status[hidden]{display:none}
+
+.akim-scene .atlas-district-badge{position:absolute;top:66px;left:16px;z-index:3;display:grid;gap:3px;max-width:min(280px,calc(100% - 105px));padding:10px 13px;border:1px solid #e1e7d0;border-radius:13px;background:#fffdf1eb;box-shadow:0 4px 18px #29452a0a;pointer-events:none}
+.akim-scene .atlas-district-badge strong{font-size:13px;line-height:1.3}
+.akim-scene .atlas-district-badge small{font-size:10px;line-height:1.4;color:#647766}
+.akim-scene .atlas-pack-icon{display:inline-block;object-fit:contain;flex:none;vertical-align:middle}
+@media(max-width:600px){.akim-scene .atlas-district-badge{top:85px;left:10px;max-width:calc(100% - 76px);padding:7px 10px}.akim-scene .atlas-district-badge small{max-width:195px}.akim-scene .atlas-walk-controls{top:240px;bottom:auto;left:10px;grid-template-columns:repeat(3,36px);grid-template-rows:repeat(3,36px)}}
+
+.akim-scene .atlas-layer-tools button[aria-pressed=true]{color:var(--atlas-forest)}

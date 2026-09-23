@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<osm version="0.6" generator="openstreetmap-cgimap 2.1.0 (2942767 spike-08.openstreetmap.org)" copyright="OpenStreetMap and contributors" attribution="http://www.openstreetmap.org/copyright" license="http://opendatacommons.org/licenses/odbl/1-0/">
+ <node id="1776807179" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1256304" lon="71.4459550"/>
+ <node id="1776807180" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1260919" lon="71.4461417"/>
+ <node id="1776807181" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1260770" lon="71.4462485"/>
+ <node id="1776807183" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1255019" lon="71.4468037"/>
+ <node id="1776807184" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1263139" lon="71.4462255"/>
+ <node id="1776807186" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259868" lon="71.4468296"/>
+ <node id="1776807187" visible="true" version="10" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259661" lon="71.4462040"/>
+ <node id="1776807189" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259646" lon="71.4469834"/>
+ <node id="1776807190" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1256134" lon="71.4460704"/>
+ <node id="1776807191" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1255286" lon="71.4466443"/>
+ <node id="1776807194" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1252853" lon="71.4467175"/>
+ <node id="1776807196" visible="true" version="11" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1254154" lon="71.4458735"/>
+ <node id="7816246590" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259232" lon="71.4460064"/>
+ <node id="7816246592" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1261803" lon="71.4470721"/>
+ <node id="7816246594" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259677" lon="71.4461452"/>
+ <node id="7816246596" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259530" lon="71.4460696"/>
+ <node id="7816246598" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1258818" lon="71.4459628"/>
+ <node id="7816246599" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1258336" lon="71.4459440"/>
+ <node id="7816246600" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1257843" lon="71.4459522"/>
+ <node id="7816246601" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1257395" lon="71.4459864"/>
+ <node id="7816246602" visible="true" version="2" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1257046" lon="71.4460426"/>
+ <node id="12828087923" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1256876" lon="71.4461005"/>
+ <node id="12828087924" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1256934" lon="71.4460734"/>
+ <node id="12828087925" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1257203" lon="71.4460098"/>
+ <node id="12828087926" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1257619" lon="71.4459655"/>
+ <node id="12828087927" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1258089" lon="71.4459453"/>
+ <node id="12828087928" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1258577" lon="71.4459506"/>
+ <node id="12828087929" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259043" lon="71.4459827"/>
+ <node id="12828087930" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259405" lon="71.4460380"/>
+ <node id="12828087931" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259627" lon="71.4461074"/>
+ <node id="12828087932" visible="true" version="1" changeset="166102238" timestamp="2025-05-11T10:33:38Z" user="Aianov" uid="20180657" lat="51.1259680" lon="71.4461755"/>
+ <node id="12830150186" visible="true" version="1" changeset="166147857" timestamp="2025-05-12T11:36:21Z" user="Aianov" uid="20180657" lat="51.1258733" lon="71.4467837"/>
+ <node id="12830150187" visible="true" version="1" changeset="166147857" timestamp="2025-05-12T11:36:21Z" user="Aianov" uid="20180657" lat="51.1255999" lon="71.4466731"/>
+ <way id="166198046" visible="true" version="26" changeset="176266933" timestamp="2025-12-22T14:39:30Z" user="MNbrn" uid="6319160">
+  <nd ref="1776807194"/>
+  <nd ref="1776807196"/>
+  <nd ref="1776807179"/>
+  <nd ref="1776807190"/>
+  <nd ref="12828087923"/>
+  <nd ref="12828087924"/>
+  <nd ref="7816246602"/>
+  <nd ref="12828087925"/>
+  <nd ref="7816246601"/>
+  <nd ref="12828087926"/>
+  <nd ref="7816246600"/>
+  <nd ref="12828087927"/>
+  <nd ref="7816246599"/>
+  <nd ref="12828087928"/>
+  <nd ref="7816246598"/>
+  <nd ref="12828087929"/>
+  <nd ref="7816246590"/>
+  <nd ref="12828087930"/>
+  <nd ref="7816246596"/>
+  <nd ref="12828087931"/>
+  <nd ref="7816246594"/>
+  <nd ref="12828087932"/>
+  <nd ref="1776807187"/>
+  <nd ref="1776807181"/>
+  <nd ref="1776807180"/>
+  <nd ref="1776807184"/>
+  <nd ref="7816246592"/>
+  <nd ref="1776807189"/>
+  <nd ref="1776807186"/>
+  <nd ref="12830150186"/>
+  <nd ref="12830150187"/>
+  <nd ref="1776807191"/>
+  <nd ref="1776807183"/>
+  <nd ref="1776807194"/>
+  <tag k="addr:city" v="Астана"/>
+  <tag k="addr:country" v="KZ"/>
+  <tag k="addr:street" v="4CGW+7GX, Ак орда, Левобережье"/>
+  <tag k="architect" v="М. Гуалаци;А. Мольтени;К. Монтахаев"/>
+  <tag k="building" v="office"/>
+  <tag k="building:levels" v="7"/>
+  <tag k="government" v="presidency"/>
+  <tag k="height" v="86"/>
+  <tag k="name" v="Ақорда резиденциясы"/>
+  <tag k="name:de" v="Ak-Orda-Präsidentenpalast"/>
+  <tag k="name:en" v="Ak Orda Presidential Palace"/>
+  <tag k="name:es" v="Palacio Presidencial Ak Orda"/>
+  <tag k="name:it" v="palazzo presidenziale Ak Orda"/>
+  <tag k="name:ja" v="アク・オルダ 大統領宮殿"/>
+  <tag k="name:kk" v="Ақорда резиденциясы"/>
+  <tag k="name:ru" v="Резиденция Акорда"/>
+  <tag k="office" v="government"/>
+  <tag k="opening_hours" v="24/7"/>
+  <tag k="phone" v="8 (702) 383 3734"/>
+  <tag k="roof:colour" v="#b5b5b5"/>
+  <tag k="start_date" v="2004"/>
+  <tag k="website" v="https://www.akorda.kz"/>
+  <tag k="wikidata" v="Q413579"/>
+  <tag k="wikipedia" v="kk:Ақорда (резиденция)"/>
+ </way>
+</osm>

@@ -1,7 +1,11 @@
 node_modules/
+.akim-data/
+.worktrees/
 .env
 .env.*
 !.env.example
 .vercel/
 .codex-private/
 AGENTS.md
+__pycache__/
+*.pyc

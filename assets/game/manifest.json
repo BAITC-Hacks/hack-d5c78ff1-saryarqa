@@ -1,0 +1,1094 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "measure.M1",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M01-M07/M01-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M2",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M01-M07/M02-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M3",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M01-M07/M03-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M4",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M01-M07/M04-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M5",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M01-M07/M05-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M6",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M01-M07/M06-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M7",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M01-M07/M07-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M8",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M08-M14/M08-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M9",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M08-M14/M09-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M10",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M08-M14/M10-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M11",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M08-M14/M11-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M12",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M08-M14/M12-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M13",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M08-M14/M13-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "measure.M14",
+      "kind": "policy-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/policies/M08-M14/M14-ui-icon.svg",
+          "width": 64.0,
+          "height": 64.0,
+          "anchor": [
+            32.0,
+            32.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "building.home",
+      "kind": "world-sprite",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/buildings/residential-house-top.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            64.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/buildings/residential-house-tilted.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            112.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "building.apartment",
+      "kind": "world-sprite",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/buildings/apartment-block-top.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            64.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/buildings/apartment-block-tilted.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            112.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "building.civic",
+      "kind": "world-sprite",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/buildings/office-civic-top.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            64.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/buildings/office-civic-tilted.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            112.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "terrain.tree",
+      "kind": "world-sprite",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/tree-01-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/tree-01-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            176.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "furniture.street-light",
+      "kind": "world-sprite",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/streetlight-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/streetlight-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            176.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "vehicle.bus",
+      "kind": "world-sprite",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "top": {
+          "path": "assets/exports/units/vehicles/bus/top/down/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/units/vehicles/bus/tilted/forward/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            240.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "terrain.park",
+      "kind": "world-sprite",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/park-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/park-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            148.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "category.transport",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/category-transport.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "category.ecology",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/category-ecology.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "category.social",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/category-social-services.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "category.safety",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/category-safety.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "category.services",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/category-city-services.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.T1",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-T1-traffic.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.T2",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-T2-transit.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.S1",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-S1-education.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.S2",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-S2-health.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.B1",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-B1-lighting.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.B2",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-B2-crossing.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.C1",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-C1-utilities.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.C2",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-C2-requests.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "terrain.grass",
+      "kind": "terrain",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/ground-grass-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/ground-grass-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            148.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "road.straight",
+      "kind": "terrain",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/road-straight-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/road-straight-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            148.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.E1",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-E1-greenery.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "indicator.E2",
+      "kind": "ui-icon",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "shared": {
+          "path": "assets/exports/icons/indicator-E2-air.svg",
+          "width": 32.0,
+          "height": 32.0,
+          "anchor": [
+            16.0,
+            16.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "unit.mayor",
+      "kind": "unit",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "shared": {
+          "path": "assets/exports/characters/mayor-still.png",
+          "width": 128,
+          "height": 128,
+          "anchor": [
+            64,
+            124
+          ]
+        }
+      },
+      "note": "Upright tilted character still, also usable as top-view marker. Pose sheet available lazily through actorArt(..., ..., ..., \"sheet\"); poses are not an animation cycle."
+    },
+    {
+      "id": "unit.citizen.01",
+      "kind": "unit",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "shared": {
+          "path": "assets/exports/characters/citizen-01-still.png",
+          "width": 128,
+          "height": 128,
+          "anchor": [
+            64,
+            124
+          ]
+        }
+      },
+      "note": "Upright tilted character still, also usable as top-view marker. Pose sheet available lazily through actorArt(..., ..., ..., \"sheet\"); poses are not an animation cycle."
+    },
+    {
+      "id": "unit.citizen.02",
+      "kind": "unit",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "shared": {
+          "path": "assets/exports/characters/citizen-02-still.png",
+          "width": 128,
+          "height": 128,
+          "anchor": [
+            64,
+            124
+          ]
+        }
+      },
+      "note": "Upright tilted character still, also usable as top-view marker. Pose sheet available lazily through actorArt(..., ..., ..., \"sheet\"); poses are not an animation cycle."
+    },
+    {
+      "id": "unit.citizen.03",
+      "kind": "unit",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "shared": {
+          "path": "assets/exports/characters/citizen-03-still.png",
+          "width": 128,
+          "height": 128,
+          "anchor": [
+            64,
+            124
+          ]
+        }
+      },
+      "note": "Upright tilted character still, also usable as top-view marker. Pose sheet available lazily through actorArt(..., ..., ..., \"sheet\"); poses are not an animation cycle."
+    },
+    {
+      "id": "unit.worker",
+      "kind": "unit",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "shared": {
+          "path": "assets/exports/characters/maintenance-still.png",
+          "width": 128,
+          "height": 128,
+          "anchor": [
+            64,
+            124
+          ]
+        }
+      },
+      "note": "Upright tilted character still, also usable as top-view marker. Pose sheet available lazily through actorArt(..., ..., ..., \"sheet\"); poses are not an animation cycle."
+    },
+    {
+      "id": "unit.emergency",
+      "kind": "unit",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "shared": {
+          "path": "assets/exports/characters/emergency-still.png",
+          "width": 128,
+          "height": 128,
+          "anchor": [
+            64,
+            124
+          ]
+        }
+      },
+      "note": "Upright tilted character still, also usable as top-view marker. Pose sheet available lazily through actorArt(..., ..., ..., \"sheet\"); poses are not an animation cycle."
+    },
+    {
+      "id": "vehicle.car",
+      "kind": "vehicle",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "top": {
+          "path": "assets/exports/units/vehicles/car/top/down/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/units/vehicles/car/tilted/forward/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            240.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "vehicle.lrt",
+      "kind": "vehicle",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "top": {
+          "path": "assets/exports/units/vehicles/lrt/top/down/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/units/vehicles/lrt/tilted/forward/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            240.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "vehicle.service",
+      "kind": "vehicle",
+      "status": "ready",
+      "sourceId": "generated-raster",
+      "views": {
+        "top": {
+          "path": "assets/exports/units/vehicles/service-van/top/down/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/units/vehicles/service-van/tilted/forward/frame-01.png",
+          "width": 256,
+          "height": 256,
+          "anchor": [
+            128.0,
+            240.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "building.school",
+      "kind": "building",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/buildings/school-kindergarten-top.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            64.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/buildings/school-kindergarten-tilted.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            112.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "building.clinic",
+      "kind": "building",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/buildings/clinic-top.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            64.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/buildings/clinic-tilted.svg",
+          "width": 128.0,
+          "height": 128.0,
+          "anchor": [
+            64.0,
+            112.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "road.corner",
+      "kind": "road",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/road-corner-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/road-corner-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            148.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "road.junction",
+      "kind": "road",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/road-intersection-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/road-intersection-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            148.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    },
+    {
+      "id": "road.crosswalk",
+      "kind": "road",
+      "status": "ready",
+      "sourceId": "generated-vector",
+      "views": {
+        "top": {
+          "path": "assets/exports/world/crosswalk-top.svg",
+          "width": 256.0,
+          "height": 256.0,
+          "anchor": [
+            128.0,
+            128.0
+          ]
+        },
+        "tilted": {
+          "path": "assets/exports/world/crosswalk-tilted.svg",
+          "width": 320.0,
+          "height": 218.0,
+          "anchor": [
+            160.0,
+            148.0
+          ]
+        }
+      },
+      "note": "Approved project export; redistribution license not specified. Full variants are available through game/art.js."
+    }
+  ]
+}

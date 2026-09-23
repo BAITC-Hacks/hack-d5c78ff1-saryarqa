@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" role="img" aria-label="M06 greening and wind protection world marker">
+  <title>M06 greening and wind protection world marker</title>
+  <path d="M32 3C17 3 5 15 5 30c0 19 20 39 27 47 7-8 27-28 27-47C59 15 47 3 32 3Z" fill="#4A985F" stroke="#203743" stroke-width="2"/>
+  <circle cx="32" cy="29" r="22" fill="#FFF8E9"/>
+  <g transform="translate(14 11) scale(.56)"><path d="m16 13-9 29h18Zm16-7L21 45h22Zm16 7-9 29h18Z" fill="#73B86B" stroke="#203743" stroke-width="2" stroke-linejoin="round"/><path d="M16 42v13m16-10v14m16-17v13M5 60h54" stroke="#203743" stroke-width="3" stroke-linecap="round"/></g>
+</svg>
