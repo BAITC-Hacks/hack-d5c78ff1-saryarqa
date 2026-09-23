@@ -1,0 +1,14 @@
+{
+  "schema_version": "0.1.0",
+  "city": "Astana",
+  "generated_for": "Akim Simulator MVP",
+  "working_bbox": {
+    "format": "[west,south,east,north]",
+    "value": [
+      71.220936,
+      50.999912,
+      71.728067,
+      51.301212
+    ]
+  }
+}
