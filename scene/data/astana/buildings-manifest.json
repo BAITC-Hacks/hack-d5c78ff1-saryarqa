@@ -1,0 +1,377 @@
+{
+  "schemaVersion": 1,
+  "kind": "building-tiles",
+  "crs": "EPSG:4326",
+  "source": "Astana municipal open geoportal",
+  "source_url": "https://gis.esaulet.kz/server/rest/services/dop_sloi_geoportal_otkr/MapServer/18",
+  "metadata": {
+    "sourceId": "astana-municipal-buildings",
+    "source": "https://gis.esaulet.kz/server/rest/services/dop_sloi_geoportal_otkr/MapServer/18",
+    "retrievedAt": "2026-09-23T11:44:36.492584+00:00",
+    "publicationDate": null,
+    "geometryStatus": "sourced",
+    "status": "unverified",
+    "license": null,
+    "reuseTerms": "Not stated by public source service.",
+    "outputCrs": "EPSG:4326",
+    "coordinateDimensions": "Source Z discarded; longitude and latitude retained.",
+    "queryBbox": [
+      71.220936,
+      50.999912,
+      71.728067,
+      51.301212
+    ],
+    "bboxClipped": false,
+    "sourceFeatureCount": 125832,
+    "featureCount": 125832,
+    "completeWithinQuery": true,
+    "renderSampleCap": null,
+    "selection": "Every source building polygon intersecting query bbox, ordered by OBJECTID; no largest-area sampling.",
+    "generalizationToleranceDegrees": 9e-06,
+    "invalidGeneralizedFeaturesReplacedByRaw": 0,
+    "fields": "OBJECTID,NAME,NAME_OBJECT,NUMBER_STOREYS,FUNCTIONAL,PURPOSE",
+    "query": {
+      "where": "1=1",
+      "geometry": "71.220936,50.999912,71.728067,51.301212",
+      "geometryType": "esriGeometryEnvelope",
+      "inSR": 4326,
+      "spatialRel": "esriSpatialRelIntersects",
+      "outFields": "OBJECTID,NAME,NAME_OBJECT,NUMBER_STOREYS,FUNCTIONAL,PURPOSE",
+      "outSR": 4326,
+      "f": "geojson",
+      "returnGeometry": "true",
+      "returnZ": "false",
+      "returnM": "false",
+      "geometryPrecision": 7,
+      "maxAllowableOffset": 9e-06,
+      "orderByFields": "OBJECTID",
+      "resultRecordCount": 2000
+    },
+    "generator": "build_building_tiles.py",
+    "sourceMetadataFile": "buildings-source.json",
+    "schemaVersion": 1,
+    "coverageChecks": {
+      "method": "Feature bboxes intersecting a 400m by400m WGS84-local rectangle centered on user-supplied anchor. No features generated from anchors.",
+      "featuresByAnchor": {
+        "astana_1_station": 61,
+        "nurly_zhol_station": 23,
+        "astana_airport": 1,
+        "baiterek": 29
+      }
+    }
+  },
+  "queryBbox": [
+    71.220936,
+    50.999912,
+    71.728067,
+    51.301212
+  ],
+  "featureCount": 125832,
+  "tileAssignment": "4x4 query-bbox grid; full source feature assigned once by its bbox center. Tile bbox contains all assigned geometry.",
+  "tiles": [
+    {
+      "id": "r0-c0",
+      "path": "buildings-tiles/r0-c0.geojson",
+      "bbox": [
+        71.3231414,
+        51.0230763,
+        71.3459331,
+        51.0541802
+      ],
+      "gridBbox": [
+        71.220936,
+        50.999912,
+        71.34771875,
+        51.075237
+      ],
+      "featureCount": 11,
+      "bytes": 5436,
+      "sha256": "cbdc45189d57618c7797f32c32fca14d37be84313848c151cc60dab3d4232310"
+    },
+    {
+      "id": "r0-c1",
+      "path": "buildings-tiles/r0-c1.geojson",
+      "bbox": [
+        71.3701198,
+        51.0036607,
+        71.4746813,
+        51.0754021
+      ],
+      "gridBbox": [
+        71.34771875,
+        50.999912,
+        71.4745015,
+        51.075237
+      ],
+      "featureCount": 6528,
+      "bytes": 2220464,
+      "sha256": "6914334dfb2528ecd6b2a101be577d5fe5179e41f1cbe3b45b6e8aa4a5554e3f"
+    },
+    {
+      "id": "r0-c2",
+      "path": "buildings-tiles/r0-c2.geojson",
+      "bbox": [
+        71.4742894,
+        51.0241736,
+        71.4950366,
+        51.0752505
+      ],
+      "gridBbox": [
+        71.4745015,
+        50.999912,
+        71.60128424999999,
+        51.075237
+      ],
+      "featureCount": 88,
+      "bytes": 38728,
+      "sha256": "33d1c88e7a2665360d1ad19f8eb0c186ca393fa9edd9a787253cb0d3654073ee"
+    },
+    {
+      "id": "r0-c3",
+      "path": "buildings-tiles/r0-c3.geojson",
+      "bbox": [
+        71.60128424999999,
+        50.999912,
+        71.728067,
+        51.075237
+      ],
+      "gridBbox": [
+        71.60128424999999,
+        50.999912,
+        71.728067,
+        51.075237
+      ],
+      "featureCount": 0,
+      "bytes": 2008,
+      "sha256": "c9ec400208ee16b0d240ba9144d9698441800aefb0179b094196a3408cc5b5c0"
+    },
+    {
+      "id": "r1-c0",
+      "path": "buildings-tiles/r1-c0.geojson",
+      "bbox": [
+        71.2280006,
+        51.1002041,
+        71.3475549,
+        51.1494177
+      ],
+      "gridBbox": [
+        71.220936,
+        51.075237,
+        71.34771875,
+        51.150562
+      ],
+      "featureCount": 7644,
+      "bytes": 2609628,
+      "sha256": "a052b172135c8b7109fb8ac53e827c31d0933631cc3d859b8770ac0a73bb9555"
+    },
+    {
+      "id": "r1-c1",
+      "path": "buildings-tiles/r1-c1.geojson",
+      "bbox": [
+        71.3473932,
+        51.0752062,
+        71.474994,
+        51.150704
+      ],
+      "gridBbox": [
+        71.34771875,
+        51.075237,
+        71.4745015,
+        51.150562
+      ],
+      "featureCount": 14753,
+      "bytes": 6745926,
+      "sha256": "568b70354ff96cfb13b78f74e5ca3963680249c127c4153189cfb3898cf54237"
+    },
+    {
+      "id": "r1-c2",
+      "path": "buildings-tiles/r1-c2.geojson",
+      "bbox": [
+        71.473814,
+        51.0752318,
+        71.6014037,
+        51.15079
+      ],
+      "gridBbox": [
+        71.4745015,
+        51.075237,
+        71.60128424999999,
+        51.150562
+      ],
+      "featureCount": 23001,
+      "bytes": 8759156,
+      "sha256": "3efeea990366b6576aaab26b94d4eb15a8d2f06ef9d4319fb4f5b35d4b399a81"
+    },
+    {
+      "id": "r1-c3",
+      "path": "buildings-tiles/r1-c3.geojson",
+      "bbox": [
+        71.601198,
+        51.0998537,
+        71.7190923,
+        51.1432259
+      ],
+      "gridBbox": [
+        71.60128424999999,
+        51.075237,
+        71.728067,
+        51.150562
+      ],
+      "featureCount": 2065,
+      "bytes": 685980,
+      "sha256": "5c769a46b2f02bc7b4da10d97406e8adf01012bb30a018be60de5aeebe6b0748"
+    },
+    {
+      "id": "r2-c0",
+      "path": "buildings-tiles/r2-c0.geojson",
+      "bbox": [
+        71.2470443,
+        51.1533151,
+        71.3482067,
+        51.2259742
+      ],
+      "gridBbox": [
+        71.220936,
+        51.150562,
+        71.34771875,
+        51.225887
+      ],
+      "featureCount": 8873,
+      "bytes": 3222292,
+      "sha256": "a8bfe9f3d0908534bbd1e0f55e8112c779a9465161a8d98bdb4280e7a2ba95c8"
+    },
+    {
+      "id": "r2-c1",
+      "path": "buildings-tiles/r2-c1.geojson",
+      "bbox": [
+        71.3474808,
+        51.1498516,
+        71.4750905,
+        51.2258385
+      ],
+      "gridBbox": [
+        71.34771875,
+        51.150562,
+        71.4745015,
+        51.225887
+      ],
+      "featureCount": 54532,
+      "bytes": 19273160,
+      "sha256": "19de59d6970dd59c94eb2314e91707773a62fa7b86a1fde75f6d8d6ee6e911ae"
+    },
+    {
+      "id": "r2-c2",
+      "path": "buildings-tiles/r2-c2.geojson",
+      "bbox": [
+        71.4735873,
+        51.1500726,
+        71.5719369,
+        51.2251576
+      ],
+      "gridBbox": [
+        71.4745015,
+        51.150562,
+        71.60128424999999,
+        51.225887
+      ],
+      "featureCount": 7572,
+      "bytes": 2834022,
+      "sha256": "2e1848c8cda58b1d737384b70274c6693c4cb2f3e110296bb2208348f5499b2a"
+    },
+    {
+      "id": "r2-c3",
+      "path": "buildings-tiles/r2-c3.geojson",
+      "bbox": [
+        71.6042429,
+        51.1591066,
+        71.6192545,
+        51.1731288
+      ],
+      "gridBbox": [
+        71.60128424999999,
+        51.150562,
+        71.728067,
+        51.225887
+      ],
+      "featureCount": 54,
+      "bytes": 21683,
+      "sha256": "c8f43d180418759148b0af89237b8f7cdb2480436a240831e8b4572969b023ff"
+    },
+    {
+      "id": "r3-c0",
+      "path": "buildings-tiles/r3-c0.geojson",
+      "bbox": [
+        71.3027814,
+        51.2715895,
+        71.330908,
+        51.2861913
+      ],
+      "gridBbox": [
+        71.220936,
+        51.225887,
+        71.34771875,
+        51.301212
+      ],
+      "featureCount": 16,
+      "bytes": 6909,
+      "sha256": "85b8b12881072ef4913bf0674a1d9b2595377cb128fb7598ebd08deb0d5e812f"
+    },
+    {
+      "id": "r3-c1",
+      "path": "buildings-tiles/r3-c1.geojson",
+      "bbox": [
+        71.356869,
+        51.2257914,
+        71.4648592,
+        51.2902853
+      ],
+      "gridBbox": [
+        71.34771875,
+        51.225887,
+        71.4745015,
+        51.301212
+      ],
+      "featureCount": 619,
+      "bytes": 213590,
+      "sha256": "6129d59fcd426b287d395ce16c295092afc761803c8414c710f7e8fb690dd3b4"
+    },
+    {
+      "id": "r3-c2",
+      "path": "buildings-tiles/r3-c2.geojson",
+      "bbox": [
+        71.481292,
+        51.2373814,
+        71.5966118,
+        51.2518945
+      ],
+      "gridBbox": [
+        71.4745015,
+        51.225887,
+        71.60128424999999,
+        51.301212
+      ],
+      "featureCount": 76,
+      "bytes": 26501,
+      "sha256": "20ecb3db1a98f0007672f1d867841d01dfdda3e3f0faa6e6db77b27c6fab36ef"
+    },
+    {
+      "id": "r3-c3",
+      "path": "buildings-tiles/r3-c3.geojson",
+      "bbox": [
+        71.60128424999999,
+        51.225887,
+        71.728067,
+        51.301212
+      ],
+      "gridBbox": [
+        71.60128424999999,
+        51.225887,
+        71.728067,
+        51.301212
+      ],
+      "featureCount": 0,
+      "bytes": 2008,
+      "sha256": "263e61d988807af9a81166e62833a1cbf373bd7c6901ac66cc4414a0dc500d60"
+    }
+  ]
+}
