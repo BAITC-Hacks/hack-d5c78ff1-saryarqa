@@ -1,0 +1,73 @@
+{
+  "browser": "153.0.4234.48",
+  "head": "1ee0698c4e18788a30ab30bee560a8740bcd3989",
+  "results": [
+    {
+      "width": 320,
+      "score": "56,54",
+      "cost": "95",
+      "critical": "0",
+      "scrollWidth": 320,
+      "interactiveOutside": [
+        "back-button"
+      ]
+    },
+    {
+      "width": 375,
+      "score": "56,54",
+      "cost": "95",
+      "critical": "0",
+      "scrollWidth": 375,
+      "interactiveOutside": []
+    },
+    {
+      "width": 430,
+      "score": "56,54",
+      "cost": "95",
+      "critical": "0",
+      "scrollWidth": 430,
+      "interactiveOutside": []
+    },
+    {
+      "width": 768,
+      "score": "56,54",
+      "cost": "95",
+      "critical": "0",
+      "scrollWidth": 768,
+      "interactiveOutside": []
+    },
+    {
+      "width": 1024,
+      "score": "56,54",
+      "cost": "95",
+      "critical": "0",
+      "scrollWidth": 1024,
+      "interactiveOutside": []
+    },
+    {
+      "width": 1440,
+      "score": "56,54",
+      "cost": "95",
+      "critical": "0",
+      "scrollWidth": 1440,
+      "interactiveOutside": []
+    }
+  ],
+  "reducedMotionScore": "56,54",
+  "touchScore": "56,54",
+  "touch": "Playwright emulation, not physical device",
+  "requestedFiles": [
+    {
+      "path": "/assets/game/manifest.json",
+      "status": 404
+    },
+    {
+      "path": "/data/geography/astana.json",
+      "status": 404
+    },
+    {
+      "path": "/data/city/context.json",
+      "status": 404
+    }
+  ]
+}

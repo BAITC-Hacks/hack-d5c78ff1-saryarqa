@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="256" height="256">
+  <title>Bus Lane — top-down</title>
+  <desc>Editable miniature game asset. Anchor: centre of top surface. No geographic claim.</desc>
+  <rect x="0" y="0" width="256" height="256" fill="#d2c6ab"/><path d="M0 76h256v104H0z" fill="#b9a98e"/><path d="M0 88h256v80H0z" fill="#56676a"/><path d="M0 80h256M0 176h256" stroke="#f5e8c8" stroke-width="8"/><path d="M0 91h256v34H0z" fill="#c96c5c"/><path d="M0 125h256" stroke="#fff1d7" stroke-width="4"/><path d="M24 108h38m52 0h38m52 0h28" stroke="#ffe8c9" stroke-width="4" stroke-linecap="round"/><path d="M125 132h32m-22-10 10 10-10 10" fill="none" stroke="#ffe8c9" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

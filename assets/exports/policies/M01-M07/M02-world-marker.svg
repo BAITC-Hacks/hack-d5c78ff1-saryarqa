@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 80" role="img" aria-label="M02 adaptive traffic lights world marker">
+  <title>M02 adaptive traffic lights world marker</title>
+  <path d="M32 3C17 3 5 15 5 30c0 19 20 39 27 47 7-8 27-28 27-47C59 15 47 3 32 3Z" fill="#138B95" stroke="#203743" stroke-width="2"/>
+  <circle cx="32" cy="29" r="22" fill="#FFF8E9"/>
+  <g transform="translate(14 11) scale(.56)"><rect x="24" y="7" width="16" height="45" rx="5" fill="#203743"/><circle cx="32" cy="17" r="5" fill="#E46D58"/><circle cx="32" cy="30" r="5" fill="#F0BB55"/><circle cx="32" cy="43" r="5" fill="#8DCB75"/><path d="M32 52v8" stroke="#203743" stroke-width="4"/></g>
+</svg>

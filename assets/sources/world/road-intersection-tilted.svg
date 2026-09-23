@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 218" width="320" height="218">
+  <title>Road Intersection — tilted 2.5D</title>
+  <desc>Editable miniature game asset. Anchor: centre of top surface. No geographic claim.</desc>
+  <path d="M14 82 160 148 306 82v20L160 168 14 102Z" fill="#947b61"/><path d="M160 148 306 82v20l-146 66Z" fill="#806b55"/><g transform="matrix(0.5703125 0.2578125 -0.5703125 0.2578125 160 16)"><rect x="0" y="0" width="256" height="256" fill="#d2c6ab"/><path d="M0 76h256v104H0zM76 0h104v256H76z" fill="#b9a98e"/><path d="M0 88h256v80H0zM88 0h80v256H88z" fill="#56676a"/><path d="M0 80h80V0m96 0v80h80M0 176h80v80m96 0v-80h80" fill="none" stroke="#f5e8c8" stroke-width="8"/><path d="M0 128h54m148 0h54M128 0v54m0 148v54" stroke="#fff3d8" stroke-width="4" stroke-dasharray="24 16"/></g>
+</svg>

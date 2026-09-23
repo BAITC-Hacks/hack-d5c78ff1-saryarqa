@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 218" width="320" height="218">
+  <title>Ground Grass — tilted 2.5D</title>
+  <desc>Editable miniature game asset. Anchor: centre of top surface. No geographic claim.</desc>
+  <path d="M14 82 160 148 306 82v20L160 168 14 102Z" fill="#947b61"/><path d="M160 148 306 82v20l-146 66Z" fill="#806b55"/><g transform="matrix(0.5703125 0.2578125 -0.5703125 0.2578125 160 16)"><rect x="0" y="0" width="256" height="256" fill="#4f9c79"/><path d="M21 33l5-10 5 10m54 18 4-8 4 8m73-19 6-11 6 11m47 30 4-7 4 7M37 127l5-9 5 9m85 18 5-10 5 10m75-6 5-10 5 10M67 212l5-10 5 10m82-8 5-9 5 9m55 21 5-10 5 10" fill="none" stroke="#286b59" stroke-width="3" stroke-linecap="round" opacity=".55"/><circle cx="115" cy="57" r="5" fill="#b6d18a"/><circle cx="192" cy="193" r="4" fill="#b6d18a"/></g>
+</svg>

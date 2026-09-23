@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "bns-astana-2026-08-01",
+      "publisher": "Бюро национальной статистики АСПиР Республики Казахстан",
+      "url": "https://stat.gov.kz/ru/region/astana/",
+      "publishedAt": null,
+      "referenceDate": "2026-08-01",
+      "retrievedAt": "2026-09-23",
+      "location": "Краткие итоги социально-экономического развития региона → Численность и миграция населения, первый абзац.",
+      "reuse": "BNS permits free reuse with attribution, including software: https://stat.gov.kz/ru/description/ . Only the aggregate fact is reproduced; no page imagery."
+    },
+    {
+      "id": "astana-bus-record-undated",
+      "publisher": "Акимат города Астаны, со ссылкой на ТОО City Transportation Systems",
+      "url": "https://www.gov.kz/memleket/entities/astana/press/news/details/984403?lang=ru",
+      "publishedAt": null,
+      "referenceDate": null,
+      "retrievedAt": "2026-09-23",
+      "location": "В Астане за день общественным транспортом воспользовалось более 1 миллиона человек, заключительный абзац о ежедневном выпуске и маршрутах.",
+      "reuse": "Attribution retained for aggregate factual counts. A specific republication license was not verified; article text, photographs and video are not redistributed."
+    },
+    {
+      "id": "cts-lrt-safety-2026-05-17",
+      "publisher": "ТОО City Transportation Systems",
+      "url": "https://cts.gov.kz/ru/press-center/news/na-linii-lrt-zafiksirovany-otdelnye-sluchai-narusheniya-passazhirami-pravil-bezopasnosti/",
+      "publishedAt": "2026-05-17",
+      "referenceDate": "2026-05-17",
+      "retrievedAt": "2026-09-23",
+      "location": "Дата над заголовком; первые абзацы сообщения о пассажирах, поездах и задержках движения LRT.",
+      "reuse": "Attributed qualitative factual summary only. A specific republication license was not verified; no article text or media copied."
+    }
+  ],
+  "observations": [
+    {
+      "id": "population.city.2026-08-01",
+      "metric": "population",
+      "regionId": "city",
+      "value": 1690605,
+      "unit": "persons",
+      "asOf": "2026-08-01",
+      "sourceId": "bns-astana-2026-08-01",
+      "definition": "Численность населения города Астаны по опубликованной оценке БНС на указанную дату.",
+      "status": "verified",
+      "note": "Date precision: day; reference date is 1 August 2026, not retrieval day. Citywide only; no distribution across six district polygons is supported. The source page updates over time."
+    },
+    {
+      "id": "population.esil.unavailable",
+      "metric": "population",
+      "regionId": "esil",
+      "value": null,
+      "unit": "persons",
+      "asOf": null,
+      "sourceId": null,
+      "definition": "Численность населения района Есиль в границах используемой карты.",
+      "status": "unavailable",
+      "note": "No dated district count compatible with the exported polygon boundary vintage was verified. Do not allocate the city total using scenario weights or polygon area."
+    },
+    {
+      "id": "population.almaty.unavailable",
+      "metric": "population",
+      "regionId": "almaty",
+      "value": null,
+      "unit": "persons",
+      "asOf": null,
+      "sourceId": null,
+      "definition": "Численность населения района Алматы в границах используемой карты.",
+      "status": "unavailable",
+      "note": "No dated district count compatible with the exported polygon boundary vintage was verified. Do not allocate the city total using scenario weights or polygon area."
+    },
+    {
+      "id": "population.saryarka.unavailable",
+      "metric": "population",
+      "regionId": "saryarka",
+      "value": null,
+      "unit": "persons",
+      "asOf": null,
+      "sourceId": null,
+      "definition": "Численность населения района Сарыарка в границах используемой карты.",
+      "status": "unavailable",
+      "note": "No dated district count compatible with the exported polygon boundary vintage was verified. Do not allocate the city total using scenario weights or polygon area."
+    },
+    {
+      "id": "population.baikonur.unavailable",
+      "metric": "population",
+      "regionId": "baikonur",
+      "value": null,
+      "unit": "persons",
+      "asOf": null,
+      "sourceId": null,
+      "definition": "Численность населения района Байконур в границах используемой карты.",
+      "status": "unavailable",
+      "note": "No dated district count compatible with the exported polygon boundary vintage was verified. Do not allocate the city total using scenario weights or polygon area."
+    },
+    {
+      "id": "population.nura.unavailable",
+      "metric": "population",
+      "regionId": "nura",
+      "value": null,
+      "unit": "persons",
+      "asOf": null,
+      "sourceId": null,
+      "definition": "Численность населения района Нура в границах используемой карты.",
+      "status": "unavailable",
+      "note": "No dated district count compatible with the exported polygon boundary vintage was verified. Do not allocate the city total using scenario weights or polygon area."
+    },
+    {
+      "id": "population.saraishyk.unavailable",
+      "metric": "population",
+      "regionId": "saraishyk",
+      "value": null,
+      "unit": "persons",
+      "asOf": null,
+      "sourceId": null,
+      "definition": "Численность населения района Сарайшық в границах используемой карты.",
+      "status": "unavailable",
+      "note": "No dated district count compatible with the exported polygon boundary vintage was verified. This sixth geography region is not a sixth scored simulation district."
+    },
+    {
+      "id": "bus_fleet_stock.city.unavailable",
+      "metric": "bus_fleet_stock",
+      "regionId": "city",
+      "value": null,
+      "unit": "vehicles",
+      "asOf": null,
+      "sourceId": null,
+      "definition": "Общее количество автобусов в парке перевозчиков Астаны, включая не выпущенные на линию машины, по сопоставимому учету.",
+      "status": "unavailable",
+      "note": "No dated complete fleet inventory was verified. Daily active buses and newly purchased buses do not establish fleet stock."
+    },
+    {
+      "id": "buses_active_daily.city.undated",
+      "metric": "buses_active_daily",
+      "regionId": "city",
+      "value": 1210,
+      "unit": "vehicles",
+      "asOf": null,
+      "sourceId": "astana-bus-record-undated",
+      "definition": "Ежедневный выпуск автобусов на улицы Астаны, заявленный в сообщении акимата; это не инвентарный состав парка.",
+      "status": "unverified",
+      "note": "The primary page explicitly states 1210, but its publication/reference date was not exposed in retrieved content. Undated historical candidate only: do not present as a current verified count or use for data-driven density."
+    },
+    {
+      "id": "bus_routes.city.undated",
+      "metric": "bus_routes",
+      "regionId": "city",
+      "value": 105,
+      "unit": "routes",
+      "asOf": null,
+      "sourceId": "astana-bus-record-undated",
+      "definition": "Количество автобусных маршрутов, обслуживаемых указанным ежедневным выпуском в сообщении акимата.",
+      "status": "unverified",
+      "note": "The primary page explicitly states 105, but the reference/publication date and precise city/suburban inclusion rules were not verified. It is not today's verified route total; no route geometries are implied."
+    },
+    {
+      "id": "lrt_daily_ridership.city.unavailable",
+      "metric": "lrt_daily_ridership",
+      "regionId": "city",
+      "value": null,
+      "unit": "trips/day",
+      "asOf": null,
+      "sourceId": "cts-lrt-safety-2026-05-17",
+      "definition": "Фактически совершенные пассажирские поездки на LRT за определенные сутки или определенный период усреднения.",
+      "status": "unavailable",
+      "note": "The CTS safety notice evidences passenger operations on its publication date but reports no ridership count. A design capacity, forecast or all-public-transport record must not substitute for measured LRT trips/day. Unknown is not zero."
+    }
+  ]
+}
