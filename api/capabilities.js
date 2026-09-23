@@ -1,6 +1,7 @@
 import { lstat } from 'node:fs/promises';
 import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { ASTANA_MAP_FILES } from '../scene/load-map.js';
 
 const defaultRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 
@@ -38,7 +39,13 @@ export async function getCapabilities(rootDir = defaultRoot) {
     ['cityData', ['data', 'city', 'context.json']],
   ];
   const checks = await Promise.all(entries.map(async ([key, parts]) => [key, await isSafeFile(rootDir, parts)]));
-  return Object.fromEntries(checks);
+  const atlasFiles = [
+    '/scene/index.js', '/scene/atlas.js', '/scene/atlas.css', '/scene/styles.css',
+    '/scene/load-map.js', '/scene/geodata.js', '/scene/camera.js',
+    ...Object.values(ASTANA_MAP_FILES),
+  ];
+  const atlas = (await Promise.all(atlasFiles.map(path => isSafeFile(rootDir, path.slice(1).split('/'))))).every(Boolean);
+  return { ...Object.fromEntries(checks), atlas };
 }
 
 export default async function handler(req, res) {
