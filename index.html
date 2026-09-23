@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content="#e8f4ed" />
     <meta name="description" content="Аким на 5 часов — симулятор городских решений для районов Астаны." />
     <title>Аким на 5 часов — симулятор решений</title>
     <link rel="stylesheet" href="./styles.css" />
@@ -17,8 +17,7 @@
           <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
           <span>Аким <span class="brand-muted">на 5 часов</span></span>
         </a>
-        <span class="topbar-note">Астана</span>
-        <a class="topbar-link" href="#rules">Как играть <span aria-hidden="true">↗</span></a>
+        <label class="city-picker"><span class="sr-only">Выбрать город</span><select id="city-select" aria-label="Выбрать город"><option value="astana">Астана</option><option value="almaty">Алматы</option><option value="shymkent">Шымкент</option></select></label>
       </header>
 
       <main id="main">
@@ -50,6 +49,7 @@
             </div>
             <div class="personal-best"><span>Личный рекорд</span><strong id="personal-best">Ещё нет</strong></div>
           </div>
+          <p id="city-note" class="city-note" hidden>Карта города. Расчёт решений пока доступен только для Астаны.</p>
           <p id="session-message" class="session-message" role="status" aria-live="polite"></p>
           <div id="game-panel">
             <div class="world-toolbar">
@@ -108,8 +108,6 @@
             <div class="insights-panel"><div class="panel-heading"><div><span class="tiny-label">ПЛАН</span><h3>Разбор</h3></div></div><div id="insight-content"></div><div class="ai-panel"><button id="ai-button" class="button button-ai" type="button">Объяснить с ИИ <span aria-hidden="true">↗</span></button><p id="ai-status" role="status" aria-live="polite">ИИ объясняет результат.</p><div id="ai-output" class="ai-output" hidden></div></div><p class="insight-disclaimer">ИИ не меняет расчёт.</p></div>
           </div>
         </section>
-
-        <section id="rules" class="rules" aria-labelledby="rules-title"><div><h2 id="rules-title">Как играть</h2></div><div class="rule-items"><p><span>01</span> Ровно пять уникальных мер.</p><p><span>02</span> Общая стоимость не выше 100.</p><p><span>03</span> Не больше двух мер одного направления.</p><p><span>04</span> Несовместимые меры отмечаются в плане.</p></div></section>
       </main>
       <footer><span>Аким на 5 часов</span><span>Учебная модель · не прогноз</span><a href="#main">Наверх ↑</a></footer>
     </div>

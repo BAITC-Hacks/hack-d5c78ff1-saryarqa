@@ -1,16 +1,22 @@
 import { REGIONS } from './contracts.js';
-import { loadAstanaMap } from '../scene/load-map.js';
+import { loadAstanaMap, loadCityMap } from '../scene/load-map.js';
 
 const EMPTY_CITY = Object.freeze({ schemaVersion: 1, sources: [], observations: [] });
 
 /** Only mount the other owners' module when its public resources are ready. */
-export async function loadScenePackage({ fetchImpl = fetch, loadModule = () => import('../scene/index.js'), signal } = {}) {
+export async function loadScenePackage({ fetchImpl = fetch, loadModule = () => import('../scene/index.js'), signal, cityId } = {}) {
   const json = async (path) => {
     const response = await fetchImpl(path, { signal });
     if (!response.ok) throw new Error(`RESOURCE_UNAVAILABLE:${path}`);
     return response.json();
   };
   const capabilities = await json('/api/capabilities');
+  if (cityId && capabilities.scene) {
+    const [mapData,module]=await Promise.all([loadCityMap(cityId,{fetchImpl,signal}),loadModule()]);
+    if(typeof module.createScene!=='function')throw new Error('INVALID_SCENE_INTERFACE');
+    const cityData=cityId==='astana'&&capabilities.cityData?await json('/data/city/context.json'):EMPTY_CITY;
+    return {ready:true,mapData,cityData,createScene:module.createScene};
+  }
   if (capabilities.scene && capabilities.atlas) {
     const [mapData, cityData] = await Promise.all([
       loadAstanaMap({ fetchImpl, signal }),
@@ -42,7 +48,7 @@ export async function loadScenePackage({ fetchImpl = fetch, loadModule = () => i
   return { ready: true, assets, geography, cityData, createScene: module.createScene };
 }
 
-export function createSceneAdapter({ root, session, onStatus = () => {}, fetchImpl = fetch, loadModule, documentRef = document, motion = matchMedia('(prefers-reduced-motion: reduce)') }) {
+export function createSceneAdapter({ root, session, onStatus = () => {}, fetchImpl = fetch, loadModule, documentRef = document, getCityId = () => undefined, motion = matchMedia('(prefers-reduced-motion: reduce)') }) {
   let scene = null;
   let disposed = false;
   let request = null;
@@ -59,7 +65,11 @@ export function createSceneAdapter({ root, session, onStatus = () => {}, fetchIm
   const context = () => ({ cityData, reducedMotion: motion.matches, visible: !documentRef.hidden && session.getSnapshot().mode === 'game' });
   function update(snapshot = session.getSnapshot()) {
     if (!scene || disposed) return;
-    try { scene.update({ snapshot, context: context() }); }
+    try {
+      const browsing = getCityId() && getCityId() !== 'astana';
+      const displayed = browsing ? {...snapshot, mode:'game', view:'overview', focusedRegion:null, plan:[], result:null, presentation:null, preview:{measures:[]}, playback:{...snapshot.playback,status:'idle'}} : snapshot;
+      scene.update({snapshot:displayed,context:context()});
+    }
     catch {
       loadingId += 1;
       clearScene();
@@ -79,9 +89,9 @@ export function createSceneAdapter({ root, session, onStatus = () => {}, fetchIm
     const id = ++loadingId;
     clearScene();
     onStatus({ phase: 'loading', cityData });
-    const timeout = setTimeout(() => controller.abort(), 10000);
+    const timeout = setTimeout(() => controller.abort(), 45000);
     try {
-      const result = await loadScenePackage({ fetchImpl, loadModule, signal: controller.signal });
+      const result = await loadScenePackage({ fetchImpl, loadModule, signal: controller.signal, cityId:getCityId() });
       if (disposed || id !== loadingId) return;
       cityData = result.cityData;
       if (!result.ready) { onStatus({ phase: 'unavailable', reason: result.reason, cityData }); return; }
@@ -91,7 +101,7 @@ export function createSceneAdapter({ root, session, onStatus = () => {}, fetchIm
         documentRef.head.append(css);
       }
       scene = result.createScene({ root, assets: result.assets, geography: result.geography, mapData: result.mapData, onIntent: (action) => {
-        if (!disposed && id === loadingId && ['FOCUS_REGION', 'SET_VIEW', 'SET_PROJECTION', 'PLAYBACK_COMPLETE'].includes(action?.type)) session.dispatch(action);
+        if (!disposed && id === loadingId && (getCityId() === undefined || getCityId() === 'astana' || action?.type === 'SET_PROJECTION') && ['FOCUS_REGION', 'SET_VIEW', 'SET_PROJECTION', 'PLAYBACK_COMPLETE'].includes(action?.type)) session.dispatch(action);
       } });
       if (!scene || typeof scene.update !== 'function' || typeof scene.destroy !== 'function') throw new Error('INVALID_SCENE_INSTANCE');
       onStatus({ phase: 'ready', cityData });

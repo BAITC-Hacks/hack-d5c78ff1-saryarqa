@@ -2,6 +2,8 @@ import { DISTRICTS, INDICATORS, MEASURES, BASELINE, realizedMeasureEffects } fro
 import { createGameSession } from './game/session.js';
 import { REGIONS, getRegion } from './game/contracts.js';
 import { createSceneAdapter } from './game/scene-adapter.js';
+import { CITIES } from './scene/cities.js';
+let currentCity = 'astana';
 
 const $ = (selector) => document.querySelector(selector);
 const byId = (id) => document.getElementById(id);
@@ -328,6 +330,7 @@ function renderInspector() {
 }
 
 function completeWithoutScene() {
+  if (currentCity !== 'astana') return;
   if (sceneStatus.phase === 'loading' || sceneStatus.phase === 'ready' || !state.result || state.playback.status === 'complete') return;
   const revision = state.planRevision;
   queueMicrotask(() => {
@@ -335,6 +338,16 @@ function completeWithoutScene() {
   });
 }
 
+function renderCityChrome() {
+  const city=CITIES[currentCity], browsing=!city.simulation;
+  byId('page-title').textContent=city.title;
+  document.title=city.name+' — Аким на 5 часов';
+  $('.intro-lead').textContent=browsing?'Улицы, здания и парки на реальной карте.':'5 решений. 100 единиц бюджета. 8 кварталов.';
+  for(const selector of ['.intro-actions','.baseline-strip','.workspace','.personal-best','.mode-toolbar .segmented','.world-toolbar','.district-inspector','#region-buttons']) $(selector).hidden=browsing;
+  byId('city-note').hidden=!browsing;
+  if(browsing){byId('game-panel').hidden=false;byId('playback-panel').hidden=true;byId('results').hidden=true;}
+  $('.scene-notice p').textContent=browsing?'Загружаем улицы и здания города.':'План доступен ниже.';
+}
 function renderShell() {
   const game = state.mode === 'game';
   byId('game-panel').hidden = !game;
@@ -362,6 +375,7 @@ function renderShell() {
   else byId('results').hidden = true;
   renderInspector();
   completeWithoutScene();
+  renderCityChrome();
 }
 
 for (const region of REGIONS) {
@@ -397,7 +411,7 @@ const unsubscribe = session.subscribe((next) => {
   }
 });
 
-adapter = createSceneAdapter({ root: byId('scene-root'), session, onStatus(status) {
+adapter = createSceneAdapter({ root: byId('scene-root'), session, getCityId:()=>currentCity, onStatus(status) {
   sceneStatus = status;
   const ready = status.phase === 'ready';
   byId('scene-notice').hidden = ready;
@@ -405,5 +419,14 @@ adapter = createSceneAdapter({ root: byId('scene-root'), session, onStatus(statu
   byId('scene-retry').hidden = status.phase === 'loading' || ready;
   renderShell();
 } });
+byId('city-select').addEventListener('change', () => {
+  const next = byId('city-select').value;
+  if (!CITIES[next] || next === currentCity) return;
+  if (state.playback.status === 'playing') dispatch({ type: 'PLAYBACK_CONTROL', command: 'pause' });
+  currentCity = next;
+  if (currentCity !== 'astana' && state.mode !== 'game') dispatch({ type: 'SET_MODE', mode: 'game' });
+  renderCityChrome();
+  adapter.connect();
+});
 adapter.connect();
 window.addEventListener('pagehide', (event) => { if (event.persisted) return; adapter.destroy(); aiController?.abort(); unsubscribe(); session.destroy(); });
