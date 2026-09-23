@@ -9,11 +9,11 @@ completion includes the host's `planRevision` and `runId`.
 The default map is sourced Astana geography. The original schematic world remains
 an explicit `?data=fixture` regression fixture. `createScene({root, mapData,
 onIntent})` mounts the atlas; the original assets/geography signature remains
-available. `loadAstanaMap()` loads eleven local public resources without API keys.
+available. `loadAstanaMap()` loads twelve initial local public resources and sixteen lazy building tiles without API keys.
 The main application and `scene/dev.html` both use the shared game session.
 
 - 1,802 actual OSM major-road ways, 150 shared-road nodes, municipal river/water
-  geometry, sampled green-space and 2,000 central building footprints.
+  geometry, sampled green-space and all 125,832 source building footprints in the working bbox.
 - Six sourced district contours from Hosted/raiony, including Nura and Saraishyk.
   Their effective date remains unverified and is disclosed. Historical four-region
   geometry is never admitted as current. Saraishyk is context only, not scored.
@@ -48,7 +48,7 @@ was preserved.
 
 ## Verification
 
-`npm test`: **105 passed, 0 failed** (Node test runner; localhost binding enabled).
+`npm test`: **117 passed, 0 failed** (Node test runner; localhost binding enabled).
 Includes real bundled-data HTTP loading, allowlist/security, source district gates,
 Nura collision/movement, both projections, lifecycle, stale completion tokens,
 engine vectors and shared session behavior.
@@ -78,8 +78,8 @@ Earlier images in that directory are explicitly schematic fixture evidence.
 ## Remaining source limits
 
 This is a sourced playable map, not a complete city census or live digital twin.
-Road coverage includes the selected major classes. Buildings/green-space are
-samples; heights and vehicles are illustrative. Historical corridor rankings do
+Road coverage includes the selected major classes. The complete building source coverage is not a current census; green-space remains
+sampled; heights and vehicles are illustrative. Historical corridor rankings do
 not describe live traffic, and unresolved endpoints are disclosed. Twelve landmark
 anchors still use the supplied coordinates without an additional identity check.
 The municipal service does not state effective boundary dates or reuse terms;
@@ -103,5 +103,25 @@ Map labels avoid overlay controls; observed HUD resizing refreshes placement.
 Close views show existing OSM road names. District selection updates map outlines,
 landmark picks clear stale road highlights, search is anchored to its input,
 source cards stay inside the map area, Escape dismisses popovers, and the north
-compass follows the selected projection. The same 105-test suite and browser
+compass follows the selected projection. The 117-test suite and browser
 plan/result checks were repeated; screenshots in evidence reflect the refined UI.
+
+## Building coverage and overlap fixes
+
+Replaced the centre-only building display with a complete municipal export: 125,832
+features, 16 geographic tiles, 46.7 MB. Two concurrent requests load only intersecting
+tiles. The viewport selector ranks visible footprint area, preserves courtyard holes,
+and caps displayed detail at 2,200 desktop / 1,200 mobile features. It does not cap
+data coverage. Close-up views reveal smaller buildings. Failed tile loads offer retry;
+remount/destroy abort requests. All source IDs and checksums are recorded in
+`scene/data/astana/BUILDING-COVERAGE.md`.
+
+Source footprints now have filled material roofs, rounded screen-width edges, two
+facade tones and soft shadows. Height and materials remain illustrative. Landmark
+labels and angled street names avoid controls and landmark models; internal road
+IDs are not drawn. Labels can be toggled independently. Decisions share a card per
+district. Source attribution is compact and the full source card closes.
+
+Browser evidence: `astana-station-buildings.png`, `astana-station-top.png`, and
+`astana-station-mobile.png` in `scene/fixtures/evidence`. Astana-1 surrounds now
+render real buildings; desktop and 375px mobile content have no horizontal overflow.

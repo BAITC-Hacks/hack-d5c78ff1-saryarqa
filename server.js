@@ -4,7 +4,7 @@ import { dirname, extname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import analyze from './api/analyze.js';
 import { getCapabilities, isSafeFile } from './api/capabilities.js';
-import { ASTANA_MAP_FILES } from './scene/load-map.js';
+import { ASTANA_MAP_FILES, BUILDING_TILE_PATHS } from './scene/load-map.js';
 
 const defaultRoot = dirname(fileURLToPath(import.meta.url));
 const MAX_BODY_BYTES = 4096;
@@ -36,7 +36,7 @@ const mime = new Map([
 ]);
 const sceneTypes = new Set(['.js', '.css', '.svg', '.png', '.webp', '.jpg', '.jpeg', '.gif', '.avif']);
 const assetTypes = new Set(['.svg', '.png', '.webp', '.json', '.mp3', '.ogg', '.wav', '.m4a', '.aac']);
-const atlasDataPaths = new Set(Object.values(ASTANA_MAP_FILES));
+const atlasDataPaths = new Set([...Object.values(ASTANA_MAP_FILES), ...BUILDING_TILE_PATHS]);
 
 function send(res, status, body, contentType = 'text/plain; charset=utf-8', headers = {}) {
   res.writeHead(status, {

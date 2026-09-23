@@ -63,3 +63,11 @@ or a named node. It retains the original coordinates and source, OSM identity,
 version, timestamp, method, displacement and SHA256 of each checked-in XML under
 `landmark-osm-source/`. Twelve other supplied landmark positions remain unverified.
 The 150 road nodes are connectivity candidates, not surveyed traffic junctions.
+
+### Complete building coverage update
+
+`buildings-manifest.json` plus `buildings-tiles/r0-c0.geojson` through
+`r3-c3.geojson` supersede the centre-only coverage limitation. The old 2,000-building
+render file remains only a fast initial fallback. The browser loads visible tiles
+and replaces duplicate source IDs with full coverage geometry. See
+`BUILDING-COVERAGE.md` for counts, query, simplification, checksums and source limits.

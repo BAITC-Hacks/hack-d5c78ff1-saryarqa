@@ -131,3 +131,17 @@
 @media(max-width:1100px) { .akim-scene .atlas-map-title>span:last-child { display:none; } .akim-scene .atlas-header-end { font-size:11px; } }
 @media(max-width:768px) { .akim-scene .atlas-sidebar-head { padding:22px 24px 16px; } .akim-scene .atlas-feature-hero { height:154px; } .akim-scene .atlas-selected-model { height:154px; } .akim-scene .atlas-feature-info h2 { font-size:24px; } .akim-scene .atlas-header-end { font-size:11px; } .akim-scene .atlas-place-card { top:118px; max-height:300px; bottom:auto; } }
 @media(max-width:430px) { .akim-scene .atlas-brand strong { font-size:21px; } .akim-scene .atlas-brand small { font-size:10px; } .akim-scene .atlas-header-end { font-size:10px; } .akim-scene .atlas-header-end>button { display:grid; } .akim-scene .atlas-layer-tools { gap:4px; } .akim-scene .atlas-layer-tools span { font-size:11px; } .akim-scene .atlas-layer-tools button { padding:6px 8px; } .akim-scene .atlas-sidebar h1 { font-size:28px; } .akim-scene .atlas-map-credit { font-size:9px; line-height:1.3; } }
+
+.akim-scene .atlas-map-credit { display:flex; align-items:center; gap:5px; bottom:51px; padding:2px 5px; font-size:9px; line-height:1.4; border-radius:5px; background:#f8fbef9c; color:#748166; max-width:calc(100% - 90px); }
+.akim-scene .atlas-map-credit a { font-weight:400; text-decoration:none; }
+.akim-scene .atlas-map-credit a:hover { text-decoration:underline; color:#365e39; }
+.akim-scene .atlas-map-credit button { width:23px; height:23px; padding:0; display:grid; place-items:center; border-radius:50%; font-size:14px; background:none; }
+.akim-scene .atlas-map-label { filter:none; }
+.akim-scene .atlas-policy-card { filter:drop-shadow(0 3px 7px #24463212); }
+@media(max-width:1100px) and (min-width:769px) { .akim-scene .atlas-layer-tools span { display:none; } }
+@media(max-width:430px) { .akim-scene .atlas-layer-tools button { font-size:13px; padding:7px; } .akim-scene .atlas-layer-tools span { font-size:10px; margin-left:3px; } .akim-scene .atlas-map-credit { font-size:8px; } }
+
+.akim-scene .atlas-building-status { position:absolute; z-index:5; left:26px; bottom:113px; border:1px solid #d1ddd1; border-radius:18px; padding:7px 12px; color:#496b61; font-size:11px; background:#ffffffdf; box-shadow:0 3px 12px #153d3510; }
+.akim-scene .atlas-building-status:disabled { cursor:progress; opacity:1; }
+.akim-scene .atlas-building-status[hidden] { display:none; }
+@media(max-width:768px) { .akim-scene .atlas-map-shell:has(.atlas-game-hud) .atlas-building-status { top:calc(max(63vh,470px) - 126px); bottom:auto; } }

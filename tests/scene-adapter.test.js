@@ -1,4 +1,5 @@
 import test from 'node:test';
+import { buildingManifest } from './fixtures/building-tiles.js';
 import assert from 'node:assert/strict';
 import { loadScenePackage, createSceneAdapter } from '../game/scene-adapter.js';
 import { REGIONS } from '../game/contracts.js';
@@ -58,6 +59,7 @@ const atlasFixture = () => {
   };
   for (const path of Object.values(ASTANA_MAP_FILES)) data[path] = { type: 'FeatureCollection', features: [] };
   data[ASTANA_MAP_FILES.seed] = { working_bbox: { value: [71.2, 51, 71.8, 51.4] } };
+  data[ASTANA_MAP_FILES.buildingManifest] = buildingManifest({ populated: 1 });
   data[ASTANA_MAP_FILES.majorRoads] = [];
   data[ASTANA_MAP_FILES.landmarkPositions] = {schemaVersion:1,positions:[]};
   data[ASTANA_MAP_FILES.trafficCorridors] = [];

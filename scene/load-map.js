@@ -1,4 +1,6 @@
 import { createGeoData } from './geodata.js';
+import { createBuildingTileSource, validateBuildingManifest } from './building-tiles.js';
+export { BUILDING_TILE_PATHS } from './building-tiles.js';
 
 // This same manifest is the server's exact public data allowlist.
 export const ASTANA_MAP_FILES = Object.freeze({
@@ -10,6 +12,7 @@ export const ASTANA_MAP_FILES = Object.freeze({
   intersections: '/scene/data/astana/intersections.geojson',
   landscape: '/scene/data/astana/landscape-render.geojson',
   buildings: '/scene/data/astana/buildings-render.geojson',
+  buildingManifest: '/scene/data/astana/buildings-manifest.json',
   trafficCorridors: '/scene/data/astana/traffic_corridors.json',
   majorRoads: '/scene/data/astana/major_roads.json',
   districts: '/scene/data/astana/districts-current.geojson',
@@ -21,7 +24,9 @@ export async function loadAstanaMap({ fetchImpl = fetch, signal } = {}) {
     const response = await fetchImpl(path, { signal });
     if (!response.ok) throw new Error(`MAP_RESOURCE_UNAVAILABLE:${path}`);
     const data = await response.json();
-    if (key === 'landmarkPositions') {
+    if (key === 'buildingManifest') {
+      validateBuildingManifest(data);
+    } else if (key === 'landmarkPositions') {
       if (data?.schemaVersion !== 1 || !Array.isArray(data.positions)) throw new Error('INVALID_MAP_DATA:landmarkPositions');
     } else if (key === 'trafficCorridors' || key === 'majorRoads') {
       if (!Array.isArray(data)) throw new Error(`INVALID_MAP_DATA:${key}`);
@@ -30,7 +35,12 @@ export async function loadAstanaMap({ fetchImpl = fetch, signal } = {}) {
     }
     return [key, data];
   }));
-  const mapData = createGeoData(Object.fromEntries(entries));
+  const layers = Object.fromEntries(entries);
+  const mapData = createGeoData(layers);
+  mapData.buildingCount = layers.buildingManifest.featureCount;
+  mapData.createBuildingSource = ({ onChange } = {}) => createBuildingTileSource({
+    manifest: layers.buildingManifest, seed: layers.seed, fallback: mapData.buildings, fetchImpl, onChange,
+  });
   if (!mapData.roads.length) throw new Error('INVALID_MAP_DATA:roads');
   return mapData;
 }
