@@ -98,3 +98,13 @@
 @media (prefers-reduced-motion: reduce) {
   .akim-scene .atlas-play-panel .atlas-play-progress span { transition: none; }
 }
+/* Match the white host interface. */
+.akim-scene .atlas-play-panel{color:#292e31}
+.akim-scene .atlas-play-panel .atlas-play-content{background:#fff;border-color:#eaeaea;border-radius:8px;box-shadow:none;backdrop-filter:none}
+.akim-scene .atlas-play-panel .atlas-play-eyebrow{display:none}
+.akim-scene .atlas-play-panel :is(.atlas-play-summary,.atlas-play-status,.atlas-play-rules,.atlas-play-boundary-note,.atlas-play-disclaimer,.atlas-play-group h3,.atlas-play-measure-meta,.atlas-play-metrics span,.atlas-play-assignment span,.atlas-play-speed){color:#687176}
+.akim-scene .atlas-play-panel .atlas-play-disclaimer{font-size:10px}
+.akim-scene .atlas-play-panel :is(.atlas-play-measure,.atlas-play-assignment select,.atlas-play-speed select,.atlas-play-playback-buttons button){background:#fff;border-color:#eaeaea;border-radius:6px}
+.akim-scene .atlas-play-panel .atlas-play-measure.is-selected{background:#f1f5f2;border-color:#7b9486}
+.akim-scene .atlas-play-panel .atlas-play-primary{background:#292e31;color:#fff;border-radius:6px}.akim-scene .atlas-play-panel .atlas-play-primary:not(:disabled):hover{background:#414749}
+.akim-scene .atlas-play-panel .atlas-play-progress{background:#eaeaea}.akim-scene .atlas-play-panel .atlas-play-progress span{background:#7f9887}.akim-scene .atlas-play-panel .atlas-play-best{background:#f6f8f6;color:#53675a}.akim-scene .atlas-play-panel .atlas-play-text-button{color:#687176}

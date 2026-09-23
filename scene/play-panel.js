@@ -56,7 +56,7 @@ export function createPlayPanel({ root, session }) {
   root.classList.add('atlas-play-panel');
   root.setAttribute('aria-label', 'План развития Астаны');
   const panel = element('section', 'atlas-play-content');
-  const eyebrow = element('div', 'atlas-play-eyebrow', 'ТВОЙ ГОРОД · ТВОИ РЕШЕНИЯ');
+  const eyebrow = element('div', 'atlas-play-eyebrow', 'ПЛАН');
   const header = element('div', 'atlas-play-header');
   const title = element('h2', '', 'План развития');
   const toggle = button('Открыть', 'atlas-play-toggle');
@@ -66,10 +66,10 @@ export function createPlayPanel({ root, session }) {
   const metrics = element('div', 'atlas-play-metrics');
   const budgetBox = element('div');
   const budget = element('strong', '', '100');
-  budgetBox.append(budget, element('span', '', 'бюджет остался'));
+  budgetBox.append(budget, element('span', '', 'бюджет'));
   const countBox = element('div');
   const count = element('strong', '', '0 / 5');
-  countBox.append(count, element('span', '', 'решений в плане'));
+  countBox.append(count, element('span', '', 'решений'));
   metrics.append(budgetBox, countBox);
   const progress = element('div', 'atlas-play-progress');
   progress.setAttribute('role', 'progressbar');
@@ -78,11 +78,11 @@ export function createPlayPanel({ root, session }) {
   progress.setAttribute('aria-valuemax', '5');
   const progressBar = element('span');
   progress.append(progressBar);
-  const planSummary = element('p', 'atlas-play-summary', 'Назначь решения районам и запусти городской сценарий.');
+  const planSummary = element('p', 'atlas-play-summary', 'Выберите 5 решений.');
   const editor = element('div', 'atlas-play-editor');
   editor.id = `${panelId}-editor`;
   editor.hidden = true;
-  const rules = element('p', 'atlas-play-rules', '5 решений · до 100 ед. · максимум 2 в одном направлении. Для районной меры выбери район.');
+  const rules = element('p', 'atlas-play-rules', '5 решений · 100 ед. · до 2 на направление.');
   const catalog = element('div', 'atlas-play-catalog');
   const rows = new Map();
   for (const direction of [...new Set(MEASURES.map((measure) => measure.direction))]) {
@@ -126,7 +126,7 @@ export function createPlayPanel({ root, session }) {
     catalog.append(group);
   }
   const errors = element('ul', 'atlas-play-errors');
-  const boundaryNote = element('p', 'atlas-play-boundary-note', 'Сарайшық виден на реальной карте, но не входит в расчёт этих правил.');
+  const boundaryNote = element('p', 'atlas-play-boundary-note', 'Сарайшық — вне расчёта.');
   editor.append(rules, catalog, errors, boundaryNote);
   const status = element('p', 'atlas-play-status');
   status.setAttribute('role', 'status');
@@ -168,7 +168,7 @@ export function createPlayPanel({ root, session }) {
   const tradeoffs = element('div', 'atlas-play-tradeoffs');
   resultPanel.append(element('h3', '', 'Город после решений'), resultHeader, resultDescription, gains, tradeoffs);
   const best = element('p', 'atlas-play-best');
-  const disclaimer = element('p', 'atlas-play-disclaimer', 'Реальная карта Астаны. Эффекты решений — учебная модель, не городской прогноз.');
+  const disclaimer = element('p', 'atlas-play-disclaimer', 'Учебная модель · не прогноз.');
   panel.append(eyebrow, header, metrics, progress, planSummary, editor, status, launch, shortcuts, playback, resultPanel, best, disclaimer);
   root.append(panel);
 
@@ -245,7 +245,7 @@ export function createPlayPanel({ root, session }) {
     count.textContent = `${plan.length} / 5`;
     progress.setAttribute('aria-valuenow', String(plan.length));
     progressBar.style.width = `${plan.length / 5 * 100}%`;
-    planSummary.textContent = plan.length ? `${validation.cost} из 100 ед. · ${[...new Set(plan.map((choice) => choice.district || (MEASURES.find((measure) => measure.id === choice.id)?.scope === 'city' ? 'Весь город' : 'район не выбран')))].join(', ')}` : 'Назначь решения районам и запусти городской сценарий.';
+    planSummary.textContent = plan.length ? `${validation.cost} из 100 ед. · ${[...new Set(plan.map((choice) => choice.district || (MEASURES.find((measure) => measure.id === choice.id)?.scope === 'city' ? 'Весь город' : 'район не выбран')))].join(', ')}` : 'Выберите 5 решений.';
     for (const [id, row] of rows) {
       const decision = planById.get(id);
       const selected = Boolean(decision);
@@ -264,7 +264,7 @@ export function createPlayPanel({ root, session }) {
     launch.disabled = !valid;
     launch.hidden = Boolean(current.result);
     status.dataset.state = actionError ? 'error' : valid ? 'ready' : 'draft';
-    status.textContent = actionError || (current.result ? '' : valid ? 'План готов. Посмотри, как изменится город.' : plan.length === 0 ? 'Начни с примера или выбери решения.' : `Проверь условия плана (${validation.errors?.length ?? 0}) — открой план.`);
+    status.textContent = actionError || (current.result ? '' : valid ? 'План готов.' : plan.length === 0 ? 'Выберите меры или пример.' : `Проверь условия плана (${validation.errors?.length ?? 0}) — открой план.`);
     status.hidden = !status.textContent;
     reset.disabled = plan.length === 0;
     const playing = current.playback?.status === 'playing';

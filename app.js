@@ -76,7 +76,7 @@ function renderSelections() {
   const list = byId('selected-list');
   list.replaceChildren();
   if (state.plan.length === 0) {
-    list.append(el('li', 'selected-empty', 'Пока нет решений. Выберите меру слева.'));
+    list.append(el('li', 'selected-empty', 'Выберите первую меру.'));
     return;
   }
   state.plan.forEach((choice, index) => {
@@ -164,7 +164,7 @@ function clearResults() {
   byId('ai-button').disabled = false;
   byId('ai-output').hidden = true;
   byId('ai-output').replaceChildren();
-  byId('ai-status').textContent = 'ИИ объясняет готовый расчёт. Для ответа нужен подключённый API.';
+  byId('ai-status').textContent = 'ИИ объясняет результат.';
 }
 
 function makeInsight(title, description) {
@@ -273,7 +273,7 @@ async function requestAI() {
     requestedAI = true;
   } catch {
     if (!isCurrent()) return;
-    status.textContent = 'ИИ сейчас недоступен. Разбор рассчитанных данных выше остаётся доступным.';
+    status.textContent = 'ИИ недоступен. Разбор — выше.';
     button.disabled = false;
   } finally {
     clearTimeout(timeout);
@@ -305,11 +305,11 @@ function renderInspector() {
   const holder = byId('district-indicators');
   holder.replaceChildren();
   if (!region) {
-    byId('district-note').textContent = 'Выберите район на карте или кнопкой ниже. План одинаков в игре и калькуляторе.';
+    byId('district-note').textContent = 'Выберите район.';
   } else if (!region.simulationDistrict) {
-    byId('district-note').textContent = 'Сарайшық показан для справки. В учебном наборе нет его показателей: назначать районные меры сюда нельзя.';
+    byId('district-note').textContent = 'Сарайшық не участвует в расчёте.';
   } else {
-    byId('district-note').textContent = region.regionId === 'nura' ? 'Показатели учебной модели. Выбранные районные меры будут назначены сюда.' : 'Планирование доступно. Подробная сцена этого района появится позже.';
+    byId('district-note').textContent = region.regionId === 'nura' ? 'Меры будут назначены этому району.' : 'Меры будут назначены этому району.';
     const baseline = DISTRICTS.find((district) => district.name === region.simulationDistrict);
     const revealed = state.result && (state.mode === 'calculator' || state.playback.status === 'complete');
     const after = revealed ? state.result.districts.find((district) => district.name === region.simulationDistrict)?.after : null;
@@ -323,7 +323,7 @@ function renderInspector() {
   const facts = byId('district-context');
   facts.replaceChildren();
   const observations = sceneStatus.cityData?.observations?.filter((item) => (item.regionId === region?.regionId || item.regionId === 'city') && item.status === 'verified' && Number.isFinite(item.value)) ?? [];
-  if (!observations.length) facts.append(el('p', '', 'Реальные данные о населении и транспорте пока не подключены. Значения модели не являются статистикой города.'));
+  if (!observations.length) facts.append(el('p', '', 'Показатели учебной модели.'));
   for (const item of observations) facts.append(el('p', '', `${item.regionId === 'city' ? 'Весь город · ' : ''}${item.definition || item.metric}: ${new Intl.NumberFormat('ru-RU').format(item.value)} ${item.unit} · ${item.asOf}`));
 }
 
@@ -340,10 +340,6 @@ function renderShell() {
   byId('game-panel').hidden = !game;
   byId('mode-game').setAttribute('aria-pressed', String(game));
   byId('mode-calculator').setAttribute('aria-pressed', String(!game));
-  for (const projection of ['top', 'tilted']) {
-    byId(`projection-${projection}`).setAttribute('aria-pressed', String(state.projection === projection));
-    byId(`projection-${projection}`).disabled = sceneStatus.phase !== 'ready';
-  }
   byId('view-overview').setAttribute('aria-pressed', String(state.view === 'overview'));
   byId('view-district').setAttribute('aria-pressed', String(state.view === 'district'));
   byId('view-district').disabled = state.focusedRegion !== 'nura' || sceneStatus.phase !== 'ready';
@@ -361,7 +357,7 @@ function renderShell() {
   byId('playback-speed').value = String(state.playback.speed);
   byId('playback-speed').disabled = sceneStatus.phase !== 'ready';
   byId('calculate-button').disabled = !state.validation.valid;
-  byId('calculate-button').textContent = game ? 'Подтвердить пять решений' : 'Рассчитать сценарий';
+  byId('calculate-button').textContent = game ? 'Применить план' : 'Рассчитать';
   if (revealed) showResult(state.result);
   else byId('results').hidden = true;
   renderInspector();
@@ -378,7 +374,6 @@ for (const region of REGIONS) {
   byId('region-buttons').append(button);
 }
 for (const mode of ['game', 'calculator']) byId(`mode-${mode}`).addEventListener('click', () => dispatch({ type: 'SET_MODE', mode }));
-for (const projection of ['top', 'tilted']) byId(`projection-${projection}`).addEventListener('click', () => dispatch({ type: 'SET_PROJECTION', projection }));
 for (const view of ['overview', 'district']) byId(`view-${view}`).addEventListener('click', () => dispatch({ type: 'SET_VIEW', view }));
 byId('playback-pause').addEventListener('click', () => dispatch({ type: 'PLAYBACK_CONTROL', command: state.playback.status === 'paused' ? 'play' : 'pause' }));
 for (const command of ['skip', 'replay']) byId(`playback-${command}`).addEventListener('click', () => dispatch({ type: 'PLAYBACK_CONTROL', command }));
@@ -406,7 +401,7 @@ adapter = createSceneAdapter({ root: byId('scene-root'), session, onStatus(statu
   sceneStatus = status;
   const ready = status.phase === 'ready';
   byId('scene-notice').hidden = ready;
-  byId('scene-status').textContent = status.phase === 'loading' ? 'Подключаем город…' : 'Интерактивная карта ещё не подключена';
+  byId('scene-status').textContent = status.phase === 'loading' ? 'Подключаем город…' : 'Карта недоступна';
   byId('scene-retry').hidden = status.phase === 'loading' || ready;
   renderShell();
 } });
