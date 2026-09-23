@@ -3,6 +3,16 @@ import { pointInRegion, regionBounds } from './camera.js';
 export const REGION_IDS = ['esil', 'almaty', 'saryarka', 'baikonur', 'nura', 'saraishyk'];
 export const REGION_COLORS = ['#a5c5b5', '#ddbf99', '#c6ce9c', '#b3c7ce', '#87b6a6', '#d4d0c6'];
 
+function crosses(a, b, c, d) {
+  const cross = (p, q, r) => (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0]);
+  const within = (p, q, r) => r[0] >= Math.min(p[0], q[0]) - 1e-10 && r[0] <= Math.max(p[0], q[0]) + 1e-10 &&
+    r[1] >= Math.min(p[1], q[1]) - 1e-10 && r[1] <= Math.max(p[1], q[1]) + 1e-10;
+  const values = [cross(a, b, c), cross(a, b, d), cross(c, d, a), cross(c, d, b)];
+  if (values[0] * values[1] < 0 && values[2] * values[3] < 0) return true;
+  return Math.abs(values[0]) < 1e-10 && within(a, b, c) || Math.abs(values[1]) < 1e-10 && within(a, b, d) ||
+    Math.abs(values[2]) < 1e-10 && within(c, d, a) || Math.abs(values[3]) < 1e-10 && within(c, d, b);
+}
+
 // A deliberately illustrative play area, never a surveyed pedestrian network.
 export function createWorld(geography) {
   if (geography?.schemaVersion !== 1 || !Array.isArray(geography.viewBox) ||
@@ -46,6 +56,12 @@ export function createWorld(geography) {
     obstacles.push(footprint);
     pieces.push({ id: `detail-${assetId}`, assetId, position, size: size * .29, detail: true });
   }
+  for (const [index, [x, y]] of [[-.9, -.9], [-.42, -.86], [.42, -.88], [.87, -.87], [-.88, -.3], [.88, -.28], [-.89, .26], [.88, .25], [-.87, .9], [-.37, .86], [.38, .88], [.89, .9]].entries()) {
+    const position = [start[0] + x * half, start[1] + y * half];
+    if (!pointInRegion(position, nura)) continue;
+    obstacles.push([position[0] - size * .025, position[1] - size * .025, size * .05, size * .05]);
+    pieces.push({ id: `detail-tree-${index}`, assetId: 'terrain.tree', position, size: size * .14, detail: true });
+  }
   for (const region of regions) {
     const b = regionBounds(region);
     for (let index = 0; index < 9; index++) {
@@ -60,7 +76,11 @@ export function createWorld(geography) {
   const inRect = (p, [x, y, w, h]) => p[0] >= x && p[0] <= x + w && p[1] >= y && p[1] <= y + h;
   const contains = p => Array.isArray(p) && p.every(Number.isFinite) && inRect(p, playBounds) &&
     pointInRegion(p, nura) && !obstacles.some(rect => inRect(p, rect));
-  return { regions, pieces, walkable: { start, bounds: playBounds, contains }, playBounds,
+  const boundaries = [...nura.polygons.flat(), ...obstacles.map(([x, y, w, h]) => [[x, y], [x + w, y], [x + w, y + h], [x, y + h], [x, y]])];
+  // Exact segment tests prevent crossing even a hole thinner than a movement step.
+  const canTraverse = (from, to) => contains(from) && contains(to) && !boundaries.some(ring =>
+    ring.some((point, index) => index > 0 && crosses(from, to, ring[index - 1], point)));
+  return { regions, pieces, walkable: { start, bounds: playBounds, contains, canTraverse }, playBounds,
     detailedRegion: nura, sourceStatus: geography.status,
     paths: geography.paths || [] };
 }

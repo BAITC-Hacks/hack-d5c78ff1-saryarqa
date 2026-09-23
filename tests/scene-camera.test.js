@@ -124,3 +124,113 @@ test('invalid navigation leaves a valid camera and collapsed viewport is inverti
   assert.throws(() => createCamera({ viewBox: [0, 0, 0, 10] }), TypeError);
   assert.throws(() => camera.setViewport(NaN, 100), TypeError);
 });
+import { createWorld, REGION_IDS } from '../scene/world.js';
+import { createActors, ACTOR_CAPS } from '../scene/actors.js';
+
+const activityFixture = () => ({
+  schemaVersion: 1, status: 'fixture', viewBox: [0, 0, 600, 400],
+  regions: REGION_IDS.map((regionId, index) => ({
+    regionId, label: regionId,
+    labelAnchor: [(index % 3) * 200 + 100, Math.floor(index / 3) * 200 + 100],
+    polygons: [[square((index % 3) * 200, Math.floor(index / 3) * 200, 200)]],
+  })),
+  paths: ['walking', 'road', 'bus', 'lrt-scenario'].map((kind, index) => ({
+    id: kind, kind, points: [[220, 300 - index * 10], [380, 300 - index * 10]],
+    illustrative: true, sourceIds: [],
+  })),
+});
+
+test('activity caps preserve unknown district counts and reject unapproved routes', () => {
+  const geography = activityFixture();
+  geography.paths.push({ id: 'unapproved', kind: 'road', points: [[220, 250], [380, 250]] });
+  const world = createWorld(geography);
+  const actors = createActors({ geography, walkable: world.walkable });
+  const observations = ['population', 'registered_cars', 'daily_active_buses'].map(metric => ({
+    id: metric, metric, regionId: 'city', value: 10000000, unit: 'count',
+    asOf: '2026', sourceId: 'fixture', definition: 'Test count', status: 'verified',
+  }));
+  const cityData = { sources: [{ id: 'fixture', url: 'https://example.org/statistics' }], observations };
+  actors.update({ cityData });
+  assert.equal(actors.getActors().length, Object.values(ACTOR_CAPS).reduce((sum, cap) => sum + cap, 0));
+  assert.equal(actors.getMetadata().mappings.find(m => m.kind === 'person').observedCount, 10000000);
+  actors.update({ view: 'district', focusedRegion: 'nura' });
+  const population = actors.getMetadata().mappings.find(m => m.kind === 'person');
+  assert.equal(population.observedCount, null);
+  assert.equal(population.cityObservation.value, 10000000);
+  assert.equal(population.count, population.fallbackCount);
+  assert(actors.getMetadata().mappings.every(mapping => mapping.paths.every(path => path.id !== 'unapproved')));
+  assert.equal(actors.getMetadata().liveTraffic, false);
+  assert(actors.getMetadata().mappings.find(m => m.kind === 'lrt').paths.every(path => path.illustrative));
+  actors.destroy();
+});
+
+test('world mask and mayor traversal exclude building footprints, including reduced motion', () => {
+  const geography = activityFixture();
+  const original = JSON.stringify(geography);
+  const world = createWorld(geography);
+  const actors = createActors({ geography, walkable: world.walkable });
+  actors.update({ view: 'district', focusedRegion: 'nura' });
+  const start = actors.getMayor().position;
+  const building = world.pieces.find(piece => piece.detail);
+  const destination = building.position.map((value, index) => start[index] + (value - start[index]) * 1.45);
+  assert.equal(world.walkable.contains(building.position), false);
+  assert.equal(world.walkable.contains(destination), true);
+  assert.equal(actors.setDestination(destination), true);
+  for (let index = 0; index < 200; index += 1) actors.step(.1);
+  assert(world.walkable.contains(actors.getMayor().position));
+  assert.notDeepEqual(actors.getMayor().position, destination);
+  const stopped = actors.getMayor().position;
+  actors.update({ reducedMotion: true });
+  const stationary = actors.getActors();
+  actors.step(10000);
+  assert.deepEqual(actors.getActors(), stationary);
+  actors.setDestination(destination);
+  assert.deepEqual(actors.getMayor().position, stopped);
+  assert.equal(actors.setDestination(building.position), false);
+  assert.equal(JSON.stringify(geography), original);
+  actors.destroy();
+});
+
+test('actor remount resets deterministic activity and old instances remain inert', () => {
+  const geography = activityFixture();
+  const world = createWorld(geography);
+  const first = createActors({ geography, walkable: world.walkable });
+  const initial = first.getActors();
+  first.step(.1);
+  assert.notDeepEqual(first.getActors(), initial);
+  const moved = first.getActors();
+  first.update({ view: 'overview' });
+  first.update({ view: 'overview' });
+  assert.deepEqual(first.getActors(), moved);
+  const exposed = first.getActors();
+  exposed[0].position[0] = -999;
+  assert.notEqual(first.getActors()[0].position[0], -999);
+  first.destroy();
+  first.destroy();
+  first.update({ view: 'district', focusedRegion: 'nura' });
+  first.step(.1);
+  assert.deepEqual(first.getActors(), []);
+  assert.equal(first.getMayor(), null);
+  assert.equal(first.setDestination(world.walkable.start), false);
+  const second = createActors({ geography, walkable: world.walkable });
+  assert.deepEqual(second.getActors(), initial);
+  assert.equal(second.getMetadata().destroyed, false);
+  second.destroy();
+});
+
+test('exact world segment guard blocks holes narrower than a movement sample', () => {
+  const geography = activityFixture();
+  const nura = geography.regions.find(region => region.regionId === 'nura');
+  nura.polygons[0].push([[300.03, 299], [300.031, 299], [300.031, 301], [300.03, 301], [300.03, 299]]);
+  const world = createWorld(geography);
+  assert(world.walkable.contains([301, 300]));
+  assert.equal(world.walkable.canTraverse([300, 300], [301, 300]), false);
+  const actors = createActors({ geography, walkable: world.walkable });
+  actors.update({ view: 'district', focusedRegion: 'nura', reducedMotion: true });
+  actors.setDestination([301, 300]);
+  assert(actors.getMayor().position[0] < 300.03);
+  actors.update({ reducedMotion: false });
+  actors.moveMayor(1, 0, .1);
+  assert(actors.getMayor().position[0] < 300.03);
+  actors.destroy();
+});

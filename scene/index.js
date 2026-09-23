@@ -60,6 +60,7 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
   const manifest = new Map((assets?.assets || []).map(asset => [asset.id, asset]));
   const missing = new Set();
   const checkedFiles = new Map();
+  const failedImages = new Set();
   const abort = new AbortController();
   const listeners = [];
   const pressed = new Set();
@@ -79,6 +80,7 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
       reportMissing(id); return null;
     }
     const href = new URL(view.path, new URL('../', import.meta.url)).href;
+    if (failedImages.has(href)) { reportMissing(id); return null; }
     if (view.symbolId && !checkedFiles.has(href)) {
       const check = { status: 'loading', ids: new Set() };
       checkedFiles.set(href, check);
@@ -101,7 +103,7 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
       const scale = size / Math.max(view.width, view.height);
       const image = svg(view.symbolId ? 'use' : 'image', { href: view.href + (view.symbolId ? `#${view.symbolId}` : ''),
         x: -view.anchor[0] * scale, y: -view.anchor[1] * scale, width: view.width * scale, height: view.height * scale });
-      if (!view.symbolId) image.addEventListener('error', () => { reportMissing(id); image.replaceWith(fallback(id, size)); }, { once: true });
+      if (!view.symbolId) image.addEventListener('error', () => { if (!destroyed) { failedImages.add(view.href); reportMissing(id); image.replaceWith(fallback(id, size)); } }, { once: true });
       group.appendChild(image);
     } else group.appendChild(fallback(id, size));
     return group;
@@ -157,13 +159,15 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
       layers.pieces.appendChild(sprite(piece.assetId, piece.position, Math.max(14, piece.size * scale), 'Декоративный объект'));
     }
     layers.labels.replaceChildren();
-    if (!detail) for (const region of world.regions) {
+    if (!detail) for (const [regionIndex, region] of world.regions.entries()) {
       const [x, y] = camera.project(region.labelAnchor);
       const group = svg('g', { transform: `translate(${x} ${y})`, class: 'akim-scene-map-label', 'data-region-id': region.regionId });
-      const length = Math.max(76, region.label.length * 8 + 25);
+      const compact = width < 480;
+      const length = compact ? 28 : Math.max(76, region.label.length * 8 + 25);
+      group.appendChild(svg('title', {}, region.label));
       group.appendChild(svg('rect', { x: -length / 2, y: -16, width: length, height: 31, rx: 15, fill: '#fffef7', stroke: snapshot?.focusedRegion === region.regionId ? '#245141' : '#fffef7' }));
-      group.appendChild(svg('text', { 'text-anchor': 'middle', y: 4 }, region.label));
-      if (region.regionId === 'saraishyk') group.appendChild(svg('text', { 'text-anchor': 'middle', y: 30, class: 'akim-scene-context-label' }, 'вне модели'));
+      group.appendChild(svg('text', { 'text-anchor': 'middle', y: 4 }, compact ? regionIndex + 1 : region.label));
+      if (region.regionId === 'saraishyk' && !compact) group.appendChild(svg('text', { 'text-anchor': 'middle', y: 30, class: 'akim-scene-context-label' }, 'вне модели'));
       layers.labels.appendChild(group);
     }
   }
@@ -175,7 +179,14 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
     const mayor = actors.getMayor();
     for (const actor of [...actors.getActors(), ...(mayor ? [mayor] : [])].sort((a, b) => camera.project(a.position)[1] - camera.project(b.position)[1])) {
       const size = actor.kind === 'mayor' ? 29 : actor.kind === 'person' ? 13 : 27;
-      layers.actors.appendChild(sprite(actor.assetId, actor.position, Math.max(size * .65, size * Math.min(1.9, scale)), actor.kind === 'mayor' ? 'Аким: декоративное движение без изменения плана' : `Условный объект: ${actor.kind}`));
+      const actorSprite = sprite(actor.assetId, actor.position, Math.max(size * .65, size * Math.min(1.9, scale)), actor.kind === 'mayor' ? 'Аким: декоративное движение без изменения плана' : `Условный объект: ${actor.kind}`);
+      if (['car', 'bus', 'lrt'].includes(actor.kind)) {
+        const angle = actor.heading * Math.PI / 180, point = camera.project(actor.position);
+        const ahead = camera.project([actor.position[0] + Math.cos(angle), actor.position[1] + Math.sin(angle)]);
+        const rotation = Math.atan2(ahead[1] - point[1], ahead[0] - point[0]) * 180 / Math.PI;
+        actorSprite.lastElementChild?.setAttribute('transform', `rotate(${rotation})`);
+      }
+      layers.actors.appendChild(actorSprite);
     }
     const state = effects.getState();
     layers.effects.replaceChildren();
@@ -197,7 +208,7 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
       const reactions = state.reactions.filter(r => r.regionId === region.regionId);
       if (!reactions.length) continue;
       const [x, y] = camera.project(region.labelAnchor);
-      const positive = reactions.some(r => r.delta > 0), negative = reactions.some(r => r.delta < 0);
+      const positive = reactions.some(r => r.tone === 'positive'), negative = reactions.some(r => r.tone === 'negative');
       const text = positive && negative ? '↑↓ Компромисс' : negative ? '↓ Есть ухудшения' : positive ? '↑ Улучшения' : 'Без изменений';
       const group = svg('g', { transform: `translate(${x} ${y - 42})`, class: 'akim-scene-reaction' });
       group.appendChild(svg('rect', { x: -65, y: -15, width: 130, height: 25, rx: 12, fill: negative ? '#f6dfcb' : '#dfedd6' }));
@@ -221,13 +232,18 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
     }).join('');
     const sourceLabel = geography.status === 'verified' ? 'Геометрия: проверенный набор' : geography.status === 'fixture' ? 'Схема для разработки' : 'Геометрия не подтверждена';
     const name = region?.label || 'Город целиком';
+    const metadata = actors.getMetadata();
+    const sampling = (metadata.mappings || []).map(mapping => {
+      const labels = { people: 'Жители', cars: 'Машины', buses: 'Автобусы', lrt: 'LRT' };
+      return `<p><strong>${labels[mapping.group] || escape(mapping.group)}</strong>: ${mapping.renderedCount ?? mapping.count} условных объектов, предел ${mapping.cap}. ${escape(mapping.observation?.asOf || 'Дата не установлена')}. ${mapping.observedCount == null ? 'Количество неизвестно; декоративная выборка.' : `Наблюдение: ${mapping.observedCount.toLocaleString('ru-RU')}. Один значок на ${mapping.unitsPerSprite.toLocaleString('ru-RU')} единиц, с ограничением.`} Охват: ${mapping.scope === 'city' ? 'весь город' : 'Нура'}.</p>`;
+    }).join('');
     $('.akim-scene-inspector').innerHTML = `<span class="akim-scene-eyebrow">${region ? 'РАЙОН' : 'ОБЗОР'}</span><h2>${escape(name)}</h2>
       <span class="akim-scene-badge">${region?.regionId === 'saraishyk' ? 'Контекст · без оценки' : region ? 'Участвует в модели' : '6 районов · 5 в модели'}</span>
       <p>${region?.regionId === 'saraishyk' ? 'Сарайшық доступен для осмотра. Назначение мер и общегородские эффекты сценария на него не распространяются.' : region ? 'Выбор района открывает его информацию. Решения и назначение мер выполняются в панели плана.' : 'Выбери район на карте или в списке. Начни с Нуры, чтобы прогуляться по миниатюрному кварталу.'}</p>
       ${region && region.regionId !== 'nura' ? '<p class="akim-scene-subtle">Детальная сцена пока доступна только для Нуры.</p>' : '<button type="button" data-action="detail" class="akim-scene-primary">Прогулка по Нуре ↗</button>'}
       <div class="akim-scene-divider"></div><h3>Город в цифрах</h3>${observationHtml || '<p class="akim-scene-subtle">Подтверждённые данные для выбранного района не переданы. Неизвестные значения не заменяются нулями.</p>'}
       ${region ? '<button type="button" data-action="city-context">Данные всего города</button>' : ''}
-      <details><summary>Масштаб и источники</summary><p>Люди и транспорт — условные представители. Максимум: ${ACTOR_CAPS.people} жителей, ${ACTOR_CAPS.cars} машин, ${ACTOR_CAPS.buses} автобусов и ${ACTOR_CAPS.lrt} LRT. Это не численность населения или парка.</p><p>${escape(sourceLabel)}${geography.boundaryDate ? ` · ${escape(geography.boundaryDate)}` : ''}. Декоративные пути и размещение построек не подтверждают реальные адреса. Сценарная линия LRT не означает действующий маршрут.</p><pre>${escape(JSON.stringify(actors.getMetadata(), null, 2))}</pre></details>
+      <details><summary>Масштаб и источники</summary><p>Люди и транспорт — условные представители. Максимум: ${ACTOR_CAPS.people} жителей, ${ACTOR_CAPS.cars} машин, ${ACTOR_CAPS.buses} автобусов и ${ACTOR_CAPS.lrt} LRT. Это не численность населения или парка.</p><p>${escape(sourceLabel)}${geography.boundaryDate ? ` · ${escape(geography.boundaryDate)}` : ''}. Декоративные пути и размещение построек не подтверждают реальные адреса. Сценарная линия LRT не означает действующий маршрут.</p>${sampling}</details>
       ${missing.size ? `<details class="akim-scene-missing"><summary>Условные значки: ${missing.size}</summary><p>Нет подходящего изображения для текущего вида; показана подписанная замена.</p><small>${[...missing].map(escape).join(', ')}</small></details>` : ''}`;
   }
 
@@ -279,7 +295,7 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
   });
   const localPoint = event => { const rect = stage.getBoundingClientRect(); return [event.clientX - rect.left, event.clientY - rect.top]; };
   listen(stage, 'pointerdown', event => {
-    if (event.button !== 0 || event.target.closest('button')) return;
+    if (!visible() || event.button !== 0 || event.target.closest('button')) return;
     stage.focus({ preventScroll: true });
     const point = localPoint(event); drag = { id: event.pointerId, start: point, last: point, moved: false };
     stage.setPointerCapture?.(event.pointerId);
@@ -306,12 +322,12 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
     event.preventDefault(); camera.zoomAt(Math.exp(-event.deltaY * .003), localPoint(event)); render();
   }, { passive: false });
   listen(stage, 'keydown', event => {
-    if (event.target !== stage || event.ctrlKey || event.metaKey || event.altKey) return;
+    if (!visible() || event.target !== stage || event.ctrlKey || event.metaKey || event.altKey) return;
     const key = event.key.length === 1 ? event.key.toLowerCase() : event.key;
     const direction = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1], a: [-1, 0], d: [1, 0], w: [0, -1], s: [0, 1] }[key];
     if (direction) {
       event.preventDefault();
-      if (detail && !event.shiftKey) { pressed.add(key); actors.moveMayor(...direction, 1 / 30); renderMotion(); schedule(); }
+      if (detail && !event.shiftKey) { if (!pressed.has(key)) actors.moveMayor(...direction, 1 / 30); pressed.add(key); renderMotion(); schedule(); }
       else { camera.pan(-direction[0] * 36, -direction[1] * 36); render(); }
     } else if (key === '+' || key === '=') { event.preventDefault(); action('zoom-in'); }
     else if (key === '-') { event.preventDefault(); action('zoom-out'); }
@@ -332,16 +348,19 @@ export function createScene({ root, assets, geography, onIntent = () => {} }) {
       detail = snapshot.view === 'district' && snapshot.focusedRegion === 'nura';
       actors.update({ cityData: context.cityData, reducedMotion: !!context.reducedMotion, view: detail ? 'district' : 'overview', focusedRegion: snapshot.focusedRegion });
       const nextView = detail ? 'nura' : 'overview';
+      if (!visible() || nextView !== previousView) pressed.clear();
       if (snapshot.projection !== previousProjection) { camera.setProjection(snapshot.projection); previousProjection = snapshot.projection; }
       if (nextView !== previousView) { if (detail) camera.focus(regionBounds(world.detailedRegion)); else camera.reset(); previousView = nextView; }
       container.dataset.reducedMotion = String(!!context.reducedMotion);
       container.dataset.visible = String(visible());
       $('.akim-scene-view strong').textContent = detail ? 'Нура · прогулка по кварталу' : 'Панорама города';
-      $('.akim-scene-regions').innerHTML = world.regions.map(region => `<button type="button" data-region="${region.regionId}" aria-pressed="${snapshot.focusedRegion === region.regionId}">${escape(region.label)}${region.regionId === 'saraishyk' ? '<span>контекст</span>' : ''}</button>`).join('');
+      if (!$('.akim-scene-regions').children.length) $('.akim-scene-regions').innerHTML = world.regions.map((region, index) => `<button type="button" data-region="${region.regionId}"><span class="akim-scene-region-number" aria-hidden="true">${index + 1}</span>${escape(region.label)}${region.regionId === 'saraishyk' ? '<span>контекст</span>' : ''}</button>`).join('');
+      for (const button of container.querySelectorAll('[data-region]')) button.setAttribute('aria-pressed', String(snapshot.focusedRegion === button.dataset.region));
       for (const button of container.querySelectorAll('[data-action="top"], [data-action="tilted"]')) button.setAttribute('aria-pressed', String(button.dataset.action === snapshot.projection));
       $('.akim-scene-map-note').textContent = geography.status === 'verified' ? 'Миниатюрная сцена · декоративные объекты' : 'Тестовая схема · не реальные границы Астаны';
       $('.akim-scene-help').textContent = detail ? 'Клик / касание — идти · стрелки / WASD — аким · Shift + стрелки — камера · движение не меняет план' : 'Потяни карту · Ctrl/⌘ + колесо — масштаб · стрелки — камера · Enter — осмотреть район в центре';
-      stop(); updateEffects(); renderInspector(); resize(); schedule();
+      if (!activeWork()) stop();
+      updateEffects(); renderInspector(); resize(); schedule();
     },
     destroy() {
       if (destroyed) return;

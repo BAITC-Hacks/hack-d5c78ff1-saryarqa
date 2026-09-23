@@ -14,6 +14,7 @@
 .akim-scene-regions { display: flex; gap: 7px; flex-wrap: wrap; padding: 0 26px 20px; border-bottom: 1px solid var(--line); }
 .akim-scene-regions button { border-radius: 24px; padding: 6px 14px; font-size: 12px; }
 .akim-scene-regions span { font-size: 9px; opacity: .65; margin-left: 6px; }
+.akim-scene-regions .akim-scene-region-number { margin: 0 5px 0 0; opacity: .6; font-weight: 700; }
 .akim-scene-layout { display: grid; grid-template-columns: minmax(0, 1fr) 265px; }
 .akim-scene-map-wrap { min-width: 0; }
 .akim-scene-map { height: 570px; min-height: 320px; position: relative; overflow: hidden; background-color: #edf0e2; background-image: radial-gradient(#97a98b30 .8px, transparent .8px); background-size: 20px 20px; touch-action: pan-y; user-select: none; cursor: grab; }
@@ -64,4 +65,5 @@
 @media (max-width: 1024px) { .akim-scene-toolbar { align-items: flex-start; flex-direction: column; gap: 12px; } .akim-scene-layout { grid-template-columns: minmax(0, 1fr) 225px; } .akim-scene-map { height: 490px; } .akim-scene-inspector { padding: 22px 17px; } }
 @media (max-width: 768px) { .akim-scene-layout { grid-template-columns: minmax(0, 1fr); } .akim-scene-inspector { border-left: 0; border-top: 1px solid var(--line); } .akim-scene-map { height: 440px; } .akim-scene-toolbar { padding: 18px 16px 14px; } .akim-scene-regions { padding: 0 16px 16px; } .akim-scene-regions button { min-height: 37px; } .akim-scene-camera { grid-template-columns: repeat(3, 39px); } .akim-scene-camera button { height: 39px; } }
 @media (max-width: 430px) { .akim-scene { border-radius: 15px; } .akim-scene-map { height: 410px; } .akim-scene-controls { gap: 5px; } .akim-scene-controls button { padding: 9px; font-size: 11px; } .akim-scene-separator { display: none; } .akim-scene-regions { gap: 5px; } .akim-scene-regions button { font-size: 11px; padding: 7px 11px; } .akim-scene-map-caption { left: 12px; gap: 8px; font-size: 8px; } .akim-scene-map-note { left: 12px; font-size: 9px; } .akim-scene-view strong { font-size: 19px; } .akim-scene-timeline { padding-inline: 15px; } .akim-scene-help { padding-inline: 15px; } }
+@media (max-width: 600px) { .akim-scene-camera { grid-template-columns: repeat(7, minmax(0, 1fr)); left: 12px; right: 12px; bottom: 47px; } .akim-scene-camera button:last-child { grid-column: auto; } }
 @media (prefers-reduced-motion: reduce) { .akim-scene * { animation: none; transition: none; } }
