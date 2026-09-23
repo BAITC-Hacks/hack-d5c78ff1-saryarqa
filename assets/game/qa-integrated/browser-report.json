@@ -1,0 +1,20 @@
+{
+  "browser": "153.0.8010.53",
+  "checkedWidths": [
+    320,
+    375,
+    430,
+    768,
+    1024,
+    1440
+  ],
+  "checks": [
+    "six region controls, Saraishyk unscored, keyboard focus preserved",
+    "official example 95 / 56.54, mode parity, local best after reload",
+    "six responsive widths without overflow or clipped shell buttons",
+    "pending AI result cancelled and ignored after editing plan",
+    "game without world resources still reveals exact result; reduced-motion fallback"
+  ],
+  "scene": "not supplied; fallback tested",
+  "pageErrors": []
+}

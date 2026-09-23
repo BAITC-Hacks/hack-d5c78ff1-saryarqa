@@ -1,0 +1,141 @@
+{
+  "head": "a081a98a66f5e358a8ed542e32689dc9e8b191aa",
+  "base": "61a9b76868cd68f66eb6f3ff1cddddc5a2095790",
+  "browser": "153.0.4234.48",
+  "score": "56,54",
+  "button": {
+    "rect": {
+      "x": 216.46875,
+      "y": 194.71875,
+      "width": 106.953125,
+      "height": 49,
+      "top": 194.71875,
+      "right": 323.421875,
+      "bottom": 243.71875,
+      "left": 216.46875
+    },
+    "viewport": 320
+  },
+  "responses": [
+    {
+      "path": "/assets/game/manifest.json",
+      "status": 200,
+      "mime": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/data/geography/astana.json",
+      "status": 200,
+      "mime": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/data/city/context.json",
+      "status": 200,
+      "mime": "application/json; charset=utf-8"
+    },
+    {
+      "path": "/assets/game/measure-icons.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/miniature-kit.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/category.transport.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/category.ecology.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/category.social.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/category.safety.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/category.services.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.T1.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.T2.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.S1.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.S2.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.B1.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.B2.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.C1.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.C2.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/ground-grass-top.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/ground-grass-tilted.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/road-straight-top.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/road-straight-tilted.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.E1.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    },
+    {
+      "path": "/assets/game/reviewed/indicator.E2.svg",
+      "status": 200,
+      "mime": "image/svg+xml"
+    }
+  ]
+}
